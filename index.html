@@ -441,6 +441,63 @@ body{display:flex;flex-direction:column;position:relative}
 .poll-radio{width:18px;height:18px;border-radius:50%;border:2px solid var(--text3);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:#1a1a2e;transition:all .2s ease}
 .poll-radio.checked{background:var(--gold);border-color:var(--gold)}
 
+/* ─── WhatsApp-style district poll tabs ─── */
+.wa-tabs{position:relative;display:flex;align-items:stretch;background:var(--surface);border:1px solid var(--border3);border-radius:12px;padding:4px;gap:2px;overflow:hidden}
+.wa-tabs::after{content:'';position:absolute;left:var(--wa-x,4px);bottom:4px;width:var(--wa-w,0);height:3px;border-radius:3px;background:linear-gradient(90deg,var(--gold-light),var(--gold));transition:left .38s cubic-bezier(.4,1.3,.5,1),width .38s cubic-bezier(.4,1.3,.5,1);box-shadow:0 0 12px rgba(201,168,76,.55)}
+.wa-tab{flex:1 1 0;min-width:0;position:relative;background:transparent;border:0;cursor:pointer;padding:10px 6px 12px;border-radius:9px;color:var(--text2);font-family:var(--font-body);font-size:12px;font-weight:600;letter-spacing:.3px;text-transform:uppercase;transition:color .25s ease,background .25s ease;display:flex;flex-direction:column;align-items:center;gap:3px;overflow:hidden}
+.wa-tab:hover{color:var(--text)}
+.wa-tab:focus-visible{outline:2px solid var(--gold);outline-offset:-2px}
+.wa-tab.active{color:var(--gold);background:rgba(201,168,76,.08)}
+.wa-tab-name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.wa-tab-count{font-size:10px;font-weight:500;letter-spacing:0;text-transform:none;color:var(--text3)}
+.wa-tab.active .wa-tab-count{color:var(--gold-light)}
+.wa-tab-dot{position:absolute;top:7px;right:9px;width:6px;height:6px;border-radius:50%;background:#68d391;box-shadow:0 0 0 0 rgba(104,211,145,.6);animation:waPulse 2.2s ease-out infinite}
+@keyframes waPulse{0%{box-shadow:0 0 0 0 rgba(104,211,145,.55)}70%{box-shadow:0 0 0 7px rgba(104,211,145,0)}100%{box-shadow:0 0 0 0 rgba(104,211,145,0)}}
+.wa-panel{animation:waPanelIn .34s cubic-bezier(.25,.8,.25,1)}
+@keyframes waPanelIn{from{opacity:0;transform:translateX(14px)}to{opacity:1;transform:translateX(0)}}
+.wa-panel.rev{animation-name:waPanelInRev}
+@keyframes waPanelInRev{from{opacity:0;transform:translateX(-14px)}to{opacity:1;transform:translateX(0)}}
+
+/* ─── Luxury animations ─── */
+.lux-sheen{position:relative;overflow:hidden}
+.lux-sheen::before{content:'';position:absolute;top:0;left:-120%;width:60%;height:100%;background:linear-gradient(105deg,transparent,rgba(255,255,255,.16),transparent);transform:skewX(-18deg);animation:luxSheen 5.5s ease-in-out infinite;pointer-events:none}
+@keyframes luxSheen{0%,72%{left:-120%}100%{left:160%}}
+.lux-rise{animation:luxRise .55s cubic-bezier(.22,1,.36,1) both}
+@keyframes luxRise{from{opacity:0;transform:translateY(16px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+.lux-float{animation:luxFloat 4.5s ease-in-out infinite}
+@keyframes luxFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.lux-gold-text{background:linear-gradient(100deg,var(--gold) 20%,#fff4cf 42%,var(--gold) 64%);background-size:220% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:luxShimmer 4.5s linear infinite}
+@keyframes luxShimmer{0%{background-position:180% 0}100%{background-position:-60% 0}}
+.poll-option{will-change:transform}
+.poll-option:active{transform:scale(.985)}
+.poll-bar-fill{background:linear-gradient(90deg,rgba(201,168,76,.30),rgba(201,168,76,.11));transition:width .7s cubic-bezier(.22,1,.36,1)}
+.poll-option.mine .poll-bar-fill{background:linear-gradient(90deg,rgba(201,168,76,.44),rgba(201,168,76,.16))}
+.poll-radio.checked{animation:luxPop .4s cubic-bezier(.34,1.56,.64,1)}
+@keyframes luxPop{0%{transform:scale(.4)}60%{transform:scale(1.22)}100%{transform:scale(1)}}
+
+/* ─── Winner Award Category prizes ─── */
+.prize-note{font-size:12px;color:var(--text2);margin:-8px 0 12px}
+.prize-grid{display:flex;flex-direction:column;gap:14px}
+.prize-card{position:relative;border-radius:var(--radius);border:1px solid var(--border3);background:linear-gradient(150deg,rgba(255,255,255,.045),rgba(255,255,255,.012));padding:16px;overflow:hidden;transition:transform .3s cubic-bezier(.22,1,.36,1),border-color .3s ease,box-shadow .3s ease}
+.prize-card:hover{transform:translateY(-3px);border-color:var(--border2);box-shadow:0 14px 34px rgba(0,0,0,.42)}
+.prize-card::after{content:'';position:absolute;inset:0;border-radius:var(--radius);pointer-events:none;opacity:0;transition:opacity .3s ease;box-shadow:inset 0 0 0 1px rgba(201,168,76,.35)}
+.prize-card:hover::after{opacity:1}
+.prize-card.rank-1{border-color:rgba(201,168,76,.42);background:linear-gradient(150deg,rgba(201,168,76,.13),rgba(201,168,76,.02))}
+.prize-card.rank-2{border-color:rgba(200,205,215,.28)}
+.prize-card.rank-3{border-color:rgba(198,140,86,.28)}
+.prize-head{display:flex;align-items:center;gap:12px}
+.prize-medal{width:44px;height:44px;flex-shrink:0;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;background:rgba(255,255,255,.05);border:1px solid var(--border3)}
+.rank-1 .prize-medal{background:linear-gradient(140deg,rgba(201,168,76,.35),rgba(201,168,76,.08));border-color:rgba(201,168,76,.5)}
+.prize-rank{font-family:var(--font-display);font-size:16px;font-weight:800}
+.prize-tier{font-size:11px;color:var(--text3);letter-spacing:.6px;text-transform:uppercase;margin-top:2px}
+.prize-value{margin-left:auto;text-align:right;font-size:12px;font-weight:700;color:var(--gold);white-space:nowrap}
+.prize-items{display:flex;flex-direction:column;gap:8px;margin-top:14px}
+.prize-item{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--border3);border-radius:10px;padding:9px 12px}
+.prize-item-icon{font-size:16px;flex-shrink:0}
+.prize-item-name{font-size:13px;font-weight:600;flex:1;min-width:0}
+.prize-item-brand{font-size:11px;color:var(--text3);white-space:nowrap}
+.prize-extra{margin-top:12px;font-size:11px;color:var(--text3);line-height:1.6}
+
 .back-btn{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border3);border-radius:50px;padding:8px 14px;font-size:14px;font-weight:500;cursor:pointer;color:var(--text);font-family:var(--font-body);transition:all .2s;flex-shrink:0}
 .back-btn:hover{border-color:var(--border2)}
 
@@ -666,7 +723,7 @@ body{display:flex;flex-direction:column;position:relative}
       <div class="countdown-section">
         <div class="countdown-card">
           <div class="countdown-title">⏳ Ceremony Countdown</div>
-          <div style="font-size:13px;color:var(--text2);margin-bottom:16px">Sinha Awards Night — March 15, 2026 · 6:00 PM · BMICH, Colombo</div>
+          <div style="font-size:13px;color:var(--text2);margin-bottom:16px">Sinha Awards Night — October 24, 2026 · 6:00 PM · BMICH, Colombo</div>
           <div class="countdown-grid">
             <div class="cd-unit"><div class="cd-num" id="cd-days">00</div><div class="cd-lbl">Days</div></div>
             <div class="cd-unit"><div class="cd-num" id="cd-hours">00</div><div class="cd-lbl">Hours</div></div>
@@ -685,7 +742,18 @@ body{display:flex;flex-direction:column;position:relative}
             <div class="section-action" onclick="navTo('vote')">Open Polls →</div>
           </div>
           <div style="font-size:12px;color:var(--text2);margin:-8px 0 12px">Most Popular Media Unit · one vote per district</div>
-          <div id="home-polls" style="display:flex;flex-direction:column;gap:16px"></div>
+          <div class="wa-tabs" id="home-poll-tabs" role="tablist" aria-label="District poll tabs"></div>
+          <div id="home-polls" style="display:flex;flex-direction:column;gap:16px;margin-top:14px"></div>
+        </div>
+
+        <!-- Winner Award Category Prizes -->
+        <div>
+          <div class="section-head">
+            <div class="section-label">🏆 Winner Award Category</div>
+            <div class="section-action" onclick="navTo('awards');switchAwardsTab('prizes')">All Prizes →</div>
+          </div>
+          <div class="prize-note">What the winning school media units take home on 24 October 2026</div>
+          <div class="prize-grid" id="home-prizes"></div>
         </div>
 
         <!-- Categories -->
@@ -735,6 +803,7 @@ body{display:flex;flex-direction:column;position:relative}
         <button class="tab-btn active" onclick="switchAwardsTab('categories',this)">Poll</button>
         <button class="tab-btn" onclick="switchAwardsTab('nominees',this)">Media Units</button>
         <button class="tab-btn" onclick="switchAwardsTab('schools',this)">Schools</button>
+        <button class="tab-btn" onclick="switchAwardsTab('prizes',this)">Prizes</button>
         <button class="tab-btn" onclick="switchAwardsTab('winners',this)">Winners</button>
       </div>
 
@@ -758,6 +827,22 @@ body{display:flex;flex-direction:column;position:relative}
         <div id="schools-list" style="padding:0 20px;display:flex;flex-direction:column;gap:12px"></div>
       </div>
 
+      <!-- Prizes Tab -->
+      <div id="awards-prizes" class="awards-tab-content" style="display:none">
+        <div style="padding:0 20px 90px">
+          <div class="card card-gold lux-sheen" style="margin-bottom:16px">
+            <div style="display:flex;align-items:center;gap:12px">
+              <span class="lux-float" style="font-size:30px" aria-hidden="true">🏆</span>
+              <div>
+                <div class="lux-gold-text" style="font-family:var(--font-display);font-size:18px;font-weight:800">Winner Award Category</div>
+                <div style="font-size:12px;color:var(--text2);margin-top:3px">Most Popular Media Unit · prizes presented 24 October 2026</div>
+              </div>
+            </div>
+          </div>
+          <div class="prize-grid" id="awards-prize-grid"></div>
+        </div>
+      </div>
+
       <!-- Winners Tab -->
       <div id="awards-winners-tab" class="awards-tab-content" style="display:none">
         <div class="winner-year-tab" id="winner-years"></div>
@@ -775,12 +860,22 @@ body{display:flex;flex-direction:column;position:relative}
         <div class="progress-bar-bg"><div class="progress-bar-fill" id="vote-progress-fill" style="width:0%"></div></div>
         <div class="progress-label">
           <span id="vote-progress-label">0 of 3 district polls voted</span>
-          <span id="vote-deadline" style="color:var(--gold)">Closes: Dec 31, 2026</span>
+          <span id="vote-deadline" style="color:var(--gold)">Closes: Oct 20, 2026</span>
         </div>
       </div>
 
       <!-- District polls -->
+      <div style="padding:0 20px 8px">
+        <div class="wa-tabs" id="vote-poll-tabs" role="tablist" aria-label="District poll tabs"></div>
+      </div>
       <div id="vote-category-list" style="padding:0 20px 80px;display:flex;flex-direction:column;gap:16px"></div>
+
+      <!-- Winner Award Category prizes -->
+      <div style="padding:0 20px 90px;margin-top:-64px">
+        <div class="section-head"><div class="section-label">🏆 Winner Award Category · Prizes</div></div>
+        <div class="prize-note">Awarded on stage at Sinha Awards Night · 24 October 2026 · BMICH, Colombo</div>
+        <div class="prize-grid" id="vote-prizes"></div>
+      </div>
     </div>
 
     <!-- ─── EVENTS SCREEN ─── -->
@@ -795,7 +890,7 @@ body{display:flex;flex-direction:column;position:relative}
         <div class="event-hero-overlay">
           <div class="event-hero-badge">🔴 LIVE EVENT</div>
           <div class="event-hero-title">Sinha Awards Night 2026</div>
-          <div class="event-hero-meta">📅 March 15, 2026 &nbsp;·&nbsp; 🕕 6:00 PM &nbsp;·&nbsp; 📍 BMICH, Colombo</div>
+          <div class="event-hero-meta">📅 October 24, 2026 &nbsp;·&nbsp; 🕕 6:00 PM &nbsp;·&nbsp; 📍 BMICH, Colombo</div>
         </div>
       </div>
       <div style="padding:0 20px;margin-bottom:16px">
@@ -940,8 +1035,8 @@ body{display:flex;flex-direction:column;position:relative}
 const ENV = {
   APP_VERSION: '2.0.0',
   VOTE_START: new Date('2026-08-01T00:00:00'),
-  VOTE_END: new Date('2026-12-31T23:59:59'),
-  CEREMONY_DATE: new Date('2026-03-15T18:00:00'),
+  VOTE_END: new Date('2026-10-20T23:59:59'),
+  CEREMONY_DATE: new Date('2026-10-24T18:00:00'),
   MAX_OTP_ATTEMPTS: 5,
   OTP_VALIDITY_MINS: 5,
   OTP_RESEND_SECS: 60,
@@ -1126,6 +1221,7 @@ const AppState = {
   votes: {}, /* { districtId: { nomineeId, timestamp } } — one vote per district poll */
   otpState: { phone: '', hash: '', attempts: 0, lastSent: 0, expires: 0 },
   currentScreen: 'home',
+  activePollDistrict: 'colombo', /* active WhatsApp-style district poll tab */
   selectedOperator: null,
   selectedPlan: 'basic',
   otpTimerInterval: null,
@@ -1222,31 +1318,61 @@ const DB = {
     { id:'n29', catId:'cat1', schoolId:'s29', votes:1035 }
   ],
   winners: [], /* Winners will be announced at Sinha Awards Night 2026 */
+
+  /* ─── Winner Award Category · prize pool ───
+     Awarded on stage at Sinha Awards Night, 24 October 2026, BMICH Colombo.
+     Every prize is handed to the winning school's media unit, not to an individual. */
+  prizes: [
+    {
+      rank: 1, medal: '🥇', title: 'Winner', tier: 'Most Popular Media Unit', value: 'Grand Prize Package',
+      items: [
+        { icon: '📷', name: 'Canon EOS R50 mirrorless camera kit', brand: 'Canon' },
+        { icon: '🎙️', name: 'RØDE Wireless GO II dual microphone system', brand: 'RØDE' }
+      ],
+      extra: 'Plus the Sinha Gold Trophy, winner certificates for the full media unit and a feature on the Sinha Awards channel.'
+    },
+    {
+      rank: 2, medal: '🥈', title: 'First Runner-Up', tier: 'Most Popular Media Unit', value: 'Silver Prize Package',
+      items: [
+        { icon: '🎬', name: 'DJI Osmo Pocket 3 creator combo', brand: 'DJI' },
+        { icon: '🎤', name: 'Hollyland Lark M2 wireless microphone set', brand: 'Hollyland' }
+      ],
+      extra: 'Plus the Sinha Silver Trophy and runner-up certificates for the media unit.'
+    },
+    {
+      rank: 3, medal: '🥉', title: 'Second Runner-Up', tier: 'Most Popular Media Unit', value: 'Bronze Prize Package',
+      items: [
+        { icon: '🤿', name: 'GoPro HERO action camera bundle', brand: 'GoPro' },
+        { icon: '🎧', name: 'Boya BY-WM4 Pro wireless microphone kit', brand: 'Boya' }
+      ],
+      extra: 'Plus the Sinha Bronze Trophy and certificates for the media unit.'
+    }
+  ],
   events: [
-    { id:'e1', name:'Sinha Awards Night 2026', date:'2026-03-15', time:'6:00 PM', venue:'BMICH, Colombo', description:'The grand annual Sinha Awards ceremony celebrating Sri Lankan school media excellence.', type:'main', img:'https://images.pexels.com/photos/31772890/pexels-photo-31772890.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=300&w=600' },
-    { id:'e2', name:'Finalists Announcement', date:'2026-02-28', time:'10:00 AM', venue:'Online / All Platforms', description:'Announcement of final nominees for all 8 award categories.', type:'announcement', img:'https://images.pexels.com/photos/37012315/pexels-photo-37012315.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=300&w=600' },
+    { id:'e1', name:'Sinha Awards Night 2026', date:'2026-10-24', time:'6:00 PM', venue:'BMICH, Colombo', description:'The grand annual Sinha Awards ceremony celebrating Sri Lankan school media excellence.', type:'main', img:'https://images.pexels.com/photos/31772890/pexels-photo-31772890.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=300&w=600' },
+    { id:'e2', name:'Finalists Announcement', date:'2026-10-22', time:'10:00 AM', venue:'Online / All Platforms', description:'District winners of the Most Popular Media Unit poll are revealed ahead of the ceremony.', type:'announcement', img:'https://images.pexels.com/photos/37012315/pexels-photo-37012315.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=300&w=600' },
     { id:'e3', name:'District Polls Open', date:'2026-08-01', time:'12:00 AM', venue:'Sinha Awards App', description:'Free public voting opens for the Most Popular Media Unit in every district.', type:'voting', img:'https://images.pexels.com/photos/6532365/pexels-photo-6532365.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=300&w=600' },
-    { id:'e4', name:'Project Submission Deadline', date:'2026-01-10', time:'11:59 PM', venue:'sinhaawards.lk/submit', description:'Final deadline for school media units to submit their nominated projects.', type:'deadline', img:'https://images.pexels.com/photos/6565248/pexels-photo-6565248.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=300&w=600' },
+    { id:'e4', name:'Project Submission Deadline', date:'2026-07-15', time:'11:59 PM', venue:'sinhaawards.lk/submit', description:'Final deadline for school media units to submit their nominated projects.', type:'deadline', img:'https://images.pexels.com/photos/6565248/pexels-photo-6565248.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=300&w=600' },
   ],
   schedule: [
     { time:'5:00 PM', event:'Registration & Red Carpet', venue:'BMICH Main Entrance' },
     { time:'6:00 PM', event:'Welcome Ceremony & National Anthem', venue:'Main Auditorium' },
     { time:'6:30 PM', event:'Opening Address – Minister of Education', venue:'Main Stage' },
-    { time:'7:00 PM', event:'Award Presentations – Categories 1-4', venue:'Main Stage' },
+    { time:'7:00 PM', event:'District Poll Results – Colombo & Gampaha', venue:'Main Stage' },
     { time:'8:00 PM', event:'Cultural Performance', venue:'Main Stage' },
-    { time:'8:30 PM', event:'Award Presentations – Categories 5-8', venue:'Main Stage' },
-    { time:'9:30 PM', event:'Best School Media Unit – Grand Award', venue:'Main Stage' },
+    { time:'8:30 PM', event:'District Poll Results – Kalutara', venue:'Main Stage' },
+    { time:'9:30 PM', event:'Most Popular Media Unit – Grand Award & Prize Handover', venue:'Main Stage' },
     { time:'10:00 PM', event:'Reception & Networking', venue:'BMICH Lobby' },
   ],
   announcements: [
-    { title:'Voting Now Open!', body:'Public voting for Most Popular Media Unit is now open. Cast your vote in your district poll before December 31, 2026.', date:'Aug 1, 2026', urgent:true },
+    { title:'Voting Now Open!', body:'Public voting for Most Popular Media Unit is now open. Cast your vote in your district poll before October 20, 2026.', date:'Aug 1, 2026', urgent:true },
     { title:'New Schools Registered', body:'Ananda Sastralaya National School Mathugama and St. Mary\'s College Matugama join the Kalutara District poll.', date:'Aug 27, 2026', urgent:false },
     { title:'29 Media Units Competing', body:'School media units from 29 schools across the Colombo, Gampaha and Kalutara districts are competing this season.', date:'Aug 15, 2026', urgent:false }
   ],
   notifications: [
-    { id:'notif1', title:'🗳️ Voting is Now Open!', body:'Vote for the Most Popular Media Unit in your district. Voting closes December 31, 2026.', time:'2 hours ago', read:false },
+    { id:'notif1', title:'🗳️ Voting is Now Open!', body:'Vote for the Most Popular Media Unit in your district. Voting closes October 20, 2026.', time:'2 hours ago', read:false },
     { id:'notif2', title:'⭐ District Polls Live', body:'Most Popular Media Unit polls are now live for the Colombo, Gampaha and Kalutara districts.', time:'3 days ago', read:false },
-    { id:'notif3', title:'📅 Event Reminder', body:'Sinha Awards Night is on March 15, 2026 at BMICH, Colombo.', time:'1 week ago', read:true },
+    { id:'notif3', title:'📅 Event Reminder', body:'Sinha Awards Night is on October 24, 2026 at BMICH, Colombo.', time:'1 week ago', read:true },
     { id:'notif4', title:'🎉 Welcome to Sinha Awards 2026', body:'Thank you for joining. Explore your district poll and support a school media unit.', time:'2 weeks ago', read:true }
   ],
   users: [], /* Production: stored in database */
@@ -1327,6 +1453,7 @@ function navTo(screen) {
   if (activeNav) activeNav.classList.add('active');
   AppState.currentScreen = screen;
   if (screen === 'vote') renderVoteScreen();
+  else if (screen === 'home') renderPollTabs();
   AuditLog.log('NAVIGATE', AppState.user?.id || 'guest', { screen });
 }
 
@@ -1661,21 +1788,122 @@ function renderPollCards() {
   return DB.districts.map(district => pollCardHTML(district.id)).join('');
 }
 
+/* ─── WhatsApp-style district poll tabs ─────────────────────
+   One tab per district; only the active district's poll is
+   mounted, so switching feels like a chat-app tab swipe. */
+
+function activeDistrictId() {
+  const exists = DB.districts.some(d => d.id === AppState.activePollDistrict);
+  if (!exists) AppState.activePollDistrict = DB.districts[0]?.id || null;
+  return AppState.activePollDistrict;
+}
+
+function pollTabsHTML(scope) {
+  const active = activeDistrictId();
+  return DB.districts.map(district => {
+    const isActive = district.id === active;
+    const count = districtNominees(district.id).length;
+    const voted = Boolean(AppState.votes[district.id]);
+    const short = district.label.replace(/\s*District$/i, '');
+    return `<button type="button" role="tab" aria-selected="${isActive}"
+      class="wa-tab${isActive ? ' active' : ''}"
+      onclick="setPollDistrict('${district.id}','${scope}')"
+      title="${Security.sanitize(district.label)}">
+      ${voted ? '<span class="wa-tab-dot" aria-hidden="true"></span>' : ''}
+      <span class="wa-tab-name">${Security.sanitize(short)}</span>
+      <span class="wa-tab-count">${count} units${voted ? ' · voted' : ''}</span>
+    </button>`;
+  }).join('');
+}
+
+/* Slide the gold indicator under the active tab. */
+function positionPollIndicator(tabsEl) {
+  if (!tabsEl) return;
+  const active = tabsEl.querySelector('.wa-tab.active');
+  if (!active) return;
+  tabsEl.style.setProperty('--wa-x', `${active.offsetLeft}px`);
+  tabsEl.style.setProperty('--wa-w', `${active.offsetWidth}px`);
+}
+
+function renderPollTabs() {
+  [['home-poll-tabs', 'home'], ['vote-poll-tabs', 'vote']].forEach(([id, scope]) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.innerHTML = pollTabsHTML(scope);
+    requestAnimationFrame(() => positionPollIndicator(el));
+  });
+}
+
+function renderActivePoll(direction) {
+  const id = activeDistrictId();
+  if (!id) return;
+  const cls = direction ? `wa-panel${direction === 'left' ? ' rev' : ''}` : '';
+  const markup = `<div class="${cls}">${pollCardHTML(id)}</div>`;
+  ['home-polls', 'vote-category-list'].forEach(target => {
+    const el = document.getElementById(target);
+    if (el) el.innerHTML = markup;
+  });
+}
+
+function setPollDistrict(districtId, scope) {
+  if (!DB.districts.some(d => d.id === districtId)) return;
+  const previousIndex = DB.districts.findIndex(d => d.id === AppState.activePollDistrict);
+  const nextIndex = DB.districts.findIndex(d => d.id === districtId);
+  if (districtId === AppState.activePollDistrict) return;
+  AppState.activePollDistrict = districtId;
+  renderPollTabs();
+  renderActivePoll(nextIndex < previousIndex ? 'left' : 'right');
+  AuditLog.log('POLL_TAB_SWITCH', AppState.user?.id || 'guest', { districtId, scope: scope || 'home' });
+}
+
 function refreshPolls() {
-  const homePolls = document.getElementById('home-polls');
-  if (homePolls) homePolls.innerHTML = renderPollCards();
-  const voteList = document.getElementById('vote-category-list');
-  if (voteList) voteList.innerHTML = renderPollCards();
+  renderPollTabs();
+  renderActivePoll();
+  renderPrizes();
   updateVoteProgress();
   const filter = document.getElementById('nominee-cat-filter');
   if (filter) renderNominees(filter.value || 'all');
 }
 
 function renderVoteScreen() {
-  const container = document.getElementById('vote-category-list');
-  if (!container) return;
-  container.innerHTML = renderPollCards();
+  renderPollTabs();
+  renderActivePoll();
+  renderPrizes();
   updateVoteProgress();
+}
+
+window.addEventListener('resize', () => {
+  ['home-poll-tabs', 'vote-poll-tabs'].forEach(id => positionPollIndicator(document.getElementById(id)));
+});
+
+/* ─── Winner Award Category prizes ─── */
+function prizeCardHTML(prize) {
+  return `<article class="prize-card rank-${prize.rank} lux-rise" style="animation-delay:${(prize.rank - 1) * 90}ms">
+    <div class="prize-head">
+      <div class="prize-medal" aria-hidden="true">${prize.medal}</div>
+      <div style="min-width:0">
+        <div class="prize-rank">${Security.sanitize(prize.title)}</div>
+        <div class="prize-tier">${Security.sanitize(prize.tier)}</div>
+      </div>
+      <div class="prize-value">${Security.sanitize(prize.value)}</div>
+    </div>
+    <div class="prize-items">
+      ${prize.items.map(item => `<div class="prize-item">
+        <span class="prize-item-icon" aria-hidden="true">${item.icon}</span>
+        <span class="prize-item-name">${Security.sanitize(item.name)}</span>
+        <span class="prize-item-brand">${Security.sanitize(item.brand)}</span>
+      </div>`).join('')}
+    </div>
+    <div class="prize-extra">${Security.sanitize(prize.extra)}</div>
+  </article>`;
+}
+
+function renderPrizes() {
+  const markup = DB.prizes.map(prizeCardHTML).join('');
+  ['home-prizes', 'vote-prizes', 'awards-prize-grid'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = markup;
+  });
 }
 
 function castPollVote(districtId, nomineeId) {
@@ -1723,11 +1951,12 @@ function updateVoteProgress() {
 function switchAwardsTab(tab, btn) {
   document.querySelectorAll('.awards-tab-content').forEach(t=>t.style.display='none');
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-  document.getElementById(`awards-${tab}`)?.style.setProperty('display','block');
+  (document.getElementById(`awards-${tab}`) || document.getElementById(`awards-${tab}-tab`))?.style.setProperty('display','block');
   if (btn) btn.classList.add('active'); else document.querySelector(`.tab-btn[onclick*="${tab}"]`)?.classList.add('active');
   if (tab==='categories') renderCategories();
   else if (tab==='nominees') renderNominees('all');
   else if (tab==='schools') renderSchools();
+  else if (tab==='prizes') renderPrizes();
   else if (tab==='winners') renderWinners(2025);
 }
 
@@ -1992,9 +2221,12 @@ function renderEvents() {
 ═══════════════════════════════════════════════════════════ */
 
 function renderHome() {
-  /* District voting polls */
-  const homePolls = document.getElementById('home-polls');
-  if (homePolls) homePolls.innerHTML = renderPollCards();
+  /* District voting polls — WhatsApp-style tabs, one district mounted at a time */
+  renderPollTabs();
+  renderActivePoll();
+
+  /* Winner Award Category prizes */
+  renderPrizes();
 
   /* Categories pill */
   const homeCats = document.getElementById('home-cats');
@@ -2395,6 +2627,7 @@ async function bootstrap() {
   renderEvents();
   renderCategories();
   populateNomineeFilter();
+  renderPrizes();
   startCountdown();
   initParticles();
   updateProfileUI();
