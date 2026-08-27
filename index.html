@@ -538,6 +538,11 @@ body{display:flex;flex-direction:column;position:relative}
 
 /* Site background — golden lion photo at 70% opacity with gold animations */
 #bg-scene{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;background:#08080f}
+#bg-photo{position:absolute;inset:-6%;
+  background:url('bg-lion.jpg') center 38%/cover no-repeat;
+  opacity:.7;
+  filter:sepia(.28) saturate(1.25) hue-rotate(-6deg) brightness(.85) contrast(1.05);
+  animation:bgKenBurns 32s ease-in-out infinite alternate, bgGoldPulse 7s ease-in-out infinite}
 #bg-shade{position:absolute;inset:0;
   background:
     radial-gradient(120% 90% at 50% 20%,rgba(8,8,15,.35) 0%,rgba(8,8,15,.72) 55%,rgba(8,8,15,.94) 100%),
@@ -690,45 +695,6 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
   .auth-screen{padding:16px 24px}
 }
 
-/* ══ SMALL SCREENS — enable BOTH vertical & horizontal scroll ══
-   On phones / tiny devices every surface scrolls vertically AND
-   horizontally so content (admin tables, schedules, analytics) is
-   never clipped. Wide blocks are allowed to keep their natural width
-   and scroll sideways instead of being squashed. */
-@media (max-width:600px){
-  #app,
-  .screen,
-  .admin-overlay,
-  .admin-content,
-  .judge-overlay,
-  #judge-content,
-  .sub-screen,
-  .notif-panel,
-  .school-detail-overlay,
-  .auth-screen,
-  .modal-box{
-    overflow-x:auto;
-    -webkit-overflow-scrolling:touch;
-    overscroll-behavior-x:contain;
-  }
-  /* Allow wide data rows / tables to keep their size and scroll sideways */
-  .admin-grid,
-  .admin-row,
-  .schedule-item,
-  .poll-option-row,
-  .operator-grid,
-  .winner-card,
-  .prize-row{ min-width:min-content; }
-  /* Make horizontal scrollbars visible & easy to grab on touch devices */
-  .screen::-webkit-scrollbar,
-  .admin-content::-webkit-scrollbar,
-  #judge-content::-webkit-scrollbar{ height:6px; }
-  .screen::-webkit-scrollbar-thumb,
-  .admin-content::-webkit-scrollbar-thumb,
-  #judge-content::-webkit-scrollbar-thumb{ background:var(--gold-dark);border-radius:3px; }
-}
-
-
 </style>
 </head>
 <body>
@@ -810,6 +776,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 
 <!-- Golden lion background -->
 <div id="bg-scene" aria-hidden="true">
+  <div id="bg-photo"></div>
   <div id="bg-shade"></div>
   <div id="bg-gold-sheen"></div>
   <div id="bg-vignette"></div>
@@ -823,6 +790,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 
 <!-- Loading Screen -->
 <div class="loading-overlay" id="loading-screen">
+  <span class="lion-logo lion-2xl lion-glow lion-spin-in" style="margin-bottom:14px"><img src="lion.png" alt="Sinha Awards lion logo"/></span>
   <div class="loading-logo">🏆 Sinha</div>
   <div style="font-size:12px;color:var(--text3);letter-spacing:2px;text-transform:uppercase">Awards 2026</div>
   <div class="spinner spinner-gold" style="margin-top:24px"></div>
@@ -832,6 +800,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 <!-- ══ AUTH SCREEN ═══════════════════════════════ -->
 <div class="auth-screen" id="auth-screen" style="display:none">
   <div style="text-align:center;margin-bottom:32px">
+    <span class="lion-logo lion-xl lion-float lion-glow lion-spin-in" style="margin-bottom:8px"><img src="lion.png" alt="Sinha Awards lion logo"/></span>
     <div style="font-family:var(--font-display);font-size:28px;font-weight:900;background:linear-gradient(135deg,var(--gold-light),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Sinha Awards</div>
     <div class="auth-tagline">Sri Lanka School Media Awards 2026</div>
   </div>
@@ -863,7 +832,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
       <p class="fee-note">LKR 39 is charged for tax and fees.</p>
       <button class="btn btn-primary btn-block btn-lg" style="margin-top:20px" onclick="sendOTP()" id="send-otp-btn">
         <span id="send-otp-text">Send Verification Code</span>
-        <span id="send-otp-spinner" class="spinner" style="display:none;width:16px;height:16px;border-width:2px;border-top-color:#080810;border-color:rgba(8,8,16,.3)"></span>
+        <span id="send-otp-spinner" style="display:none" class="spinner" style="width:16px;height:16px;border-width:2px;border-top-color:#080810;border-color:rgba(8,8,16,.3)"></span>
       </button>
       <p class="privacy-text" style="margin-top:20px">By continuing, you agree to our <span class="privacy-link" onclick="showPrivacy()">Privacy Policy</span> and <span class="privacy-link" onclick="showTerms()">Terms of Service</span>.</p>
     </div>
@@ -891,7 +860,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
       </div>
       <button class="btn btn-primary btn-block btn-lg" style="margin-top:16px" onclick="verifyOTP()" id="verify-otp-btn">
         <span id="verify-otp-text">Verify & Continue</span>
-        <span id="verify-otp-spinner" class="spinner" style="display:none;border-top-color:#080810;border-color:rgba(8,8,16,.3)"></span>
+        <span id="verify-otp-spinner" style="display:none" class="spinner" style="border-top-color:#080810;border-color:rgba(8,8,16,.3)"></span>
       </button>
     </div>
 
@@ -989,7 +958,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
     <div style="padding:20px">
       <button class="btn btn-primary btn-block btn-lg" onclick="initiatePayment()" id="pay-btn">
         <span id="pay-btn-text">Proceed to Payment</span>
-        <span id="pay-spinner" class="spinner" style="display:none;border-top-color:#080810"></span>
+        <span id="pay-spinner" style="display:none" class="spinner" style="border-top-color:#080810"></span>
       </button>
       <p class="privacy-text" style="margin-top:16px">Payment is processed securely. Subscription activates only after server-side verification. See our <span class="privacy-link">Subscription Terms</span>.</p>
     </div>
@@ -1004,7 +973,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
     <div class="screen active" id="screen-home">
       <div class="hero-section">
         <div class="hero-bg"></div>
-        <div class="hero-badge"> &nbsp; Sinha Awards 2026 &nbsp; · &nbsp; Now Open</div>
+        <div class="hero-badge"><span class="lion-logo lion-float" style="width:26px;height:26px;vertical-align:middle"><img src="lion.png" alt="Sinha Awards lion logo"/></span> &nbsp; Sinha Awards 2026 &nbsp; · &nbsp; Now Open</div>
         <h1 class="hero-title">Sri Lanka's<br/>School Media<br/><span class="gold lux-shimmer">Awards Night</span></h1>
         <p class="hero-subtitle">Celebrating excellence in school media production across Sri Lanka. Vote for your favourite school media units.</p>
         <div class="hero-cta">
@@ -1110,8 +1079,8 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
         <div id="schools-list" class="stagger" style="padding:0 20px;display:flex;flex-direction:column;gap:12px"></div>
       </div>
 
-    <!-- Winners Tab -->
-    <div id="awards-winners" class="awards-tab-content" style="display:none">
+      <!-- Winners Tab -->
+      <div id="awards-winners-tab" class="awards-tab-content" style="display:none">
         <div class="winner-year-tab" id="winner-years"></div>
         <div id="winners-list"></div>
       </div>
@@ -1154,12 +1123,6 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
         <div class="section-head"><div class="section-label">Upcoming Events</div></div>
       </div>
       <div id="event-list"></div>
-
-      <!-- Event Schedule -->
-      <div style="padding:0 20px;margin:8px 0 24px">
-        <div class="section-head"><div class="section-label">📋 Event Schedule</div></div>
-        <div class="card" id="event-schedule" style="padding:8px 16px"></div>
-      </div>
 
       <!-- Winner Award Category -->
       <div style="padding:0 20px;margin:8px 0 24px">
@@ -1295,6 +1258,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 <aside class="dash-drawer" id="dash-drawer" aria-label="Dashboard menu">
   <div class="dash-header">
     <div style="display:flex;align-items:center;gap:12px">
+      <span class="lion-logo lion-float" style="width:44px;height:44px;flex-shrink:0"><img src="lion.png" alt="Sinha Awards lion logo"/></span>
       <div>
         <div style="font-family:var(--font-display);font-size:20px;font-weight:900;background:linear-gradient(135deg,var(--gold-light),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Sinha Awards</div>
         <div style="font-size:11px;color:var(--text2);letter-spacing:1px;text-transform:uppercase">Dashboard · 2026</div>
@@ -1994,7 +1958,8 @@ async function initiatePayment() {
     showModal(`
       <div class="modal-title modal-center">📲 Confirm Mobile Billing</div>
       <div style="text-align:center;margin:6px 0 18px">
-      <div class="modal-subtitle" style="margin-bottom:6px">You will receive a confirmation on your phone from your network operator.</div>
+        <div class="lion-logo lion-l lion-glow" style="margin:0 auto 14px"><img src="lion.png" alt="Sinha Awards lion logo"/></div>
+        <div class="modal-subtitle" style="margin-bottom:6px">You will receive a confirmation on your phone from your network operator.</div>
         <div class="security-notice" style="text-align:left"><span class="security-icon">🔒</span><span>Payment is processed securely by your mobile operator and activated only after confirmation.</span></div>
       </div>
       <div style="display:flex;gap:10px">
@@ -3503,6 +3468,5 @@ async function bootstrap() {
 
 document.addEventListener('DOMContentLoaded', bootstrap);
 </script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a31a79a31db5849b',t:'MTc4NzgyNzQwNQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"1954b47c125f43f8b4338b3c4f804e4f"}' crossorigin="anonymous"></script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a31a8d29ddc2d93e',t:'MTc4NzgyODIwNQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a31a9373d95f3ae5',t:'MTc4NzgyODQ2Mg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
