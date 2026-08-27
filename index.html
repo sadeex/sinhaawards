@@ -608,6 +608,67 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
   .featured-grid{grid-template-columns:1fr 1fr 1fr}
   .featured-card:first-child{grid-row:span 1;aspect-ratio:3/4}
 }
+
+/* ══ DESKTOP / TABLET — centered app frame ═════════ */
+@media (min-width:600px){
+  html,body{height:100%}
+  body{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+
+  /* Main app becomes a centered phone-like column; lion photo fills the viewport behind */
+  #app{
+    width:min(480px,100%);
+    margin:0 auto;
+    box-shadow:0 0 0 1px rgba(201,168,76,.22), 0 0 70px rgba(0,0,0,.75), 0 0 120px rgba(201,168,76,.08);
+  }
+
+  /* Full-screen overlays stay inside the same centered frame */
+  .auth-screen,.sub-screen,.notif-panel,.school-detail-overlay,.vote-confirm-screen,.loading-overlay{
+    width:min(480px,100%);
+    left:0;right:0;margin-inline:auto;
+    box-shadow:0 0 0 1px rgba(201,168,76,.18), 0 0 70px rgba(0,0,0,.75);
+  }
+
+  /* Admin & Judge are real dashboards — give them a wider centered panel */
+  .admin-overlay,.judge-overlay{
+    width:min(1020px,94vw);
+    left:0;right:0;margin-inline:auto;
+    box-shadow:0 0 0 1px rgba(201,168,76,.22), 0 24px 90px rgba(0,0,0,.8);
+  }
+  .admin-grid{grid-template-columns:repeat(3,1fr)}
+  .admin-content{max-width:960px;margin:0 auto}
+  #judge-content > div{max-width:960px;margin:0 auto}
+  .judge-score-card,.admin-stat{transition:transform .2s ease,border-color .2s ease}
+  .judge-score-card:hover,.admin-stat:hover{transform:translateY(-2px);border-color:var(--border2)}
+
+  /* Bottom sheets become centered dialogs */
+  .modal-overlay{align-items:center;padding:24px}
+  .modal-box{border-radius:var(--radius-lg);max-width:460px;width:100%}
+
+  /* Dashboard drawer + FAB align inside the centered frame */
+  .dash-drawer{
+    left:calc(50vw - 240px);
+    border-radius:0 18px 18px 0;
+    box-shadow:16px 0 60px rgba(0,0,0,.65);
+  }
+  .dash-fab{left:calc(50vw - 228px)}
+
+  /* Toasts sit over the frame */
+  #toast-container{max-width:420px}
+
+  /* Slightly roomier type on larger canvases */
+  .hero-title{font-size:42px}
+  .page-title{font-size:30px}
+}
+
+/* Very large screens: keep the frame but let the lion backdrop breathe */
+@media (min-width:1100px){
+  #app,.auth-screen,.sub-screen,.notif-panel,.school-detail-overlay,.vote-confirm-screen,.loading-overlay{
+    width:min(500px,100%);
+  }
+  .dash-drawer{left:calc(50vw - 250px)}
+  .dash-fab{left:calc(50vw - 238px)}
+}
+
 </style>
 </head>
 <body>
@@ -3138,5 +3199,5 @@ async function bootstrap() {
 
 document.addEventListener('DOMContentLoaded', bootstrap);
 </script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a31a3c80af184f15',t:'MTc4NzgyNDkwMQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a31a4ceca8653af5',t:'MTc4NzgyNTU3Mw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
