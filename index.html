@@ -440,6 +440,40 @@ body{display:flex;flex-direction:column;position:relative}
 .poll-option-row{position:relative;display:flex;align-items:center;gap:10px;padding:10px 12px}
 .poll-radio{width:18px;height:18px;border-radius:50%;border:2px solid var(--text3);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:#1a1a2e;transition:all .2s ease}
 .poll-radio.checked{background:var(--gold);border-color:var(--gold)}
+.poll-tabs{display:flex;gap:6px;margin-bottom:14px;background:var(--surface);padding:5px;border-radius:13px;border:1px solid var(--border3)}
+.poll-tab{flex:1;border:none;background:transparent;color:var(--text2);font-size:13px;font-weight:700;padding:10px 6px;border-radius:9px;cursor:pointer;transition:all .28s cubic-bezier(.25,.8,.25,1);font-family:inherit;white-space:nowrap}
+.poll-tab:hover{color:var(--gold-light)}
+.poll-tab.active{background:linear-gradient(135deg,var(--gold-light),var(--gold-dark));color:#171204;box-shadow:0 4px 16px rgba(201,168,76,.4)}
+.poll-enter{animation:fadeUp .4s cubic-bezier(.22,.9,.3,1)}
+/* ─── Luxury animations ─── */
+@keyframes shimmer{0%{background-position:-200% center}100%{background-position:200% center}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes screenIn{from{opacity:0;transform:translateY(12px) scale(.995)}to{opacity:1;transform:none}}
+@keyframes glowPulse{0%,100%{text-shadow:0 0 14px rgba(201,168,76,.25)}50%{text-shadow:0 0 32px rgba(201,168,76,.55)}}
+@keyframes softFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+@keyframes crownShine{0%,100%{filter:drop-shadow(0 0 6px rgba(201,168,76,.35))}50%{filter:drop-shadow(0 0 16px rgba(201,168,76,.7))}}
+.lux-shimmer{background:linear-gradient(110deg,var(--gold-dark) 20%,var(--gold-light) 40%,#fff6d8 50%,var(--gold-light) 60%,var(--gold-dark) 80%);background-size:200% auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:shimmer 5s linear infinite}
+.screen.active{animation:screenIn .45s cubic-bezier(.22,.9,.3,1)}
+.card{transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease}
+.card:hover{transform:translateY(-2px);box-shadow:0 10px 34px rgba(201,168,76,.14);border-color:var(--border2)}
+.btn{transition:transform .2s ease,box-shadow .25s ease,filter .25s ease}
+.btn:hover{transform:translateY(-1px);filter:brightness(1.08)}
+.btn-primary{position:relative;overflow:hidden}
+.btn-primary::after{content:'';position:absolute;top:0;left:-80%;width:45%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.35),transparent);transform:skewX(-20deg);transition:left .65s ease}
+.btn-primary:hover::after{left:135%}
+.hero-badge{animation:softFloat 3.4s ease-in-out infinite}
+.cd-num{animation:glowPulse 3.2s ease-in-out infinite}
+.nav-item.active .nav-icon{animation:softFloat 2.6s ease-in-out infinite}
+.sub-icon,.countdown-title{animation:crownShine 3.5s ease-in-out infinite}
+.stagger>*{animation:fadeUp .55s cubic-bezier(.22,.9,.3,1) both}
+.stagger>*:nth-child(1){animation-delay:.03s}.stagger>*:nth-child(2){animation-delay:.09s}.stagger>*:nth-child(3){animation-delay:.15s}.stagger>*:nth-child(4){animation-delay:.21s}.stagger>*:nth-child(5){animation-delay:.27s}.stagger>*:nth-child(6){animation-delay:.33s}.stagger>*:nth-child(7){animation-delay:.39s}.stagger>*:nth-child(8){animation-delay:.45s}.stagger>*:nth-child(n+9){animation-delay:.5s}
+.prize-row{display:flex;gap:12px;padding:12px;border-radius:12px;background:var(--surface);border:1px solid var(--border3);margin-bottom:8px;align-items:center;transition:border-color .25s ease,transform .25s ease}
+.prize-row:hover{border-color:var(--border2);transform:translateX(3px)}
+.prize-medal{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:23px;flex-shrink:0}
+.prize-medal.gold{background:rgba(201,168,76,.18);border:1px solid var(--border2);box-shadow:0 0 18px rgba(201,168,76,.3)}
+.prize-medal.silver{background:rgba(192,192,192,.12);border:1px solid rgba(192,192,192,.38)}
+.prize-medal.bronze{background:rgba(205,127,50,.13);border:1px solid rgba(205,127,50,.4)}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
 
 .back-btn{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border3);border-radius:50px;padding:8px 14px;font-size:14px;font-weight:500;cursor:pointer;color:var(--text);font-family:var(--font-body);transition:all .2s;flex-shrink:0}
 .back-btn:hover{border-color:var(--border2)}
@@ -654,7 +688,7 @@ body{display:flex;flex-direction:column;position:relative}
       <div class="hero-section">
         <div class="hero-bg"></div>
         <div class="hero-badge">🏆 &nbsp; Sinha Awards 2026 &nbsp; · &nbsp; Now Open</div>
-        <h1 class="hero-title">Sri Lanka's<br/>School Media<br/><span class="gold">Awards Night</span></h1>
+        <h1 class="hero-title">Sri Lanka's<br/>School Media<br/><span class="gold lux-shimmer">Awards Night</span></h1>
         <p class="hero-subtitle">Celebrating excellence in school media production across Sri Lanka. Vote for your favourite school media units.</p>
         <div class="hero-cta">
           <button class="btn btn-primary btn-lg" onclick="navTo('vote')">🗳️ Vote Now</button>
@@ -666,7 +700,7 @@ body{display:flex;flex-direction:column;position:relative}
       <div class="countdown-section">
         <div class="countdown-card">
           <div class="countdown-title">⏳ Ceremony Countdown</div>
-          <div style="font-size:13px;color:var(--text2);margin-bottom:16px">Sinha Awards Night — March 15, 2026 · 6:00 PM · BMICH, Colombo</div>
+          <div style="font-size:13px;color:var(--text2);margin-bottom:16px">Sinha Awards Night — October 24, 2026 (Saturday) · 6:00 PM · Colombo</div>
           <div class="countdown-grid">
             <div class="cd-unit"><div class="cd-num" id="cd-days">00</div><div class="cd-lbl">Days</div></div>
             <div class="cd-unit"><div class="cd-num" id="cd-hours">00</div><div class="cd-lbl">Hours</div></div>
@@ -677,15 +711,16 @@ body{display:flex;flex-direction:column;position:relative}
       </div>
 
       <!-- Home Content -->
-      <div class="home-scroll">
+      <div class="home-scroll stagger">
         <!-- District Voting Polls -->
         <div>
           <div class="section-head">
             <div class="section-label">⭐ District Voting Polls</div>
             <div class="section-action" onclick="navTo('vote')">Open Polls →</div>
           </div>
-          <div style="font-size:12px;color:var(--text2);margin:-8px 0 12px">Most Popular Media Unit · one vote per district</div>
-          <div id="home-polls" style="display:flex;flex-direction:column;gap:16px"></div>
+          <div style="font-size:12px;color:var(--text2);margin:-8px 0 12px">Most Popular Media Unit · one vote per district · Voting closes Oct 20</div>
+          <div class="poll-tabs" id="home-poll-tabs"></div>
+          <div id="home-polls"></div>
         </div>
 
         <!-- Categories -->
@@ -750,12 +785,12 @@ body{display:flex;flex-direction:column;position:relative}
             <option value="all">All Categories</option>
           </select>
         </div>
-        <div id="nominee-list-container" class="nominee-list"></div>
+        <div id="nominee-list-container" class="nominee-list stagger"></div>
       </div>
 
       <!-- Schools Tab -->
       <div id="awards-schools" class="awards-tab-content" style="display:none">
-        <div id="schools-list" style="padding:0 20px;display:flex;flex-direction:column;gap:12px"></div>
+        <div id="schools-list" class="stagger" style="padding:0 20px;display:flex;flex-direction:column;gap:12px"></div>
       </div>
 
       <!-- Winners Tab -->
@@ -775,7 +810,7 @@ body{display:flex;flex-direction:column;position:relative}
         <div class="progress-bar-bg"><div class="progress-bar-fill" id="vote-progress-fill" style="width:0%"></div></div>
         <div class="progress-label">
           <span id="vote-progress-label">0 of 3 district polls voted</span>
-          <span id="vote-deadline" style="color:var(--gold)">Closes: Dec 31, 2026</span>
+          <span id="vote-deadline" style="color:var(--gold)">Closes: Oct 20, 2026</span>
         </div>
       </div>
 
@@ -795,17 +830,20 @@ body{display:flex;flex-direction:column;position:relative}
         <div class="event-hero-overlay">
           <div class="event-hero-badge">🔴 LIVE EVENT</div>
           <div class="event-hero-title">Sinha Awards Night 2026</div>
-          <div class="event-hero-meta">📅 March 15, 2026 &nbsp;·&nbsp; 🕕 6:00 PM &nbsp;·&nbsp; 📍 BMICH, Colombo</div>
+          <div class="event-hero-meta">📅 October 24, 2026 (Sat) &nbsp;·&nbsp; 🕕 6:00 PM &nbsp;·&nbsp; 📍 Colombo</div>
         </div>
-      </div>
-      <div style="padding:0 20px;margin-bottom:16px">
-        <div class="section-head"><div class="section-label">Event Schedule</div></div>
-        <div id="event-schedule"></div>
       </div>
       <div style="padding:0 20px;margin-bottom:16px">
         <div class="section-head"><div class="section-label">Upcoming Events</div></div>
       </div>
       <div id="event-list"></div>
+
+      <!-- Winner Award Category -->
+      <div style="padding:0 20px;margin:8px 0 24px">
+        <div class="section-head"><div class="section-label">🎁 Winner Award Category</div></div>
+        <p style="font-size:12px;color:var(--text2);line-height:1.6;margin-bottom:12px">The 1st, 2nd &amp; 3rd place winners of each district's Most Popular Media Unit poll receive these branded gifts at the ceremony in Colombo.</p>
+        <div id="winner-awards-list" class="stagger" style="display:flex;flex-direction:column;gap:14px"></div>
+      </div>
     </div>
 
     <!-- ─── PROFILE SCREEN ─── -->
@@ -940,8 +978,8 @@ body{display:flex;flex-direction:column;position:relative}
 const ENV = {
   APP_VERSION: '2.0.0',
   VOTE_START: new Date('2026-08-01T00:00:00'),
-  VOTE_END: new Date('2026-12-31T23:59:59'),
-  CEREMONY_DATE: new Date('2026-03-15T18:00:00'),
+  VOTE_END: new Date('2026-10-20T23:59:59'),
+  CEREMONY_DATE: new Date('2026-10-24T18:00:00'),
   MAX_OTP_ATTEMPTS: 5,
   OTP_VALIDITY_MINS: 5,
   OTP_RESEND_SECS: 60,
@@ -1124,6 +1162,7 @@ const AppState = {
   user: null,
   subscription: null,
   votes: {}, /* { districtId: { nomineeId, timestamp } } — one vote per district poll */
+  homePollTab: 'colombo',
   otpState: { phone: '', hash: '', attempts: 0, lastSent: 0, expires: 0 },
   currentScreen: 'home',
   selectedOperator: null,
@@ -1222,31 +1261,36 @@ const DB = {
     { id:'n29', catId:'cat1', schoolId:'s29', votes:1035 }
   ],
   winners: [], /* Winners will be announced at Sinha Awards Night 2026 */
+  winnerPrizes: [ /* Awarded to 1st, 2nd & 3rd place of EACH district's Most Popular Media Unit poll */
+    { place:'1st', medal:'🥇', medalClass:'gold', gift:'Canon EOS R50 Mirrorless Camera Kit', audio:'RØDE Wireless GO II Wireless Microphone Kit', trophy:'Gold Trophy & Winner Certificate' },
+    { place:'2nd', medal:'🥈', medalClass:'silver', gift:'DJI Osmo Pocket 3 Creator Combo', audio:'Hollyland Lark M2 Wireless Microphone', trophy:'Silver Trophy & Certificate' },
+    { place:'3rd', medal:'🥉', medalClass:'bronze', gift:'GoPro HERO12 Black Action Camera', audio:'Boya BY-PM700 USB Studio Microphone', trophy:'Bronze Trophy & Certificate' }
+  ],
   events: [
-    { id:'e1', name:'Sinha Awards Night 2026', date:'2026-03-15', time:'6:00 PM', venue:'BMICH, Colombo', description:'The grand annual Sinha Awards ceremony celebrating Sri Lankan school media excellence.', type:'main', img:'https://images.pexels.com/photos/31772890/pexels-photo-31772890.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=300&w=600' },
-    { id:'e2', name:'Finalists Announcement', date:'2026-02-28', time:'10:00 AM', venue:'Online / All Platforms', description:'Announcement of final nominees for all 8 award categories.', type:'announcement', img:'https://images.pexels.com/photos/37012315/pexels-photo-37012315.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=300&w=600' },
+    { id:'e1', name:'Sinha Awards Night 2026', date:'2026-10-24', time:'6:00 PM', venue:'Colombo', description:'The grand annual Sinha Awards ceremony celebrating Sri Lankan school media excellence.', type:'main', img:'https://images.pexels.com/photos/31772890/pexels-photo-31772890.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=300&w=600' },
+    { id:'e2', name:'Finalists Announcement', date:'2026-02-28', time:'10:00 AM', venue:'Online / All Platforms', description:'Announcement of the final standings for each district Most Popular Media Unit poll.', type:'announcement', img:'https://images.pexels.com/photos/37012315/pexels-photo-37012315.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=300&w=600' },
     { id:'e3', name:'District Polls Open', date:'2026-08-01', time:'12:00 AM', venue:'Sinha Awards App', description:'Free public voting opens for the Most Popular Media Unit in every district.', type:'voting', img:'https://images.pexels.com/photos/6532365/pexels-photo-6532365.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=300&w=600' },
     { id:'e4', name:'Project Submission Deadline', date:'2026-01-10', time:'11:59 PM', venue:'sinhaawards.lk/submit', description:'Final deadline for school media units to submit their nominated projects.', type:'deadline', img:'https://images.pexels.com/photos/6565248/pexels-photo-6565248.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=300&w=600' },
   ],
   schedule: [
-    { time:'5:00 PM', event:'Registration & Red Carpet', venue:'BMICH Main Entrance' },
+    { time:'5:00 PM', event:'Registration & Red Carpet', venue:'Main Entrance' },
     { time:'6:00 PM', event:'Welcome Ceremony & National Anthem', venue:'Main Auditorium' },
     { time:'6:30 PM', event:'Opening Address – Minister of Education', venue:'Main Stage' },
     { time:'7:00 PM', event:'Award Presentations – Categories 1-4', venue:'Main Stage' },
     { time:'8:00 PM', event:'Cultural Performance', venue:'Main Stage' },
     { time:'8:30 PM', event:'Award Presentations – Categories 5-8', venue:'Main Stage' },
     { time:'9:30 PM', event:'Best School Media Unit – Grand Award', venue:'Main Stage' },
-    { time:'10:00 PM', event:'Reception & Networking', venue:'BMICH Lobby' },
+    { time:'10:00 PM', event:'Reception & Networking', venue:'Grand Lobby' },
   ],
   announcements: [
-    { title:'Voting Now Open!', body:'Public voting for Most Popular Media Unit is now open. Cast your vote in your district poll before December 31, 2026.', date:'Aug 1, 2026', urgent:true },
+    { title:'Voting Now Open!', body:'Public voting for Most Popular Media Unit is now open. Cast your vote in your district poll before October 20, 2026.', date:'Aug 1, 2026', urgent:true },
     { title:'New Schools Registered', body:'Ananda Sastralaya National School Mathugama and St. Mary\'s College Matugama join the Kalutara District poll.', date:'Aug 27, 2026', urgent:false },
     { title:'29 Media Units Competing', body:'School media units from 29 schools across the Colombo, Gampaha and Kalutara districts are competing this season.', date:'Aug 15, 2026', urgent:false }
   ],
   notifications: [
-    { id:'notif1', title:'🗳️ Voting is Now Open!', body:'Vote for the Most Popular Media Unit in your district. Voting closes December 31, 2026.', time:'2 hours ago', read:false },
+    { id:'notif1', title:'🗳️ Voting is Now Open!', body:'Vote for the Most Popular Media Unit in your district. Voting closes October 20, 2026.', time:'2 hours ago', read:false },
     { id:'notif2', title:'⭐ District Polls Live', body:'Most Popular Media Unit polls are now live for the Colombo, Gampaha and Kalutara districts.', time:'3 days ago', read:false },
-    { id:'notif3', title:'📅 Event Reminder', body:'Sinha Awards Night is on March 15, 2026 at BMICH, Colombo.', time:'1 week ago', read:true },
+    { id:'notif3', title:'📅 Event Reminder', body:'Sinha Awards Night is on October 24, 2026 (Saturday) in Colombo.', time:'1 week ago', read:true },
     { id:'notif4', title:'🎉 Welcome to Sinha Awards 2026', body:'Thank you for joining. Explore your district poll and support a school media unit.', time:'2 weeks ago', read:true }
   ],
   users: [], /* Production: stored in database */
@@ -1502,12 +1546,8 @@ function completeAuth() {
   document.getElementById('app').style.display='flex';
   navTo('home');
   showToast('Welcome to Sinha Awards 2026! 🏆','success');
-  /* Check if came from vote intent */
-  if (!AppState.hasActiveSubscription()) {
-    setTimeout(() => showSubScreen(), 800);
-  } else {
-    setTimeout(() => navTo('vote'), 500);
-  }
+  /* Voting is free for everyone — district polls need no subscription */
+  setTimeout(() => navTo('vote'), 500);
 }
 
 function confirmLogout() {
@@ -1644,7 +1684,7 @@ function pollCardHTML(districtId) {
         const isMine = selectedId === nominee.id;
         const isLeading = nominee.votes === maxVotes && nominee.votes > 0;
         return `<div class="poll-option${isMine ? ' mine' : ''}" role="button" tabindex="0" onclick="castPollVote('${districtId}','${nominee.id}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();castPollVote('${districtId}','${nominee.id}')}">
-          <div class="poll-bar-fill" style="width:${percent}%"></div>
+          <div class="poll-bar-fill" style="width:0%" data-w="${percent}"></div>
           <div class="poll-option-row">
             <div class="poll-radio${isMine ? ' checked' : ''}" aria-hidden="true">${isMine ? '✓' : ''}</div>
             <div style="flex:1;min-width:0;font-size:13px;font-weight:${isMine || isLeading ? '700' : '500'}">${Security.sanitize(nominee.schoolName)}${isLeading ? ' 🥇' : ''}</div>
@@ -1661,11 +1701,36 @@ function renderPollCards() {
   return DB.districts.map(district => pollCardHTML(district.id)).join('');
 }
 
+function animatePollBars(root) {
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    (root||document).querySelectorAll('.poll-bar-fill[data-w]').forEach(b=>{ b.style.width = b.dataset.w+'%'; });
+  }));
+}
+
+function renderHomePollTabs() {
+  const tabs = document.getElementById('home-poll-tabs');
+  const holder = document.getElementById('home-polls');
+  if (!tabs || !holder) return;
+  if (!DB.districts.find(d=>d.id===AppState.homePollTab)) AppState.homePollTab = DB.districts[0].id;
+  tabs.innerHTML = DB.districts.map(d=>{
+    const active = AppState.homePollTab===d.id;
+    const cast = !!AppState.votes[d.id];
+    return `<button class="poll-tab${active?' active':''}" onclick="switchHomePoll('${d.id}')">${Security.sanitize(d.label.replace(' District',''))}${cast?' ✓':''}</button>`;
+  }).join('');
+  holder.innerHTML = `<div class="poll-enter">${pollCardHTML(AppState.homePollTab)}</div>`;
+  animatePollBars(holder);
+}
+
+function switchHomePoll(districtId) {
+  if (AppState.homePollTab===districtId) return;
+  AppState.homePollTab = districtId;
+  renderHomePollTabs();
+}
+
 function refreshPolls() {
-  const homePolls = document.getElementById('home-polls');
-  if (homePolls) homePolls.innerHTML = renderPollCards();
+  renderHomePollTabs();
   const voteList = document.getElementById('vote-category-list');
-  if (voteList) voteList.innerHTML = renderPollCards();
+  if (voteList) { voteList.innerHTML = renderPollCards(); animatePollBars(voteList); }
   updateVoteProgress();
   const filter = document.getElementById('nominee-cat-filter');
   if (filter) renderNominees(filter.value || 'all');
@@ -1674,7 +1739,9 @@ function refreshPolls() {
 function renderVoteScreen() {
   const container = document.getElementById('vote-category-list');
   if (!container) return;
+  container.classList.add('stagger');
   container.innerHTML = renderPollCards();
+  animatePollBars(container);
   updateVoteProgress();
 }
 
@@ -1852,7 +1919,7 @@ function renderWinners(year) {
         <div style="margin-top:10px"><span class="chip chip-gold" style="font-size:11px">${w.year} Winner</span></div>
       </div>
     </div>`;
-  }).join('') || `<div class="empty-state"><div class="empty-icon">🏆</div><div class="empty-title">${DB.winners.length?`No winners for ${year}`:'Winners Not Announced Yet'}</div><div class="empty-sub">Winners of Sinha Awards 2026 will be revealed at the Awards Night on March 15, 2026 at BMICH, Colombo.</div></div>`;
+  }).join('') || `<div class="empty-state"><div class="empty-icon">🏆</div><div class="empty-title">${DB.winners.length?`No winners for ${year}`:'Winners Not Announced Yet'}</div><div class="empty-sub">Winners of Sinha Awards 2026 will be revealed at the Awards Night on October 24, 2026 (Saturday) in Colombo.</div></div>`;
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -1953,9 +2020,35 @@ function openSchoolInfo(schoolId) {
    EVENTS SCREEN
 ═══════════════════════════════════════════════════════════ */
 
+function renderWinnerAwards() {
+  const list = document.getElementById('winner-awards-list');
+  if (!list) return;
+  list.innerHTML = DB.districts.map(d => `
+    <div class="card card-gold">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <span style="font-size:24px">🏆</span>
+        <div style="flex:1">
+          <div style="font-size:15px;font-weight:700">${Security.sanitize(d.label)}</div>
+          <div style="font-size:12px;color:var(--text2)">Most Popular Media Unit · ${d.nameSi}</div>
+        </div>
+        <span class="chip chip-gold" style="font-size:10px">3 Prizes</span>
+      </div>
+      ${DB.winnerPrizes.map(p=>`
+        <div class="prize-row">
+          <div class="prize-medal ${p.medalClass}">${p.medal}</div>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:13px;font-weight:700;color:${p.medalClass==='gold'?'var(--gold-light)':p.medalClass==='silver'?'#d8d8e0':'#e0a878'}">${p.place} Place</div>
+            <div style="font-size:12px;color:var(--text2);margin-top:3px">📷 ${Security.sanitize(p.gift)}</div>
+            <div style="font-size:12px;color:var(--text2);margin-top:2px">🎙️ ${Security.sanitize(p.audio)}</div>
+            <div style="font-size:12px;color:var(--text2);margin-top:2px">🏆 ${Security.sanitize(p.trophy)}</div>
+          </div>
+        </div>`).join('')}
+    </div>`).join('');
+}
+
 function renderEvents() {
   const schedule = document.getElementById('event-schedule');
-  schedule.innerHTML = DB.schedule.map(s=>`
+  if (schedule) schedule.innerHTML = DB.schedule.map(s=>`
     <div class="schedule-item">
       <div class="schedule-time">${s.time}</div>
       <div class="schedule-dot"></div>
@@ -1985,6 +2078,8 @@ function renderEvents() {
       </div>
     </div>`;
   }).join('');
+
+  renderWinnerAwards();
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -1992,9 +2087,8 @@ function renderEvents() {
 ═══════════════════════════════════════════════════════════ */
 
 function renderHome() {
-  /* District voting polls */
-  const homePolls = document.getElementById('home-polls');
-  if (homePolls) homePolls.innerHTML = renderPollCards();
+  /* District voting polls (tabs) */
+  renderHomePollTabs();
 
   /* Categories pill */
   const homeCats = document.getElementById('home-cats');
@@ -2280,7 +2374,7 @@ function showPrivacy() {
 function showTerms() {
   showModal(`<div class="modal-title">📄 Terms of Service</div>
     <div style="font-size:13px;color:var(--text2);line-height:1.8;max-height:60vh;overflow-y:auto">
-      <p><strong style="color:var(--text)">Voting Rules:</strong><br/>• One vote per district poll<br/>• District polls are free and open to everyone<br/>• You may change your selection before voting closes on December 31, 2026<br/>• Fraudulent voting attempts may be removed by the organisers</p>
+      <p><strong style="color:var(--text)">Voting Rules:</strong><br/>• One vote per district poll<br/>• District polls are free and open to everyone<br/>• You may change your selection before voting closes on October 20, 2026<br/>• Fraudulent voting attempts may be removed by the organisers</p>
       <p style="margin-top:12px"><strong style="color:var(--text)">Supporter Terms:</strong><br/>• Supporter subscriptions help fund the 2026 Sinha Awards season<br/>• Voting never requires a supporter subscription<br/>• A subscription is tied to your verified phone number</p>
       <p style="margin-top:12px"><strong style="color:var(--text)">Account:</strong><br/>• One account per phone number<br/>• Accounts used for vote manipulation will be permanently banned<br/>• Sinha Awards reserves the right to void votes found to be fraudulent</p>
       <p style="margin-top:12px"><strong style="color:var(--text)">Contact:</strong> legal@sinhaawards.lk</p>
@@ -2405,5 +2499,5 @@ async function bootstrap() {
 
 document.addEventListener('DOMContentLoaded', bootstrap);
 </script>
-</body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a319e47d9da4ff67',t:'MTc4NzgyMTI5Ng=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
