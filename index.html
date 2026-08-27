@@ -430,6 +430,17 @@ body{display:flex;flex-direction:column;position:relative}
 .school-gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
 .school-gallery img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px}
 
+/* District poll cards */
+.poll-card{padding:16px}
+.poll-option{position:relative;border:1px solid var(--border3);border-radius:10px;cursor:pointer;overflow:hidden;background:var(--surface);transition:border-color .2s ease}
+.poll-option:hover{border-color:var(--border2)}
+.poll-option:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.poll-option.mine{border-color:var(--gold);background:rgba(201,168,76,.07)}
+.poll-bar-fill{position:absolute;left:0;top:0;bottom:0;width:0;background:rgba(201,168,76,.17);border-radius:9px;transition:width .5s ease}
+.poll-option-row{position:relative;display:flex;align-items:center;gap:10px;padding:10px 12px}
+.poll-radio{width:18px;height:18px;border-radius:50%;border:2px solid var(--text3);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:#1a1a2e;transition:all .2s ease}
+.poll-radio.checked{background:var(--gold);border-color:var(--gold)}
+
 .back-btn{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border3);border-radius:50px;padding:8px 14px;font-size:14px;font-weight:500;cursor:pointer;color:var(--text);font-family:var(--font-body);transition:all .2s;flex-shrink:0}
 .back-btn:hover{border-color:var(--border2)}
 
@@ -546,14 +557,14 @@ body{display:flex;flex-direction:column;position:relative}
 <div class="sub-screen" id="sub-screen" style="display:none">
   <div style="display:flex;align-items:center;padding:12px 16px;border-bottom:1px solid var(--border3);flex-shrink:0">
     <button class="back-btn" onclick="closeSubScreen()">✕ Close</button>
-    <span style="flex:1;text-align:center;font-size:14px;font-weight:600">Subscription</span>
+    <span style="flex:1;text-align:center;font-size:14px;font-weight:600">Support the Awards</span>
     <div style="width:60px"></div>
   </div>
   <div style="flex:1;overflow-y:auto;padding-bottom:24px">
     <div class="sub-hero">
       <div class="sub-icon">👑</div>
-      <div class="sub-hero-title">Unlock Voting Access</div>
-      <div class="sub-hero-sub">Subscribe to participate in Sinha Awards 2026 voting and support Sri Lankan school media excellence.</div>
+      <div class="sub-hero-title">Support the Awards</div>
+      <div class="sub-hero-sub">Voting is free and open to everyone. Subscribe to support Sri Lankan school media excellence and the Sinha Awards 2026 ceremony.</div>
     </div>
     <div style="padding:0 20px 8px">
       <div class="section-head"><div class="section-label">Select Plan</div></div>
@@ -562,8 +573,8 @@ body{display:flex;flex-direction:column;position:relative}
     <div class="plan-card featured" id="plan-basic" onclick="selectPlan('basic')">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
         <div>
-          <div class="plan-name">Basic Voter</div>
-          <div style="font-size:12px;color:var(--text2);margin-top:2px">1 Vote per Category</div>
+          <div class="plan-name">Basic Supporter</div>
+          <div style="font-size:12px;color:var(--text2);margin-top:2px">Supporter Badge</div>
         </div>
         <div style="text-align:right">
           <div class="plan-price">Rs. 99</div>
@@ -572,8 +583,8 @@ body{display:flex;flex-direction:column;position:relative}
         <div class="plan-radio"><div class="plan-radio-dot"></div></div>
       </div>
       <div class="plan-benefits">
-        <div class="plan-benefit"><span class="plan-benefit-icon">✅</span>1 vote per award category</div>
-        <div class="plan-benefit"><span class="plan-benefit-icon">✅</span>Access to all award categories</div>
+        <div class="plan-benefit"><span class="plan-benefit-icon">✅</span>Official supporter badge</div>
+        <div class="plan-benefit"><span class="plan-benefit-icon">✅</span>Funds the awards ceremony</div>
         <div class="plan-benefit"><span class="plan-benefit-icon">✅</span>View live vote counts</div>
         <div class="plan-benefit"><span class="plan-benefit-icon">✅</span>Event announcements</div>
       </div>
@@ -583,7 +594,7 @@ body{display:flex;flex-direction:column;position:relative}
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
         <div>
           <div class="plan-name">Premium Supporter</div>
-          <div style="font-size:12px;color:var(--text2);margin-top:2px">3 Votes per Category</div>
+          <div style="font-size:12px;color:var(--text2);margin-top:2px">Super Supporter Badge</div>
         </div>
         <div style="text-align:right">
           <div class="plan-price">Rs. 250</div>
@@ -592,7 +603,7 @@ body{display:flex;flex-direction:column;position:relative}
         <div class="plan-radio"><div class="plan-radio-dot"></div></div>
       </div>
       <div class="plan-benefits">
-        <div class="plan-benefit"><span class="plan-benefit-icon">✅</span>3 votes per award category</div>
+        <div class="plan-benefit"><span class="plan-benefit-icon">✅</span>Everything in Basic</div>
         <div class="plan-benefit"><span class="plan-benefit-icon">✅</span>Early finalist announcements</div>
         <div class="plan-benefit"><span class="plan-benefit-icon">✅</span>Exclusive event updates</div>
         <div class="plan-benefit"><span class="plan-benefit-icon">✅</span>Digital supporter certificate</div>
@@ -647,7 +658,7 @@ body{display:flex;flex-direction:column;position:relative}
         <p class="hero-subtitle">Celebrating excellence in school media production across Sri Lanka. Vote for your favourite school media units.</p>
         <div class="hero-cta">
           <button class="btn btn-primary btn-lg" onclick="navTo('vote')">🗳️ Vote Now</button>
-          <button class="btn btn-outline" onclick="navTo('awards')">View Categories</button>
+          <button class="btn btn-outline" onclick="navTo('awards')">View Poll Details</button>
         </div>
       </div>
 
@@ -667,10 +678,20 @@ body{display:flex;flex-direction:column;position:relative}
 
       <!-- Home Content -->
       <div class="home-scroll">
+        <!-- District Voting Polls -->
+        <div>
+          <div class="section-head">
+            <div class="section-label">⭐ District Voting Polls</div>
+            <div class="section-action" onclick="navTo('vote')">Open Polls →</div>
+          </div>
+          <div style="font-size:12px;color:var(--text2);margin:-8px 0 12px">Most Popular Media Unit · one vote per district</div>
+          <div id="home-polls" style="display:flex;flex-direction:column;gap:16px"></div>
+        </div>
+
         <!-- Categories -->
         <div>
           <div class="section-head">
-            <div class="section-label">Award Categories</div>
+            <div class="section-label">Poll Details</div>
             <div class="section-action" onclick="navTo('awards')">View All →</div>
           </div>
           <div class="cat-scroll" id="home-cats"></div>
@@ -707,12 +728,12 @@ body{display:flex;flex-direction:column;position:relative}
     <!-- ─── AWARDS SCREEN ─── -->
     <div class="screen" id="screen-awards">
       <div class="page-header">
-        <div class="page-title">Award Categories</div>
-        <div class="page-subtitle">Sinha Awards 2026 · 8 Categories</div>
+        <div class="page-title">District Polls</div>
+        <div class="page-subtitle">Sinha Awards 2026 · Most Popular Media Unit</div>
       </div>
       <div class="awards-tabs" id="awards-tabs">
-        <button class="tab-btn active" onclick="switchAwardsTab('categories',this)">Categories</button>
-        <button class="tab-btn" onclick="switchAwardsTab('nominees',this)">Nominees</button>
+        <button class="tab-btn active" onclick="switchAwardsTab('categories',this)">Poll</button>
+        <button class="tab-btn" onclick="switchAwardsTab('nominees',this)">Media Units</button>
         <button class="tab-btn" onclick="switchAwardsTab('schools',this)">Schools</button>
         <button class="tab-btn" onclick="switchAwardsTab('winners',this)">Winners</button>
       </div>
@@ -747,25 +768,19 @@ body{display:flex;flex-direction:column;position:relative}
     <!-- ─── VOTE SCREEN ─── -->
     <div class="screen" id="screen-vote">
       <div class="page-header">
-        <div class="page-title">Cast Your Vote</div>
-        <div class="page-subtitle" id="vote-status-sub">Select one nominee per category</div>
+        <div class="page-title">District Voting Polls</div>
+        <div class="page-subtitle" id="vote-status-sub">Tap an option to vote · one vote per district</div>
       </div>
       <div class="vote-progress">
         <div class="progress-bar-bg"><div class="progress-bar-fill" id="vote-progress-fill" style="width:0%"></div></div>
         <div class="progress-label">
-          <span id="vote-progress-label">0 of 8 categories voted</span>
-          <span id="vote-deadline" style="color:var(--gold)">Closes: Mar 10, 2026</span>
+          <span id="vote-progress-label">0 of 3 district polls voted</span>
+          <span id="vote-deadline" style="color:var(--gold)">Closes: Dec 31, 2026</span>
         </div>
       </div>
 
-      <!-- Vote Category List -->
-      <div id="vote-category-list" style="padding:0 0 80px"></div>
-
-      <!-- Submit -->
-      <div class="vote-actions" id="vote-submit-bar" style="display:none">
-        <button class="btn btn-outline" style="flex:1" onclick="clearVotes()">Clear</button>
-        <button class="btn btn-primary" style="flex:2" onclick="submitAllVotes()" id="submit-votes-btn">Submit All Votes 🏆</button>
-      </div>
+      <!-- District polls -->
+      <div id="vote-category-list" style="padding:0 20px 80px;display:flex;flex-direction:column;gap:16px"></div>
     </div>
 
     <!-- ─── EVENTS SCREEN ─── -->
@@ -804,15 +819,15 @@ body{display:flex;flex-direction:column;position:relative}
 
       <!-- Subscription Status Card -->
       <div class="sub-status-card" id="sub-status-card">
-        <div class="sub-active-label">Subscription Status</div>
-        <div class="sub-plan-name" id="sub-plan-display">No Active Plan</div>
-        <div class="sub-expiry" id="sub-expiry-display">Subscribe to unlock voting access</div>
+        <div class="sub-active-label">Supporter Status</div>
+        <div class="sub-plan-name" id="sub-plan-display">Voting is Free</div>
+        <div class="sub-expiry" id="sub-expiry-display">Subscribe to support the awards</div>
         <div class="sub-votes-row">
           <div class="sub-vote-stat"><div class="sub-vote-num" id="votes-cast">0</div><div class="sub-vote-lbl">Votes Cast</div></div>
-          <div class="sub-vote-stat"><div class="sub-vote-num" id="votes-remaining">0</div><div class="sub-vote-lbl">Remaining</div></div>
-          <div class="sub-vote-stat"><div class="sub-vote-num" id="votes-limit">0</div><div class="sub-vote-lbl">Limit/Cat</div></div>
+          <div class="sub-vote-stat"><div class="sub-vote-num" id="votes-remaining">3</div><div class="sub-vote-lbl">Remaining</div></div>
+          <div class="sub-vote-stat"><div class="sub-vote-num" id="votes-limit">1</div><div class="sub-vote-lbl">Per District</div></div>
         </div>
-        <button class="btn btn-outline btn-sm" style="margin-top:16px" onclick="showSubScreen()" id="manage-sub-btn">Manage Subscription</button>
+        <button class="btn btn-outline btn-sm" style="margin-top:16px" onclick="showSubScreen()" id="manage-sub-btn">Support the Awards</button>
       </div>
 
       <!-- Menu Groups -->
@@ -820,7 +835,7 @@ body{display:flex;flex-direction:column;position:relative}
         <div class="menu-group-label">Account</div>
         <div class="menu-item" onclick="showNotifications()"><div class="menu-item-icon">🔔</div><div class="menu-item-text"><div class="menu-item-label">Notifications</div><div class="menu-item-sub">Manage alerts &amp; updates</div></div><span class="menu-item-arrow">›</span></div>
         <div class="menu-item" onclick="showMyVotes()"><div class="menu-item-icon">🗳️</div><div class="menu-item-text"><div class="menu-item-label">My Votes</div><div class="menu-item-sub">View your voting history</div></div><span class="menu-item-arrow">›</span></div>
-        <div class="menu-item" onclick="showSubScreen()"><div class="menu-item-icon">👑</div><div class="menu-item-text"><div class="menu-item-label">Subscription</div><div class="menu-item-sub" id="menu-sub-status">No active plan</div></div><span class="menu-item-arrow">›</span></div>
+        <div class="menu-item" onclick="showSubScreen()"><div class="menu-item-icon">👑</div><div class="menu-item-text"><div class="menu-item-label">Support the Awards</div><div class="menu-item-sub" id="menu-sub-status">Voting is free</div></div><span class="menu-item-arrow">›</span></div>
       </div>
       <div class="menu-group">
         <div class="menu-group-label">Support</div>
@@ -910,18 +925,6 @@ body{display:flex;flex-direction:column;position:relative}
   <div class="school-body" id="school-detail-body"></div>
 </div>
 
-<!-- ══ VOTE CONFIRMATION ══════════════════════════ -->
-<div class="vote-confirm-screen" id="vote-confirm" style="display:none">
-  <div class="vote-confirm-icon">🎉</div>
-  <div class="vote-confirm-title">Vote Recorded!</div>
-  <p style="font-size:14px;color:var(--text2);line-height:1.6;margin-bottom:8px">Your votes have been successfully recorded and verified server-side.</p>
-  <div class="vote-ref-card" id="vote-ref-card"></div>
-  <div style="display:flex;gap:12px;width:100%;max-width:360px;margin-top:8px">
-    <button class="btn btn-ghost" style="flex:1" onclick="closeVoteConfirm()">View Results</button>
-    <button class="btn btn-primary" style="flex:1" onclick="shareVote()">Share 🎊</button>
-  </div>
-</div>
-
 <!-- ══ MODALS ════════════════════════════════════ -->
 <div id="modal-container"></div>
 
@@ -936,8 +939,8 @@ body{display:flex;flex-direction:column;position:relative}
 /* ─── Environment Config (would come from env vars in production) ─── */
 const ENV = {
   APP_VERSION: '2.0.0',
-  VOTE_START: new Date('2026-01-15T00:00:00'),
-  VOTE_END: new Date('2026-03-10T23:59:59'),
+  VOTE_START: new Date('2026-08-01T00:00:00'),
+  VOTE_END: new Date('2026-12-31T23:59:59'),
   CEREMONY_DATE: new Date('2026-03-15T18:00:00'),
   MAX_OTP_ATTEMPTS: 5,
   OTP_VALIDITY_MINS: 5,
@@ -1120,7 +1123,7 @@ const AppState = {
   session: null,
   user: null,
   subscription: null,
-  votes: {}, /* { categoryId: { nomineeId, refId, timestamp } } */
+  votes: {}, /* { districtId: { nomineeId, timestamp } } — one vote per district poll */
   otpState: { phone: '', hash: '', attempts: 0, lastSent: 0, expires: 0 },
   currentScreen: 'home',
   selectedOperator: null,
@@ -1130,29 +1133,22 @@ const AppState = {
   countdownInterval: null,
 
   plans: {
-    basic: { id:'basic', name:'Basic Voter', price:99, currency:'LKR', votesPerCat:1, period:'2026 Season', color:'#C9A84C' },
-    premium: { id:'premium', name:'Premium Supporter', price:250, currency:'LKR', votesPerCat:3, period:'2026 Season', color:'#E8C97A' }
+    basic: { id:'basic', name:'Basic Supporter', price:99, currency:'LKR', period:'2026 Season', color:'#C9A84C' },
+    premium: { id:'premium', name:'Premium Supporter', price:250, currency:'LKR', period:'2026 Season', color:'#E8C97A' }
   },
 
   isLoggedIn() { return !!this.user?.verified; },
   hasActiveSubscription() { return !!this.subscription?.active && new Date(this.subscription.expires) > new Date(); },
-  canVote() { return this.isLoggedIn() && this.hasActiveSubscription() && this.isVotingOpen(); },
+  canVote() { return this.isVotingOpen(); },
   isVotingOpen() { const n = new Date(); return n >= ENV.VOTE_START && n <= ENV.VOTE_END; },
-  votesForCategory(catId) { return (this.votes[catId]) ? 1 : 0; },
+  votesForDistrict(districtId) { return this.votes[districtId] ? 1 : 0; },
   totalVotesCast() { return Object.keys(this.votes).length; }
 };
 
 /* ─── Data Store ─── */
 const DB = {
   categories: [
-    { id:'cat1', name:'Best School Media Unit', icon:'📡', description:'Recognizing the most outstanding overall school media unit', nominees:4, status:'open' },
-    { id:'cat2', name:'Best Video Production', icon:'🎬', description:'Best video content produced by a school media unit', nominees:5, status:'open' },
-    { id:'cat3', name:'Best Photography', icon:'📸', description:'Excellence in photographic journalism and artistic photography', nominees:4, status:'open' },
-    { id:'cat4', name:'Best Graphic Design', icon:'🎨', description:'Creative excellence in graphic design and visual communication', nominees:4, status:'open' },
-    { id:'cat5', name:'Best School News Production', icon:'📰', description:'Outstanding news coverage and journalism by a school media unit', nominees:4, status:'open' },
-    { id:'cat6', name:'Best Presenter', icon:'🎙️', description:'The most engaging and professional student media presenter', nominees:5, status:'open' },
-    { id:'cat7', name:'Best Media Project', icon:'💡', description:'Most innovative media project by a school unit', nominees:4, status:'open' },
-    { id:'cat8', name:'Best Short Film', icon:'🎥', description:'Outstanding short film production by a school media team', nominees:4, status:'open' }
+    { id:'cat1', name:'Most Popular Media Unit', icon:'⭐', description:'The people\'s choice — public votes crown the most popular school media unit in each district', nominees:29, status:'open' }
   ],
   /* ─── School Registry · Western Province (photos verified from web sources) ─── */
   districts: [
@@ -1190,29 +1186,46 @@ const DB = {
     { id:'s24', district:'kalutara', name:'Vidura College Kalutara', photo:null },
     { id:'s25', district:'kalutara', name:'Agamethi Balika Vidyalaya', photo:null },
     { id:'s26', district:'kalutara', name:'Sri Sumangala College Panadura', photo:'https://upload.wikimedia.org/wikipedia/commons/8/8e/Sri_Sumangala_College.png' },
-    { id:'s27', district:'kalutara', name:'Taxila Central College Horana', photo:'https://upload.wikimedia.org/wikipedia/commons/7/71/Taxila_Central_College.jpg' }
+    { id:'s27', district:'kalutara', name:'Taxila Central College Horana', photo:'https://upload.wikimedia.org/wikipedia/commons/7/71/Taxila_Central_College.jpg' },
+    { id:'s28', district:'kalutara', name:'Ananda Sastralaya National School Mathugama', photo:null },
+    { id:'s29', district:'kalutara', name:'St. Mary\'s College Matugama', photo:null }
   ],
   nominees: [
-    { id:'n1', catId:'cat1', schoolId:'s1', schoolName:'Ananda College, Colombo', unit:'Ananda Media Unit', project:'Annual Media Coverage', description:'Multi-platform coverage of school events, sports and student activities produced by the Ananda College media unit.', achievements:[], img:'https://www.anandacollegeprefectsguild.com/img/anandacover.png', votes:1248 },
-    { id:'n2', catId:'cat1', schoolId:'s3', schoolName:'Royal College, Colombo', unit:'Royal Media Unit', project:'Live Event Broadcasting', description:'Student-run broadcasting of school events and assemblies, delivering live coverage across audio and video platforms.', achievements:[], img:'https://upload.wikimedia.org/wikipedia/commons/d/d9/Royal_College_Colombo_main_building.jpg', votes:987 },
-    { id:'n3', catId:'cat1', schoolId:'s4', schoolName:'Nalanda College, Colombo', unit:'Nalanda Media Team', project:'School Media Magazine', description:'A student-produced media magazine featuring news, features and creative work from across the school community.', achievements:[], img:'https://goklassifieds.com/wp-content/uploads/2023/02/Nalanda-College-Cover-scaled.jpg', votes:1104 },
-    { id:'n4', catId:'cat1', schoolId:'s2', schoolName:'D. S. Senanayake College, Colombo', unit:'DSS Media Crew', project:'News & Current Affairs Bulletin', description:'Weekly student bulletin covering school news and national education developments.', achievements:[], img:'https://d3fphkxyf5o5bm.cloudfront.net/image-resize/format%3Dwebp%2Cw%3D720/QwRY54Li1HMwD7oNfqCf4lQJ1CSiA3TuLZgBSVjAYJ', votes:876 },
-    { id:'n5', catId:'cat2', schoolId:'s5', schoolName:'Thurstan College, Colombo', unit:'Thurstan Productions', project:'School Life Documentary', description:'A short documentary capturing everyday life, traditions and achievements at Thurstan College.', achievements:[], img:'https://www.thurstanmedia.com/images/slide-03.jpg', votes:1520 },
-    { id:'n6', catId:'cat2', schoolId:'s6', schoolName:'Isipathana College, Colombo', unit:'Isipathana Films', project:'Student Short Film', description:'A student-directed short film selected for screening at the Sinha Awards school media showcase.', achievements:[], img:'https://media.licdn.com/dms/image/v2/C511BAQFXZTBXHVyDBg/company-background_10000/company-background_10000/0/1584026498239/isipathana_college_colombo_05_cover?e=2147483647&t=f2Jv7DGoFHt642SqDnUiPyx35pfs55k32oa-I5MMNec&v=beta', votes:1190 },
-    { id:'n7', catId:'cat2', schoolId:'s7', schoolName:'St. Joseph\'s College, Colombo', unit:'St. Joseph\'s Visuals', project:'Sports Season Highlights', description:'Cinematic highlights package covering the college sports season, from training sessions to match day.', achievements:[], img:'https://static.wixstatic.com/media/a63005_d591a091765945198ddb1955996ba4f3~mv2.jpg/v1/fill/w_980%2Ch_631%2Cal_c%2Cq_85%2Cusm_0.66_1.00_0.01%2Cenc_auto/a63005_d591a091765945198ddb1955996ba4f3~mv2.jpg', votes:943 },
-    { id:'n8', catId:'cat3', schoolId:'s10', schoolName:'Bandaranayake College, Gampaha', unit:'BC Photo Club', project:'Campus Through the Lens', description:'A photographic series documenting campus life, events and landscapes at Bandaranayake College.', achievements:[], img:'https://static.wixstatic.com/media/6f0ec4_cde53c3d211c463ba2e2a6d05a7b970a~mv2.jpg/v1/fill/w_980%2Ch_427%2Cal_c%2Cq_85%2Cusm_0.66_1.00_0.01%2Cenc_auto/6f0ec4_cde53c3d211c463ba2e2a6d05a7b970a~mv2.jpg', votes:1340 },
-    { id:'n9', catId:'cat3', schoolId:'s18', schoolName:'Sri Dharmaloka College, Gampaha', unit:'Dharmaloka Photo Unit', project:'Faces of Our School', description:'Portrait photography project celebrating the students and staff of the school community.', achievements:[], img:'https://media.licdn.com/dms/image/v2/C4D1BAQFXQ6Reh9xSJyA/company-background_10000/company-background_10000/0/1634969754481/sri_dharmaloka_college_cover?e=2147483647&t=-dkpiuYIMfulkl6H-fv5J46ORuzEkajiebfn6xMNOM4&v=beta', votes:1100 },
-    { id:'n10', catId:'cat4', schoolId:'s11', schoolName:'Yasodara Devi Balika Vidyalaya, Gampaha', unit:'YDV Design Team', project:'Festival Poster Campaign', description:'Poster and visual identity campaign designed by students for the school festival season.', achievements:[], img:'https://3.bp.blogspot.com/-8gzZiG5-mLo/Vf_sMEo1pVI/AAAAAAAABd0/qMaVUboP7xo/s1600/5.jpg', votes:890 },
-    { id:'n11', catId:'cat5', schoolId:'s19', schoolName:'Kalutara Vidyalaya, Kalutara', unit:'KV News Desk', project:'Student News Bulletin', description:'A student news bulletin reporting on school, local and national education news.', achievements:[], img:'https://upload.wikimedia.org/wikipedia/commons/1/1b/Main_Building_of_Kalutara_Vidyalaya.jpg', votes:1670 },
-    { id:'n12', catId:'cat6', schoolId:'s22', schoolName:'Holy Cross College, Kalutara', unit:'Holy Cross Presenters', project:'Morning Announcements', description:'Student presenter team delivering daily announcements and hosting school events and assemblies.', achievements:[], img:'https://media.licdn.com/dms/image/v2/C4D1BAQEsF4rQ8G6cVQ/company-background_10000/company-background_10000/0/1583173760664?e=2147483647&t=eRvGVSlHwcLsapiqJ9yz2hUfsBQOTLcswRsEVj7atp8&v=beta', votes:2100 },
-    { id:'n13', catId:'cat7', schoolId:'s26', schoolName:'Sri Sumangala College, Panadura', unit:'Sumangala Media Project', project:'School Heritage Archive', description:'A digital archive project recording the history, heritage and milestones of the college.', achievements:[], img:'https://upload.wikimedia.org/wikipedia/commons/8/8e/Sri_Sumangala_College.png', votes:1450 },
-    { id:'n14', catId:'cat8', schoolId:'s12', schoolName:'Thakshila College, Gampaha', unit:'Thakshila Film Unit', project:'The Classroom Window', description:'An original short film written and produced by students, exploring everyday life in the classroom.', achievements:[], img:'https://s3.amazonaws.com/bizenglish/wp-content/uploads/2022/08/31164830/Image-2-Rhino-e1661944755182.jpg', votes:1800 }
+    { id:'n1', catId:'cat1', schoolId:'s1', votes:1248 },
+    { id:'n2', catId:'cat1', schoolId:'s2', votes:876 },
+    { id:'n3', catId:'cat1', schoolId:'s3', votes:987 },
+    { id:'n4', catId:'cat1', schoolId:'s4', votes:1104 },
+    { id:'n5', catId:'cat1', schoolId:'s5', votes:1520 },
+    { id:'n6', catId:'cat1', schoolId:'s6', votes:1190 },
+    { id:'n7', catId:'cat1', schoolId:'s7', votes:943 },
+    { id:'n8', catId:'cat1', schoolId:'s8', votes:615 },
+    { id:'n9', catId:'cat1', schoolId:'s9', votes:704 },
+    { id:'n10', catId:'cat1', schoolId:'s10', votes:1340 },
+    { id:'n11', catId:'cat1', schoolId:'s11', votes:890 },
+    { id:'n12', catId:'cat1', schoolId:'s12', votes:1800 },
+    { id:'n13', catId:'cat1', schoolId:'s13', votes:512 },
+    { id:'n14', catId:'cat1', schoolId:'s14', votes:448 },
+    { id:'n15', catId:'cat1', schoolId:'s15', votes:386 },
+    { id:'n16', catId:'cat1', schoolId:'s16', votes:657 },
+    { id:'n17', catId:'cat1', schoolId:'s17', votes:923 },
+    { id:'n18', catId:'cat1', schoolId:'s18', votes:1100 },
+    { id:'n19', catId:'cat1', schoolId:'s19', votes:1670 },
+    { id:'n20', catId:'cat1', schoolId:'s20', votes:581 },
+    { id:'n21', catId:'cat1', schoolId:'s21', votes:469 },
+    { id:'n22', catId:'cat1', schoolId:'s22', votes:2100 },
+    { id:'n23', catId:'cat1', schoolId:'s23', votes:834 },
+    { id:'n24', catId:'cat1', schoolId:'s24', votes:402 },
+    { id:'n25', catId:'cat1', schoolId:'s25', votes:358 },
+    { id:'n26', catId:'cat1', schoolId:'s26', votes:1450 },
+    { id:'n27', catId:'cat1', schoolId:'s27', votes:976 },
+    { id:'n28', catId:'cat1', schoolId:'s28', votes:1120 },
+    { id:'n29', catId:'cat1', schoolId:'s29', votes:1035 }
   ],
   winners: [], /* Winners will be announced at Sinha Awards Night 2026 */
   events: [
     { id:'e1', name:'Sinha Awards Night 2026', date:'2026-03-15', time:'6:00 PM', venue:'BMICH, Colombo', description:'The grand annual Sinha Awards ceremony celebrating Sri Lankan school media excellence.', type:'main', img:'https://images.pexels.com/photos/31772890/pexels-photo-31772890.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=300&w=600' },
     { id:'e2', name:'Finalists Announcement', date:'2026-02-28', time:'10:00 AM', venue:'Online / All Platforms', description:'Announcement of final nominees for all 8 award categories.', type:'announcement', img:'https://images.pexels.com/photos/37012315/pexels-photo-37012315.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=300&w=600' },
-    { id:'e3', name:'Voting Opens', date:'2026-01-15', time:'12:00 AM', venue:'Sinha Awards App', description:'Public voting opens for all verified and subscribed users.', type:'voting', img:'https://images.pexels.com/photos/6532365/pexels-photo-6532365.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=300&w=600' },
+    { id:'e3', name:'District Polls Open', date:'2026-08-01', time:'12:00 AM', venue:'Sinha Awards App', description:'Free public voting opens for the Most Popular Media Unit in every district.', type:'voting', img:'https://images.pexels.com/photos/6532365/pexels-photo-6532365.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=300&w=600' },
     { id:'e4', name:'Project Submission Deadline', date:'2026-01-10', time:'11:59 PM', venue:'sinhaawards.lk/submit', description:'Final deadline for school media units to submit their nominated projects.', type:'deadline', img:'https://images.pexels.com/photos/6565248/pexels-photo-6565248.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=300&w=600' },
   ],
   schedule: [
@@ -1226,20 +1239,35 @@ const DB = {
     { time:'10:00 PM', event:'Reception & Networking', venue:'BMICH Lobby' },
   ],
   announcements: [
-    { title:'Voting Now Open!', body:'Public voting for Sinha Awards 2026 is now open. Subscribe and cast your votes before March 10, 2026.', date:'Jan 15, 2026', urgent:true },
-    { title:'Finalists Announced', body:'All finalists for Sinha Awards 2026 have been announced. View the full list in the Awards section.', date:'Jan 10, 2026', urgent:false },
-    { title:'Record Submissions', body:'Sinha Awards 2026 received a record 247 project submissions from 89 schools across Sri Lanka.', date:'Jan 5, 2026', urgent:false },
+    { title:'Voting Now Open!', body:'Public voting for Most Popular Media Unit is now open. Cast your vote in your district poll before December 31, 2026.', date:'Aug 1, 2026', urgent:true },
+    { title:'New Schools Registered', body:'Ananda Sastralaya National School Mathugama and St. Mary\'s College Matugama join the Kalutara District poll.', date:'Aug 27, 2026', urgent:false },
+    { title:'29 Media Units Competing', body:'School media units from 29 schools across the Colombo, Gampaha and Kalutara districts are competing this season.', date:'Aug 15, 2026', urgent:false }
   ],
   notifications: [
-    { id:'notif1', title:'🗳️ Voting is Now Open!', body:'Cast your votes for Sinha Awards 2026. Voting closes March 10, 2026.', time:'2 hours ago', read:false },
-    { id:'notif2', title:'🏆 Finalists Announced', body:'The finalists for all 8 award categories have been officially announced.', time:'3 days ago', read:false },
+    { id:'notif1', title:'🗳️ Voting is Now Open!', body:'Vote for the Most Popular Media Unit in your district. Voting closes December 31, 2026.', time:'2 hours ago', read:false },
+    { id:'notif2', title:'⭐ District Polls Live', body:'Most Popular Media Unit polls are now live for the Colombo, Gampaha and Kalutara districts.', time:'3 days ago', read:false },
     { id:'notif3', title:'📅 Event Reminder', body:'Sinha Awards Night is on March 15, 2026 at BMICH, Colombo.', time:'1 week ago', read:true },
-    { id:'notif4', title:'🎉 Welcome to Sinha Awards 2026', body:'Thank you for joining. Explore nominees and get ready to vote!', time:'2 weeks ago', read:true },
+    { id:'notif4', title:'🎉 Welcome to Sinha Awards 2026', body:'Thank you for joining. Explore your district poll and support a school media unit.', time:'2 weeks ago', read:true }
   ],
   users: [], /* Production: stored in database */
   transactions: [],
   auditLogs: []
 };
+
+/* Hydrate district-poll candidates from the verified school registry. */
+DB.nominees = DB.nominees.map(n => {
+  const school = DB.schools.find(s => s.id === n.schoolId);
+  const district = DB.districts.find(d => d.id === school?.district);
+  return {
+    ...n,
+    schoolName: school?.name || 'School',
+    unit: `${school?.name || 'School'} Media Unit`,
+    project: 'Sinha Awards 2026',
+    description: `School media unit of ${school?.name || 'this school'}, competing in the Most Popular Media Unit poll for the ${district?.label || 'district'} at Sinha Awards 2026.`,
+    achievements: [],
+    img: school?.photo || ''
+  };
+});
 
 /* ═══════════════════════════════════════════════════════════
    UI UTILITIES
@@ -1291,20 +1319,15 @@ function setLoading(btnId, textId, spinnerId, loading, text='') {
 ═══════════════════════════════════════════════════════════ */
 
 function navTo(screen) {
-  /* Voting guard */
-  if (screen === 'vote') {
-    if (!AppState.isLoggedIn()) { showAuthScreen(); return; }
-    if (!AppState.hasActiveSubscription()) { showSubScreen(); return; }
-    if (!AppState.isVotingOpen()) { showToast('Voting is not currently open.','warning'); return; }
-  }
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
-  const s = document.getElementById(`screen-${screen}`);
-  const b = document.getElementById(`nav-${screen}`);
-  if (s) s.classList.add('active');
-  if (b) b.classList.add('active');
+  const activeScreen = document.getElementById(`screen-${screen}`);
+  const activeNav = document.getElementById(`nav-${screen}`);
+  if (activeScreen) activeScreen.classList.add('active');
+  if (activeNav) activeNav.classList.add('active');
   AppState.currentScreen = screen;
-  AuditLog.log('NAVIGATE', AppState.user?.id, { screen });
+  if (screen === 'vote') renderVoteScreen();
+  AuditLog.log('NAVIGATE', AppState.user?.id || 'guest', { screen });
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -1594,159 +1617,104 @@ function activateDemoSubscription() {
    VOTING SYSTEM
 ═══════════════════════════════════════════════════════════ */
 
+function districtNominees(districtId) {
+  return DB.nominees.filter(n => DB.schools.find(s => s.id === n.schoolId)?.district === districtId);
+}
+
+function pollCardHTML(districtId) {
+  const district = DB.districts.find(d => d.id === districtId);
+  const options = districtNominees(districtId).slice().sort((a, b) => b.votes - a.votes);
+  const totalVotes = options.reduce((sum, nominee) => sum + nominee.votes, 0);
+  const selectedId = AppState.votes[districtId]?.nomineeId;
+  const hasVoted = Boolean(selectedId);
+  const maxVotes = Math.max(0, ...options.map(option => option.votes));
+
+  return `<section class="card poll-card" aria-label="${Security.sanitize(district?.label || 'District')} poll">
+    <div style="display:flex;align-items:center;gap:10px">
+      <span style="font-size:22px" aria-hidden="true">📊</span>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:15px;font-weight:700">⭐ Most Popular Media Unit</div>
+        <div style="font-size:12px;color:var(--text2);margin-top:2px">📍 ${Security.sanitize(district?.label || '')} · ${district?.nameSi || ''}</div>
+      </div>
+      ${hasVoted ? '<span class="chip chip-green" style="font-size:10px">✓ Voted</span>' : '<span class="chip chip-gold" style="font-size:10px">Tap to vote</span>'}
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-top:14px">
+      ${options.map(nominee => {
+        const percent = totalVotes ? nominee.votes / totalVotes * 100 : 0;
+        const isMine = selectedId === nominee.id;
+        const isLeading = nominee.votes === maxVotes && nominee.votes > 0;
+        return `<div class="poll-option${isMine ? ' mine' : ''}" role="button" tabindex="0" onclick="castPollVote('${districtId}','${nominee.id}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();castPollVote('${districtId}','${nominee.id}')}">
+          <div class="poll-bar-fill" style="width:${percent}%"></div>
+          <div class="poll-option-row">
+            <div class="poll-radio${isMine ? ' checked' : ''}" aria-hidden="true">${isMine ? '✓' : ''}</div>
+            <div style="flex:1;min-width:0;font-size:13px;font-weight:${isMine || isLeading ? '700' : '500'}">${Security.sanitize(nominee.schoolName)}${isLeading ? ' 🥇' : ''}</div>
+            <div style="font-size:12px;font-weight:700;color:${isMine ? 'var(--gold)' : 'var(--text2)'};white-space:nowrap">${hasVoted ? `${percent.toFixed(0)}% · ` : ''}${nominee.votes.toLocaleString()}</div>
+          </div>
+        </div>`;
+      }).join('')}
+    </div>
+    <div style="margin-top:12px;font-size:11px;color:var(--text3)">${totalVotes.toLocaleString()} votes · One vote per district${hasVoted ? ' · Tap another option to change your vote' : ''}</div>
+  </section>`;
+}
+
+function renderPollCards() {
+  return DB.districts.map(district => pollCardHTML(district.id)).join('');
+}
+
+function refreshPolls() {
+  const homePolls = document.getElementById('home-polls');
+  if (homePolls) homePolls.innerHTML = renderPollCards();
+  const voteList = document.getElementById('vote-category-list');
+  if (voteList) voteList.innerHTML = renderPollCards();
+  updateVoteProgress();
+  const filter = document.getElementById('nominee-cat-filter');
+  if (filter) renderNominees(filter.value || 'all');
+}
+
 function renderVoteScreen() {
   const container = document.getElementById('vote-category-list');
   if (!container) return;
-  container.innerHTML = '';
-
-  if (!AppState.isLoggedIn()) {
-    container.innerHTML = `<div class="empty-state"><div class="empty-icon">🔐</div><div class="empty-title">Sign In Required</div><div class="empty-sub">You must verify your phone number to access voting.</div><button class="btn btn-primary" style="margin-top:20px" onclick="showAuthScreen()">Sign In to Vote</button></div>`;
-    return;
-  }
-  if (!AppState.hasActiveSubscription()) {
-    container.innerHTML = `<div class="empty-state"><div class="empty-icon">👑</div><div class="empty-title">Subscription Required</div><div class="empty-sub">An active subscription is required to vote. Subscribe to support Sri Lankan school media excellence.</div><button class="btn btn-primary" style="margin-top:20px" onclick="showSubScreen()">Subscribe Now</button></div>`;
-    return;
-  }
-  if (!AppState.isVotingOpen()) {
-    container.innerHTML = `<div class="empty-state"><div class="empty-icon">⏳</div><div class="empty-title">Voting Not Open</div><div class="empty-sub">Voting opens January 15, 2026 and closes March 10, 2026.</div></div>`;
-    return;
-  }
-
-  const hasVotes = Object.keys(AppState.votes).length > 0;
-  document.getElementById('vote-submit-bar').style.display = hasVotes ? 'flex' : 'none';
+  container.innerHTML = renderPollCards();
   updateVoteProgress();
-
-  DB.categories.forEach(cat => {
-    const nominees = DB.nominees.filter(n => n.catId === cat.id);
-    const myVote = AppState.votes[cat.id];
-    const catDiv = document.createElement('div');
-    catDiv.style = 'margin-bottom:24px';
-    catDiv.innerHTML = `
-      <div class="vote-category-header">
-        <div class="vch-icon">${cat.icon}</div>
-        <div>
-          <div class="vch-title">${Security.sanitize(cat.name)}</div>
-          <div class="vch-sub">${nominees.length} nominees · ${myVote?'<span style="color:var(--green)">✓ Voted</span>':'Select one to vote'}</div>
-        </div>
-      </div>
-      <div class="nominee-list" style="padding:0 20px 0">
-        ${nominees.map(n => `
-          <div class="nominee-card${myVote?.nomineeId===n.id?' selected':''}" onclick="selectVote('${cat.id}','${n.id}')">
-            <div class="nominee-card-inner">
-              <img class="nominee-avatar" src="${n.img}" alt="${Security.sanitize(n.schoolName)}" loading="lazy" referrerpolicy="no-referrer" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22><rect fill=%22%231a1a2e%22 width=%2264%22 height=%2264%22/><text y=%2240%22 x=%2232%22 font-size=%2228%22 text-anchor=%22middle%22>${cat.icon}</text></svg>'"/>
-              <div class="nominee-info">
-                <div class="nominee-school">${Security.sanitize(n.schoolName)}</div>
-                <div class="nominee-name">${Security.sanitize(n.unit)}</div>
-                <div class="nominee-project">${Security.sanitize(n.project)}</div>
-                <div class="nominee-meta">
-                  <span class="chip" style="font-size:10px;padding:4px 8px">${(n.votes+AppState.votesForCategory(cat.id)).toLocaleString()} votes</span>
-                </div>
-              </div>
-            </div>
-            <div class="vote-radio"><div class="vote-radio-dot"></div></div>
-          </div>`).join('')}
-      </div>`;
-    container.appendChild(catDiv);
-  });
 }
 
-function selectVote(catId, nomineeId) {
-  if (!AppState.canVote()) return;
-  if (AppState.votes[catId]) {
-    showToast('You have already voted in this category.','warning'); return;
+function castPollVote(districtId, nomineeId) {
+  if (!AppState.canVote()) {
+    showToast('District voting is not currently open.', 'warning');
+    return;
   }
-  /* Server-side validation would happen here via API call in production */
-  AppState.votes[catId] = { nomineeId, timestamp: new Date().toISOString() };
-  renderVoteScreen();
-  const hasVotes = Object.keys(AppState.votes).length > 0;
-  document.getElementById('vote-submit-bar').style.display = hasVotes ? 'flex':'none';
-  showToast('Selection recorded. Review and submit all votes.','success',2000);
+  const previousVote = AppState.votes[districtId];
+  if (previousVote?.nomineeId === nomineeId) {
+    showToast('You already support this media unit in this district.', 'info', 1800);
+    return;
+  }
+
+  const target = DB.nominees.find(n => n.id === nomineeId);
+  if (!target || !districtNominees(districtId).some(n => n.id === nomineeId)) return;
+  if (previousVote) {
+    const previousNominee = DB.nominees.find(n => n.id === previousVote.nomineeId);
+    if (previousNominee) previousNominee.votes = Math.max(0, previousNominee.votes - 1);
+  }
+
+  /* Production: POST /api/v1/polls/{districtId}/votes with abuse prevention and atomic counting. */
+  target.votes += 1;
+  AppState.votes[districtId] = { nomineeId, timestamp: new Date().toISOString() };
+  AuditLog.log('POLL_VOTE_CAST', AppState.user?.id || 'guest', { districtId, nomineeId, changed: Boolean(previousVote) });
+  refreshPolls();
+  updateProfileUI();
+  showToast(previousVote ? `Vote updated — now supporting ${target.schoolName} ✓` : `Vote recorded — ${target.schoolName} ✓`, 'success', 2200);
 }
 
 function updateVoteProgress() {
-  const total = DB.categories.length;
-  const cast = Object.keys(AppState.votes).length;
-  const pct = (cast/total)*100;
+  const total = DB.districts.length;
+  const cast = DB.districts.filter(district => AppState.votes[district.id]).length;
+  const percent = total ? cast / total * 100 : 0;
   const fill = document.getElementById('vote-progress-fill');
   const label = document.getElementById('vote-progress-label');
-  if (fill) fill.style.width = pct+'%';
-  if (label) label.textContent = `${cast} of ${total} categories voted`;
+  if (fill) fill.style.width = `${percent}%`;
+  if (label) label.textContent = `${cast} of ${total} district polls voted`;
 }
 
-function clearVotes() {
-  showConfirm('Clear All Selections','Remove all your current vote selections?',()=>{ AppState.votes={}; renderVoteScreen(); document.getElementById('vote-submit-bar').style.display='none'; },'Clear',true);
-}
-
-async function submitAllVotes() {
-  if (!AppState.canVote()) return;
-  if (Object.keys(AppState.votes).length === 0) { showToast('Please select at least one nominee.','warning'); return; }
-
-  /* Final security checks (all would be re-validated server-side in production) */
-  if (!AppState.user?.verified) { showToast('Phone verification required.','error'); return; }
-  if (!AppState.subscription?.active) { showToast('Active subscription required.','error'); return; }
-
-  const btn = document.getElementById('submit-votes-btn');
-  if (btn) { btn.disabled=true; btn.textContent='Submitting...'; }
-
-  AuditLog.log('VOTE_SUBMIT_INITIATED', AppState.user.id, { categories: Object.keys(AppState.votes) });
-
-  /* Production: POST /api/v1/votes with session token (server validates all rules) */
-  await delay(2000);
-
-  /* Generate vote reference details */
-  const voteRecords = Object.entries(AppState.votes).map(([catId, vote]) => {
-    const cat = DB.categories.find(c=>c.id===catId);
-    const nominee = DB.nominees.find(n=>n.id===vote.nomineeId);
-    const ref = Security.generateVoteRef();
-    return { catId, nomineeId:vote.nomineeId, catName:cat?.name, nomineeName:nominee?.unit, school:nominee?.schoolName, project:nominee?.project, ref, timestamp:vote.timestamp };
-  });
-
-  /* Increment vote counts in DB (production: atomic server-side transaction) */
-  voteRecords.forEach(r => {
-    const n = DB.nominees.find(n=>n.id===r.nomineeId);
-    if (n) n.votes++;
-  });
-
-  AuditLog.log('VOTE_SUBMITTED', AppState.user.id, { voteCount: voteRecords.length, refs: voteRecords.map(v=>v.ref) });
-
-  /* Show confirmation */
-  showVoteConfirmation(voteRecords);
-  launchConfetti();
-}
-
-function showVoteConfirmation(records) {
-  const card = document.getElementById('vote-ref-card');
-  card.innerHTML = records.map(r=>`
-    <div class="vote-ref-row">
-      <span class="vote-ref-label">${Security.sanitize(r.catName||'Category')}</span>
-      <span class="vote-ref-value">${Security.sanitize(r.school||'')} – ${Security.sanitize(r.nomineeName||'')}</span>
-    </div>
-    <div class="vote-ref-row">
-      <span class="vote-ref-label">Reference</span>
-      <span class="vote-ref-id">${r.ref}</span>
-    </div>
-    <div class="vote-ref-row">
-      <span class="vote-ref-label">Timestamp</span>
-      <span class="vote-ref-value" style="font-size:11px">${new Date(r.timestamp).toLocaleString('en-LK')}</span>
-    </div>
-    <div class="vote-ref-row">
-      <span class="vote-ref-label">Status</span>
-      <span class="vote-ref-value" style="color:var(--green)">✓ Verified</span>
-    </div>
-    <div class="divider" style="margin:8px 0"></div>`).join('');
-  document.getElementById('vote-confirm').style.display='flex';
-  /* Lock votes */
-  Object.keys(AppState.votes).forEach(catId => { AppState.votes[catId].submitted = true; });
-}
-
-function closeVoteConfirm() {
-  document.getElementById('vote-confirm').style.display='none';
-  AppState.votes = {};
-  navTo('awards');
-  renderVoteScreen();
-}
-
-function shareVote() { showToast('Sharing feature available in production app.','info'); }
 
 /* ═══════════════════════════════════════════════════════════
    AWARDS SCREEN
@@ -1785,29 +1753,35 @@ function renderCategories() {
 function renderNominees(catId) {
   const container = document.getElementById('nominee-list-container');
   const filter = document.getElementById('nominee-cat-filter');
-  if (catId && catId !== 'all') { filter.value = catId; }
-  const selCat = filter?.value || 'all';
-  const nominees = selCat==='all' ? DB.nominees : DB.nominees.filter(n=>n.catId===selCat);
-  container.innerHTML = nominees.map(n => {
-    const cat = DB.categories.find(c=>c.id===n.catId);
-    const maxVotes = Math.max(...DB.nominees.filter(x=>x.catId===n.catId).map(x=>x.votes));
-    const isLeading = n.votes === maxVotes;
-    return `<div class="nominee-card" onclick="openSchoolDetail('${n.id}')">
-      ${isLeading?`<div class="winner-badge">🥇 Leading</div>`:''}
+  if (!container) return;
+  if (catId && catId !== 'all' && filter) filter.value = catId;
+  const selectedCategory = filter?.value || 'all';
+  const nominees = selectedCategory === 'all' ? DB.nominees : DB.nominees.filter(n => n.catId === selectedCategory);
+
+  container.innerHTML = nominees.map(nominee => {
+    const category = DB.categories.find(c => c.id === nominee.catId);
+    const school = DB.schools.find(s => s.id === nominee.schoolId);
+    const district = DB.districts.find(d => d.id === school?.district);
+    const districtCandidates = district ? districtNominees(district.id) : [];
+    const maxVotes = Math.max(0, ...districtCandidates.map(candidate => candidate.votes));
+    const isLeading = nominee.votes === maxVotes && nominee.votes > 0;
+    return `<div class="nominee-card" onclick="openSchoolDetail('${nominee.id}')">
+      ${isLeading ? '<div class="winner-badge">🥇 District leader</div>' : ''}
       <div class="nominee-card-inner">
-        <img class="nominee-avatar" src="${n.img}" alt="${Security.sanitize(n.schoolName)}" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none'"/>
+        <img class="nominee-avatar" src="${nominee.img}" alt="${Security.sanitize(nominee.schoolName)}" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none'"/>
         <div class="nominee-info">
-          <div class="nominee-school">${Security.sanitize(n.schoolName)}</div>
-          <div class="nominee-name">${Security.sanitize(n.unit)}</div>
-          <div class="nominee-project">${Security.sanitize(n.project)}</div>
+          <div class="nominee-school">${Security.sanitize(nominee.schoolName)}</div>
+          <div class="nominee-name">${Security.sanitize(nominee.unit)}</div>
+          <div class="nominee-project">${Security.sanitize(nominee.project)}</div>
           <div class="nominee-meta">
-            <span class="chip" style="font-size:10px;padding:4px 8px">${cat?.icon||''} ${Security.sanitize(cat?.name||'')}</span>
-            <span class="chip chip-gold" style="font-size:10px;padding:4px 8px">${n.votes.toLocaleString()} votes</span>
+            <span class="chip" style="font-size:10px;padding:4px 8px">${category?.icon || ''} ${Security.sanitize(category?.name || '')}</span>
+            <span class="chip" style="font-size:10px;padding:4px 8px">📍 ${Security.sanitize(district?.label || '')}</span>
+            <span class="chip chip-gold" style="font-size:10px;padding:4px 8px">${nominee.votes.toLocaleString()} votes</span>
           </div>
         </div>
       </div>
     </div>`;
-  }).join('') || `<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-title">No nominees found</div></div>`;
+  }).join('') || '<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-title">No media units found</div></div>';
 }
 
 function filterNominees(catId) { renderNominees(catId); }
@@ -1897,8 +1871,9 @@ function openSchoolDetail(nomineeId) {
   document.getElementById('school-detail-title').textContent = n.unit;
   document.getElementById('school-detail-cat').textContent = (cat?.icon||'')+'  '+Security.sanitize(cat?.name||'')+(district?('  ·  📍 '+district.label):'');
   document.getElementById('school-detail-name').textContent = Security.sanitize(n.schoolName);
-  const totalVotes = DB.nominees.filter(x=>x.catId===n.catId).reduce((s,x)=>s+x.votes,0);
-  const pct = totalVotes ? ((n.votes/totalVotes)*100).toFixed(1) : 0;
+  const districtCandidates = district ? districtNominees(district.id) : [];
+  const totalVotes = districtCandidates.reduce((sum, candidate) => sum + candidate.votes, 0);
+  const pct = totalVotes ? ((n.votes / totalVotes) * 100).toFixed(1) : 0;
   document.getElementById('school-detail-body').innerHTML = `
     <div style="margin-bottom:20px">
       <div class="gold-line"></div>
@@ -1908,12 +1883,12 @@ function openSchoolDetail(nomineeId) {
       <p style="font-size:14px;color:var(--text2);line-height:1.7">${Security.sanitize(n.description)}</p>
     </div>
     <div style="margin-bottom:20px">
-      <div class="section-label" style="margin-bottom:12px">Nominated Project</div>
+      <div class="section-label" style="margin-bottom:12px">District Poll</div>
       <div class="card card-gold">
         <div style="font-size:16px;font-weight:700;margin-bottom:8px">${Security.sanitize(n.project)}</div>
         <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px">
           <span class="chip chip-gold">${n.votes.toLocaleString()} votes</span>
-          <span class="chip">${pct}% of category</span>
+          <span class="chip">${pct}% of district poll</span>
         </div>
         <div style="margin-top:12px;height:6px;background:var(--surface2);border-radius:3px;overflow:hidden"><div style="height:100%;width:${pct}%;background:linear-gradient(90deg,var(--gold),var(--gold-light));border-radius:3px;transition:width .8s ease"></div></div>
       </div>
@@ -1923,7 +1898,7 @@ function openSchoolDetail(nomineeId) {
       ${n.achievements.map(a=>`<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border3)"><span style="font-size:16px">🏅</span><span style="font-size:14px">${Security.sanitize(a)}</span></div>`).join('')}
     </div>`:''}
     <div style="margin-bottom:16px">
-      <div class="section-label" style="margin-bottom:12px">Category</div>
+      <div class="section-label" style="margin-bottom:12px">Voting Category</div>
       <div class="card" style="display:flex;align-items:center;gap:12px"><span style="font-size:28px">${cat?.icon||'🏆'}</span><div><div style="font-size:14px;font-weight:700">${Security.sanitize(cat?.name||'')}</div><div style="font-size:12px;color:var(--text2);margin-top:2px">${Security.sanitize(cat?.description||'')}</div></div></div>
     </div>
     <button class="btn btn-primary btn-block" onclick="closeSchoolDetail();navTo('vote')" style="margin-top:8px">🗳️ Vote for This Unit</button>
@@ -1957,7 +1932,7 @@ function openSchoolInfo(schoolId) {
       <div class="card" style="padding:8px"><img src="${s.photo}" alt="${Security.sanitize(s.name)}" referrerpolicy="no-referrer" style="width:100%;border-radius:8px;display:block" onerror="this.parentElement.innerHTML='<div style=\\'padding:24px;text-align:center;color:var(--text3)\\'>📷 Photo temporarily unavailable</div>'"/></div>
     </div>`:''}
     ${noms.length?`<div style="margin-bottom:20px">
-      <div class="section-label" style="margin-bottom:12px">Nominations · Sinha Awards 2026</div>
+      <div class="section-label" style="margin-bottom:12px">District Poll Entry · Sinha Awards 2026</div>
       ${noms.map(n=>{const c=DB.categories.find(c=>c.id===n.catId);return `<div class="card card-gold" style="margin-bottom:10px">
         <div style="display:flex;align-items:center;gap:12px">
           <span style="font-size:26px">${c?.icon||'🏆'}</span>
@@ -1968,7 +1943,7 @@ function openSchoolInfo(schoolId) {
           <span class="chip chip-gold" style="font-size:10px">${n.votes.toLocaleString()} votes</span>
         </div>
       </div>`;}).join('')}
-    </div>`:`<div class="card" style="margin-bottom:20px;text-align:center;padding:24px;color:var(--text2);font-size:13px">No nominations yet for Sinha Awards 2026.</div>`}
+    </div>`:`<div class="card" style="margin-bottom:20px;text-align:center;padding:24px;color:var(--text2);font-size:13px">No district poll entry yet for Sinha Awards 2026.</div>`}
     ${noms.length?`<button class="btn btn-primary btn-block" onclick="closeSchoolDetail();navTo('vote')" style="margin-top:8px">🗳️ Vote for This School</button>`:''}
     <div style="height:20px"></div>`;
   document.getElementById('school-detail').style.display='flex';
@@ -2017,6 +1992,10 @@ function renderEvents() {
 ═══════════════════════════════════════════════════════════ */
 
 function renderHome() {
+  /* District voting polls */
+  const homePolls = document.getElementById('home-polls');
+  if (homePolls) homePolls.innerHTML = renderPollCards();
+
   /* Categories pill */
   const homeCats = document.getElementById('home-cats');
   homeCats.innerHTML = DB.categories.map(c=>`<div class="cat-pill" onclick="navTo('awards')">${c.icon} ${Security.sanitize(c.name)}</div>`).join('');
@@ -2070,26 +2049,46 @@ function renderHome() {
 ═══════════════════════════════════════════════════════════ */
 
 function updateProfileUI() {
-  if (!AppState.user) return;
-  const phone = AppState.user.phone || '';
-  const masked = phone.length > 6 ? phone.slice(0,5) + '***' + phone.slice(-3) : phone;
-  document.getElementById('profile-name').textContent = 'Verified Member';
-  document.getElementById('profile-phone').innerHTML = `📱 ${masked} <span class="verified-badge">✓ Verified</span>`;
-  document.getElementById('profile-avatar').textContent = '👤';
-  
+  const user = AppState.user;
+  const profileName = document.getElementById('profile-name');
+  const profilePhone = document.getElementById('profile-phone');
+  const profileAvatar = document.getElementById('profile-avatar');
   const badges = document.getElementById('profile-badges');
-  badges.innerHTML = `<span class="chip chip-green">✓ Phone Verified</span>${AppState.subscription?.active?`<span class="chip chip-gold">👑 ${AppState.subscription.planName||'Subscriber'}</span>`:'<span class="chip chip-red">No Subscription</span>'}`;
+  const planDisplay = document.getElementById('sub-plan-display');
+  const expiryDisplay = document.getElementById('sub-expiry-display');
+  const castDisplay = document.getElementById('votes-cast');
+  const remainingDisplay = document.getElementById('votes-remaining');
+  const limitDisplay = document.getElementById('votes-limit');
+  const menuStatus = document.getElementById('menu-sub-status');
 
-  if (AppState.subscription?.active) {
-    const plan = AppState.plans[AppState.subscription.planId];
-    document.getElementById('sub-plan-display').textContent = AppState.subscription.planName;
-    document.getElementById('sub-expiry-display').textContent = `Expires: ${new Date(AppState.subscription.expires).toLocaleDateString('en-LK',{dateStyle:'long'})}`;
-    document.getElementById('votes-cast').textContent = Object.keys(AppState.votes).length;
-    document.getElementById('votes-remaining').textContent = Math.max(0, DB.categories.length - Object.keys(AppState.votes).length);
-    document.getElementById('votes-limit').textContent = plan?.votesPerCat || 1;
-    document.getElementById('menu-sub-status').textContent = AppState.subscription.planName + ' · Active';
+  if (user) {
+    const phone = user.phone || '';
+    const masked = phone.length > 6 ? `${phone.slice(0, 5)}***${phone.slice(-3)}` : phone;
+    if (profileName) profileName.textContent = 'Verified Member';
+    if (profilePhone) profilePhone.innerHTML = `📱 ${masked} <span class="verified-badge">✓ Verified</span>`;
+    if (profileAvatar) profileAvatar.textContent = '👤';
+  } else {
+    if (profileName) profileName.textContent = 'Guest Voter';
+    if (profilePhone) profilePhone.textContent = 'No sign-in required for district polls';
+    if (profileAvatar) profileAvatar.textContent = '🗳️';
   }
-  document.getElementById('profile-badge').style.display = AppState.subscription?.active ? 'none':'flex';
+
+  if (badges) {
+    badges.innerHTML = `<span class="chip chip-green">✓ Voting is free</span>${AppState.subscription?.active ? `<span class="chip chip-gold">👑 ${Security.sanitize(AppState.subscription.planName || 'Supporter')}</span>` : ''}`;
+  }
+  if (planDisplay) planDisplay.textContent = AppState.subscription?.active ? AppState.subscription.planName : 'Voting is Free';
+  if (expiryDisplay) expiryDisplay.textContent = AppState.subscription?.active
+    ? `Supporter until ${new Date(AppState.subscription.expires).toLocaleDateString('en-LK', { dateStyle:'long' })}`
+    : 'Subscribe to support the awards ceremony';
+
+  const voted = DB.districts.filter(district => AppState.votes[district.id]).length;
+  if (castDisplay) castDisplay.textContent = voted;
+  if (remainingDisplay) remainingDisplay.textContent = Math.max(0, DB.districts.length - voted);
+  if (limitDisplay) limitDisplay.textContent = '1';
+  if (menuStatus) menuStatus.textContent = AppState.subscription?.active ? `${AppState.subscription.planName} · Active` : 'Voting is free';
+
+  const profileBadge = document.getElementById('profile-badge');
+  if (profileBadge) profileBadge.style.display = AppState.subscription?.active ? 'none' : 'flex';
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -2121,16 +2120,20 @@ function markRead(id) {
 
 function showMyVotes() {
   const voteEntries = Object.entries(AppState.votes);
-  if (!voteEntries.length) { showToast('You haven\'t cast any votes yet.','info'); return; }
-  showModal(`<div class="modal-title">My Votes</div>
-    ${voteEntries.map(([catId,v])=>{
-      const cat = DB.categories.find(c=>c.id===catId);
-      const nom = DB.nominees.find(n=>n.id===v.nomineeId);
+  if (!voteEntries.length) {
+    showToast('You have not cast a district poll vote yet.', 'info');
+    return;
+  }
+  showModal(`<div class="modal-title">My District Votes</div>
+    ${voteEntries.map(([districtId, vote]) => {
+      const district = DB.districts.find(d => d.id === districtId);
+      const nominee = DB.nominees.find(n => n.id === vote.nomineeId);
       return `<div style="padding:12px 0;border-bottom:1px solid var(--border3)">
-        <div style="font-size:11px;color:var(--gold);font-weight:700">${cat?.icon||''} ${Security.sanitize(cat?.name||'')}</div>
-        <div style="font-size:14px;font-weight:600;margin-top:4px">${Security.sanitize(nom?.unit||'')}</div>
-        <div style="font-size:12px;color:var(--text2)">${Security.sanitize(nom?.schoolName||'')}</div>
-      </div>`;}).join('')}
+        <div style="font-size:11px;color:var(--gold);font-weight:700">📊 Most Popular Media Unit · 📍 ${Security.sanitize(district?.label || '')}</div>
+        <div style="font-size:14px;font-weight:600;margin-top:4px">${Security.sanitize(nominee?.schoolName || '')}</div>
+        <div style="font-size:12px;color:var(--text2)">${Security.sanitize(nominee?.unit || '')}</div>
+      </div>`;
+    }).join('')}
     <button class="btn btn-ghost btn-block" style="margin-top:16px" onclick="this.closest('.modal-overlay').remove()">Close</button>`);
 }
 
@@ -2150,13 +2153,13 @@ function showAdmin() {
         <div class="admin-stat"><div class="admin-stat-num">${totalVotes.toLocaleString()}</div><div class="admin-stat-lbl">Total Votes</div></div>
         <div class="admin-stat"><div class="admin-stat-num">${DB.transactions.length}</div><div class="admin-stat-lbl">Transactions</div></div>
         <div class="admin-stat"><div class="admin-stat-num">${DB.nominees.length}</div><div class="admin-stat-lbl">Nominees</div></div>
-        <div class="admin-stat"><div class="admin-stat-num">${DB.categories.length}</div><div class="admin-stat-lbl">Categories</div></div>
+        <div class="admin-stat"><div class="admin-stat-num">${DB.districts.length}</div><div class="admin-stat-lbl">District Polls</div></div>
         <div class="admin-stat"><div class="admin-stat-num">${DB.events.length}</div><div class="admin-stat-lbl">Events</div></div>
       </div>
     </div>
 
     <div class="admin-section">
-      <div class="admin-section-title">⚙️ Award Categories</div>
+      <div class="admin-section-title">⚙️ District Poll</div>
       ${DB.categories.map(cat=>{
         const nominees = DB.nominees.filter(n=>n.catId===cat.id);
         const votes = nominees.reduce((s,n)=>s+n.votes,0);
@@ -2165,7 +2168,7 @@ function showAdmin() {
           <div class="admin-row-info"><div class="admin-row-label">${Security.sanitize(cat.name)}</div><div class="admin-row-sub">${nominees.length} nominees · ${votes.toLocaleString()} votes · Status: ${cat.status}</div></div>
           <div class="admin-actions"><button class="admin-btn admin-btn-edit" onclick="adminEditCat('${cat.id}')">Edit</button><button class="admin-btn admin-btn-del" onclick="adminDisableCat('${cat.id}')">Disable</button></div>
         </div>`;}).join('')}
-      <button class="admin-btn admin-btn-add" style="width:100%;padding:10px;margin-top:8px;border-radius:var(--radius-sm)" onclick="adminAddCategory()">+ Add Category</button>
+      <button class="admin-btn admin-btn-add" style="width:100%;padding:10px;margin-top:8px;border-radius:var(--radius-sm)" onclick="adminAddCategory()">+ Manage Poll</button>
     </div>
 
     <div class="admin-section">
@@ -2196,15 +2199,18 @@ function showAdmin() {
     </div>
 
     <div class="admin-section">
-      <div class="admin-section-title">📊 Vote Analytics</div>
-      ${DB.categories.map(cat=>{
-        const nominees = DB.nominees.filter(n=>n.catId===cat.id);
-        const total = nominees.reduce((s,n)=>s+n.votes,0);
-        const leader = nominees.sort((a,b)=>b.votes-a.votes)[0];
-        return `<div style="margin-bottom:16px">
-          <div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:13px;font-weight:600">${cat.icon} ${Security.sanitize(cat.name)}</span><span style="font-size:12px;color:var(--text2)">${total.toLocaleString()} total</span></div>
-          ${nominees.map(n=>{const pct=total?((n.votes/total)*100).toFixed(1):0;return `<div style="display:flex;align-items:center;gap:10px;margin-bottom:6px"><div style="font-size:12px;color:var(--text2);width:100px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${Security.sanitize(n.unit)}</div><div style="flex:1;height:6px;background:var(--surface2);border-radius:3px;overflow:hidden"><div style="height:100%;width:${pct}%;background:linear-gradient(90deg,var(--gold),var(--gold-light));border-radius:3px"></div></div><div style="font-size:11px;color:var(--text2);min-width:36px;text-align:right">${pct}%</div></div>`;}).join('')}
-        </div>`;}).join('')}
+      <div class="admin-section-title">📊 District Poll Analytics</div>
+      ${DB.districts.map(district => {
+        const nominees = districtNominees(district.id).slice().sort((a, b) => b.votes - a.votes);
+        const total = nominees.reduce((sum, nominee) => sum + nominee.votes, 0);
+        return `<div style="margin-bottom:20px">
+          <div style="display:flex;justify-content:space-between;margin-bottom:8px"><span style="font-size:13px;font-weight:600">📍 ${Security.sanitize(district.label)} · ${district.nameSi}</span><span style="font-size:12px;color:var(--text2)">${total.toLocaleString()} total</span></div>
+          ${nominees.map(nominee => {
+            const percent = total ? (nominee.votes / total * 100).toFixed(1) : 0;
+            return `<div style="display:flex;align-items:center;gap:10px;margin-bottom:6px"><div style="font-size:12px;color:var(--text2);width:112px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${Security.sanitize(nominee.schoolName)}</div><div style="flex:1;height:6px;background:var(--surface2);border-radius:3px;overflow:hidden"><div style="height:100%;width:${percent}%;background:linear-gradient(90deg,var(--gold),var(--gold-light));border-radius:3px"></div></div><div style="font-size:11px;color:var(--text2);min-width:36px;text-align:right">${percent}%</div></div>`;
+          }).join('')}
+        </div>`;
+      }).join('')}
     </div>`;
   document.getElementById('admin-overlay').style.display='flex';
 }
@@ -2227,7 +2233,7 @@ function showJudgePanel() {
     <div style="background:rgba(128,90,213,.08);border:1px solid rgba(128,90,213,.2);border-radius:var(--radius-sm);padding:14px;margin-bottom:20px;font-size:13px;color:#b794f4;line-height:1.6">
       ⚖️ <strong>Judge Evaluation System:</strong> Scores are encrypted and stored server-side. Scores are not publicly visible unless the administrator enables it. Each judge is assigned specific categories by the admin.
     </div>
-    <div style="font-size:16px;font-weight:700;margin-bottom:16px;font-family:var(--font-display)">Assigned: Best School Media Unit</div>
+    <div style="font-size:16px;font-weight:700;margin-bottom:16px;font-family:var(--font-display)">Assigned: Most Popular Media Unit</div>
     ${DB.nominees.filter(n=>n.catId==='cat1').map(n=>`
       <div class="judge-score-card">
         <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
@@ -2262,8 +2268,8 @@ function submitJudgeScore(nomineeId) {
 function showPrivacy() {
   showModal(`<div class="modal-title">🔒 Privacy Policy</div>
     <div style="font-size:13px;color:var(--text2);line-height:1.8;max-height:60vh;overflow-y:auto">
-      <p><strong style="color:var(--text)">Data We Collect:</strong><br/>• Mobile phone number (for authentication only)<br/>• Device information (for security)<br/>• Voting records (anonymised in public analytics)</p>
-      <p style="margin-top:12px"><strong style="color:var(--text)">Why We Need Your Phone Number:</strong><br/>Your phone number is used solely for OTP-based authentication to prevent duplicate voting. We do not sell or share your phone number.</p>
+      <p><strong style="color:var(--text)">Data We Collect:</strong><br/>• District-poll selections stored in your current browser session<br/>• Device information used to protect the service<br/>• Anonymised public vote analytics</p>
+      <p style="margin-top:12px"><strong style="color:var(--text)">District Polls:</strong><br/>District polls are open without a sign-in. If you choose to become a supporter, your mobile number is used only for subscription authentication. We do not sell or share your phone number.</p>
       <p style="margin-top:12px"><strong style="color:var(--text)">Payment Data:</strong><br/>Payment processing is handled by your mobile operator. We do not store card numbers or sensitive payment details. Subscription activation is server-side verified only.</p>
       <p style="margin-top:12px"><strong style="color:var(--text)">Your Rights:</strong><br/>You may request deletion of your account and associated data at any time by contacting us.</p>
       <p style="margin-top:12px"><strong style="color:var(--text)">Contact:</strong> privacy@sinhaawards.lk</p>
@@ -2274,8 +2280,8 @@ function showPrivacy() {
 function showTerms() {
   showModal(`<div class="modal-title">📄 Terms of Service</div>
     <div style="font-size:13px;color:var(--text2);line-height:1.8;max-height:60vh;overflow-y:auto">
-      <p><strong style="color:var(--text)">Voting Rules:</strong><br/>• One vote per category per verified account<br/>• Voting requires an active subscription<br/>• Votes are final and cannot be changed after submission<br/>• Fraudulent voting attempts will result in account suspension</p>
-      <p style="margin-top:12px"><strong style="color:var(--text)">Subscription Terms:</strong><br/>• Subscriptions are valid for the 2026 Sinha Awards season<br/>• No refunds after subscription activation<br/>• Subscription is tied to your verified phone number</p>
+      <p><strong style="color:var(--text)">Voting Rules:</strong><br/>• One vote per district poll<br/>• District polls are free and open to everyone<br/>• You may change your selection before voting closes on December 31, 2026<br/>• Fraudulent voting attempts may be removed by the organisers</p>
+      <p style="margin-top:12px"><strong style="color:var(--text)">Supporter Terms:</strong><br/>• Supporter subscriptions help fund the 2026 Sinha Awards season<br/>• Voting never requires a supporter subscription<br/>• A subscription is tied to your verified phone number</p>
       <p style="margin-top:12px"><strong style="color:var(--text)">Account:</strong><br/>• One account per phone number<br/>• Accounts used for vote manipulation will be permanently banned<br/>• Sinha Awards reserves the right to void votes found to be fraudulent</p>
       <p style="margin-top:12px"><strong style="color:var(--text)">Contact:</strong> legal@sinhaawards.lk</p>
     </div>
