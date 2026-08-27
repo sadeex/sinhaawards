@@ -1899,7 +1899,7 @@ async function verifyOTP() {
   AppState.user = user;
   AppState.session = { token: Security.generateSessionToken(), userId: user.id, createdAt: new Date().toISOString(), expiresAt: new Date(Date.now()+86400000*7).toISOString() };
   /* Production: Store session token in HttpOnly cookie via backend */
-  sessionStorage.setItem('sa_session', JSON.stringify({ userId: user.id, operator: AppState.loginOperator }));
+  sessionStorage.setItem('sa_session', JSON.stringify({ userId: user.id, phone: user.phone, operator: AppState.loginOperator }));
 
   AuditLog.log('AUTH_SUCCESS', user.id, { phone: phone.slice(-4) });
   setLoading('verify-otp-btn','verify-otp-text','verify-otp-spinner',false,'Verify & Continue');
@@ -2147,6 +2147,30 @@ function castPollVote(districtId, nomineeId) {
   localCastPollVote(districtId, nomineeId);
 }
 
+/* Cache local-mode votes so a refresh on the SAME browser doesn't lose them
+   while cloud sync is unavailable. This does NOT make votes cross-device —
+   only Sync (Firebase) does that — it just stops them vanishing on reload. */
+const LocalVoteCache = {
+  KEY: 'sa_local_votes',
+  save() {
+    try { localStorage.setItem(this.KEY, JSON.stringify({ votes: AppState.votes, ts: Date.now() })); } catch(e) {}
+  },
+  load() {
+    try {
+      const raw = localStorage.getItem(this.KEY);
+      if (!raw) return;
+      const data = JSON.parse(raw);
+      Object.entries(data.votes || {}).forEach(([districtId, v]) => {
+        if (!AppState.votes[districtId]) {
+          AppState.votes[districtId] = v;
+          const nominee = DB.nominees.find(n => n.id === v.nomineeId);
+          if (nominee) nominee.votes += 1; /* reflect the cached vote in the local count until cloud data (if any) arrives */
+        }
+      });
+    } catch(e) {}
+  }
+};
+
 /* Local (offline / no-Firebase) vote path */
 function localCastPollVote(districtId, nomineeId) {
   const previousVote = AppState.votes[districtId];
@@ -2158,6 +2182,7 @@ function localCastPollVote(districtId, nomineeId) {
   }
   target.votes += 1;
   AppState.votes[districtId] = { nomineeId, timestamp: new Date().toISOString() };
+  LocalVoteCache.save();
   AuditLog.log('POLL_VOTE_CAST', AppState.user?.id || 'guest', { districtId, nomineeId, changed: Boolean(previousVote) });
   refreshPolls();
   updateProfileUI();
@@ -3526,13 +3551,17 @@ async function bootstrap() {
 
   /* ---- everything below is wrapped so one error never freezes the app ---- */
   try {
+  /* Restore any votes cached locally (protects against losing a vote on
+     refresh while cloud sync is unavailable — cloud data still wins once it arrives) */
+  LocalVoteCache.load();
+
   /* Restore session if exists */
   const storedSession = sessionStorage.getItem('sa_session');
   if (storedSession) {
     try {
       const s = JSON.parse(storedSession);
       const op = s.operator || 'dialog';
-      const user = DB.users.find(u=>u.id===s.userId) || { id:s.userId, phone:'+94 7X XXX XXXX', verified:true, operator:op, role:'user', active:true };
+      const user = DB.users.find(u=>u.id===s.userId) || { id:s.userId, phone: s.phone || '+94 7X XXX XXXX', verified:true, operator:op, role:'user', active:true };
       if (!DB.users.find(u=>u.id===s.userId)) DB.users.push(user);
       AppState.user = user;
       AppState.loginOperator = user.operator || op;
