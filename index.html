@@ -1314,8 +1314,8 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 <!-- ══ MODALS ════════════════════════════════════ -->
 <div id="modal-container"></div>
 
-<!-- Firebase SDK is loaded lazily in the background by Sync.loadSDK() so it
-     can never block the app from appearing. -->
+<!-- Votes are read from / written to a JSON file in this GitHub repo via
+     Sync (see GITHUB_STORE below); it can never block the app from appearing. -->
 <script>
 /* ═══════════════════════════════════════════════════════════
    SINHA AWARDS 2026 — Application Engine
@@ -2126,7 +2126,7 @@ function castPollVote(districtId, nomineeId) {
   const target = DB.nominees.find(n => n.id === nomineeId);
   if (!target || !districtNominees(districtId).some(n => n.id === nomineeId)) return;
 
-  /* When Firebase is connected, vote through the cloud (atomic + cross-device). */
+  /* When GitHub sync is connected, vote through it (cross-device). */
   if (window.Sync && Sync.enabled) {
     showToast('Recording your vote…', 'info', 1200);
     Sync.castVote(districtId, nomineeId).then(ok => {
@@ -2138,7 +2138,7 @@ function castPollVote(districtId, nomineeId) {
       }
     }).catch(err => {
       console.error('[vote] cloud vote failed:', err && err.code, err && err.message, err);
-      showToast('Vote could not be synced: ' + ((err && err.message) || 'check Firestore rules') + '. Saved on this device.', 'error', 6000);
+      showToast('Vote could not be synced: ' + ((err && err.message) || 'check your GitHub token/repo settings') + '. Saved on this device.', 'error', 6000);
       localCastPollVote(districtId, nomineeId);
     });
     return;
@@ -2149,7 +2149,7 @@ function castPollVote(districtId, nomineeId) {
 
 /* Cache local-mode votes so a refresh on the SAME browser doesn't lose them
    while cloud sync is unavailable. This does NOT make votes cross-device —
-   only Sync (Firebase) does that — it just stops them vanishing on reload. */
+   only Sync (GitHub) does that — it just stops them vanishing on reload. */
 const LocalVoteCache = {
   KEY: 'sa_local_votes',
   save() {
@@ -2171,7 +2171,7 @@ const LocalVoteCache = {
   }
 };
 
-/* Local (offline / no-Firebase) vote path */
+/* Local (offline / no-GitHub-sync) vote path */
 function localCastPollVote(districtId, nomineeId) {
   const previousVote = AppState.votes[districtId];
   const target = DB.nominees.find(n => n.id === nomineeId);
@@ -3288,28 +3288,41 @@ function populateNomineeFilter() {
 }
 
 /* ═══════════════════════════════════════════════════════════
-   FIREBASE REAL-TIME SYNC (cross-device)
+   GITHUB-BACKED VOTE STORAGE (cross-device, no server)
    ───────────────────────────────────────────────────────────
-   STEP 1: Create a free project at https://console.firebase.google.com
-   STEP 2: Add a "Web app" (</> icon) and copy the config object here.
-   STEP 3: In Firebase console → Firestore Database → Create database
-           (start in production mode is fine; paste the rules below).
-   STEP 4: Firebase console → Authentication → Sign-in method →
-           enable "Anonymous". (Phone sign-in is optional — see note.)
-   STEP 5: Deploy the Firestore security rules provided in the
-           FIREBASE-SETUP guide so only admins can edit schools.
+   Votes are read from and written to a single JSON file in this
+   GitHub repo via the GitHub Contents API. There is no backend —
+   the browser talks to api.github.com directly using the token
+   below.
 
-   Until you paste a real config below, the app keeps working in
-   local (offline) mode and nothing is sent to the cloud.
+   ⚠️ IMPORTANT SECURITY NOTE
+   A token embedded in client-side code is visible to anyone who
+   views the page source or opens DevTools. Do NOT use a token
+   with broad access. Set this up as:
+     1. Create a dedicated GitHub account just for this (not your
+        main one), or use a fine-grained token scoped to ONLY
+        this one repo.
+     2. Settings → Developer settings → Fine-grained tokens →
+        Generate new token.
+     3. Repository access: "Only select repositories" → this repo.
+     4. Permissions: Contents → Read and write. Nothing else.
+     5. Paste the token below.
+   Anyone with this token can rewrite GITHUB_STORE.PATH (and
+   anything else the token's permission scope allows) — that's
+   an accepted tradeoff for a low-stakes public poll with no
+   backend. Do not reuse this token anywhere sensitive, and
+   rotate/regenerate it if you ever suspect abuse.
+
+   Every vote creates one commit to GITHUB_STORE.PATH. That's
+   normal for this approach — expect the commit history to grow.
 ═══════════════════════════════════════════════════════════ */
-const FIREBASE_CONFIG = {
-  apiKey:            "AIzaSyCrTuZv9kao4nWCC1zg5CPnoQEWy8eTDz0",
-  authDomain:        "aswefwe.firebaseapp.com",
-  projectId:         "aswefwe",
-  storageBucket:     "aswefwe.firebasestorage.app",
-  messagingSenderId: "838676070129",
-  appId:             "1:838676070129:web:f29599e26e5a8a17843350",
-  measurementId:     "G-KZ23LWFSBK"
+const GITHUB_STORE = {
+  OWNER:  'sadeex',              // repo owner
+  REPO:   'sinhaawards',         // repo name
+  BRANCH: 'main',
+  PATH:   'data/votes.json',     // file this app reads/writes
+  TOKEN:  'PASTE_YOUR_FINE_GRAINED_TOKEN_HERE',
+  API:    'https://api.github.com'
 };
 
 function setSyncStatus(state, text) {
@@ -3323,188 +3336,175 @@ function setSyncStatus(state, text) {
 
 const Sync = {
   enabled: false,
-  app: null, db: null, auth: null,
-  uid: null,
-  _votesUnsub: null,
+  sha: null,           // current file blob sha, needed to write without clobbering others
+  pollTimer: null,
+  POLL_MS: 20000,       // how often to re-check GitHub for other people's votes
 
-  /* Build the districtId for a nominee from the local school registry */
-  districtOf(nominee) {
-    if (nominee.districtId) return nominee.districtId;
-    const school = DB.schools.find(s => s.id === nominee.schoolId);
-    return school?.district || 'colombo';
+  isConfigured() {
+    return GITHUB_STORE.TOKEN && !GITHUB_STORE.TOKEN.startsWith('PASTE_');
   },
 
   voterKey() {
     const phone = AppState.user?.phone;
     if (phone) return 'phone_' + phone.replace(/\D/g, '');
-    return this.uid ? 'anon_' + this.uid : null;
+    return null;
   },
 
-  /* Load the Firebase CDN scripts in the background (non-blocking). */
-  loadScript(src, timeout=9000) {
-    return new Promise((resolve, reject) => {
-      const existing = document.querySelector(`script[src="${src}"]`);
-      if (existing && window.firebase) return resolve();
-      const s = document.createElement('script');
-      s.src = src; s.async = true;
-      const to = setTimeout(() => reject(new Error('SDK load timeout: ' + src)), timeout);
-      s.onload = () => { clearTimeout(to); resolve(); };
-      s.onerror = () => { clearTimeout(to); reject(new Error('SDK blocked: ' + src)); };
-      document.head.appendChild(s);
+  headers(withAuth = true) {
+    const h = { 'Accept': 'application/vnd.github+json' };
+    if (withAuth && this.isConfigured()) h['Authorization'] = 'Bearer ' + GITHUB_STORE.TOKEN;
+    return h;
+  },
+
+  contentsUrl() {
+    return `${GITHUB_STORE.API}/repos/${GITHUB_STORE.OWNER}/${GITHUB_STORE.REPO}/contents/${GITHUB_STORE.PATH}?ref=${GITHUB_STORE.BRANCH}&_=${Date.now()}`;
+  },
+
+  b64encode(str) { return btoa(unescape(encodeURIComponent(str))); },
+  b64decode(str) { return decodeURIComponent(escape(atob(str))); },
+
+  /* Pull the latest votes.json from GitHub. Returns { nominees, pollVotes }. */
+  async fetchFile() {
+    const res = await fetch(this.contentsUrl(), { headers: this.headers() });
+    if (res.status === 404) {
+      // File doesn't exist yet — start from an empty store, will be created on first write.
+      this.sha = null;
+      return { nominees: {}, pollVotes: {} };
+    }
+    if (!res.ok) throw new Error(`GitHub read failed: ${res.status} ${res.statusText}`);
+    const json = await res.json();
+    this.sha = json.sha;
+    const data = JSON.parse(this.b64decode(json.content));
+    return { nominees: data.nominees || {}, pollVotes: data.pollVotes || {} };
+  },
+
+  /* Apply the fetched vote-store into local DB/AppState for rendering. */
+  applyRemote(data) {
+    DB.nominees.forEach(n => {
+      if (Object.prototype.hasOwnProperty.call(data.nominees, n.id)) n.votes = data.nominees[n.id];
     });
+    const key = this.voterKey();
+    if (key && data.pollVotes[key]) {
+      AppState.votes = {};
+      Object.entries(data.pollVotes[key]).forEach(([districtId, nomineeId]) => {
+        if (DB.districts.find(d => d.id === districtId)) {
+          AppState.votes[districtId] = { nomineeId, timestamp: new Date().toISOString() };
+        }
+      });
+    }
   },
 
-  async loadSDK() {
-    const v = '10.12.2';
-    await this.loadScript(`https://www.gstatic.com/firebasejs/${v}/firebase-app-compat.js`);
-    await this.loadScript(`https://www.gstatic.com/firebasejs/${v}/firebase-auth-compat.js`);
-    await this.loadScript(`https://www.gstatic.com/firebasejs/${v}/firebase-firestore-compat.js`);
-    return typeof firebase !== 'undefined';
+  async refresh() {
+    try {
+      const data = await this.fetchFile();
+      this.applyRemote(data);
+      setSyncStatus('live', 'Synced with GitHub');
+      refreshCloudUI();
+      return data;
+    } catch (err) {
+      console.warn('[sync] GitHub read failed:', err);
+      setSyncStatus('offline', 'Sync unavailable');
+      throw err;
+    }
+  },
+
+  startPolling() {
+    if (this.pollTimer) clearInterval(this.pollTimer);
+    this.pollTimer = setInterval(() => this.refresh().catch(() => {}), this.POLL_MS);
   },
 
   async init() {
+    if (!this.isConfigured()) {
+      console.info('[sync] No GitHub token configured — using local (this-device-only) mode.');
+      setSyncStatus('offline', 'Local mode');
+      this.enabled = false;
+      return;
+    }
     setSyncStatus('connecting', 'Connecting…');
-    /* Lazily load Firebase. If it's slow/blocked, app stays in local mode. */
     try {
-      const ok = await Promise.race([ this.loadSDK(), new Promise((_,rej)=>setTimeout(()=>rej(new Error('firebase load timeout')),9000)) ]);
-      if (!ok) throw new Error('firebase unavailable');
-    } catch (e) {
-      console.warn('[sync] Firebase SDK could not be loaded — using local mode:', e.message);
-      setSyncStatus('offline', 'Local mode');
-      return;
-    }
-    if (typeof firebase === 'undefined') {
-      console.info('[sync] Firebase SDK not loaded — using local mode.');
-      setSyncStatus('offline', 'Local mode');
-      return;
-    }
-    if (!FIREBASE_CONFIG.apiKey || FIREBASE_CONFIG.apiKey.startsWith('PASTE_')) {
-      console.info('[sync] No Firebase config set — using local mode.');
-      setSyncStatus('offline', 'Local mode');
-      return;
-    }
-    try {
-      setSyncStatus('connecting', 'Connecting…');
-      this.app = firebase.initializeApp(FIREBASE_CONFIG);
-      this.db = firebase.firestore();
-      this.auth = firebase.auth();
-
-      /* Persist an anonymous identity so votes survive refreshes */
-      await new Promise(resolve => {
-        this.auth.onAuthStateChanged(user => {
-          this.uid = user ? user.uid : null;
-          resolve();
-        });
-        this.auth.signInAnonymously().catch(() => {});
-      });
-
+      await this.refresh();
       this.enabled = true;
-      /* Seeding must never block live sync — if rules stop the seed,
-         the onSnapshot listeners still run and an admin can add data. */
-      try { await this.seedIfNeeded(); }
-      catch (e) { console.warn('[sync] seed skipped:', e && e.message); }
-      this.subscribeNominees();
-      this.bindVoter();
-      setSyncStatus('live', 'Live synced');
-      showToast('☁️ Live sync connected — votes sync across all devices', 'success', 3500);
-      AuditLog.log('FIREBASE_CONNECTED', this.uid || 'anon', {});
+      this.startPolling();
+      showToast('☁️ Connected — votes sync via GitHub', 'success', 3000);
+      AuditLog.log('GITHUB_SYNC_CONNECTED', this.voterKey() || 'anon', {});
     } catch (err) {
-      console.warn('[sync] Firebase init failed, using local mode:', err);
+      console.warn('[sync] GitHub init failed, using local mode:', err);
       setSyncStatus('offline', 'Local mode');
       this.enabled = false;
     }
   },
 
-  /* First run: upload the 29 starter schools/nominees once */
-  async seedIfNeeded() {
-    const metaRef = this.db.collection('meta').doc('seed');
-    const meta = await metaRef.get();
-    if (meta.exists) return;
-    const batch = this.db.batch();
-    DB.nominees.forEach(n => {
-      const ref = this.db.collection('nominees').doc(n.id);
-      batch.set(ref, {
-        catId: 'cat1',
-        districtId: this.districtOf(n),
-        schoolName: n.schoolName,
-        unit: n.unit,
-        project: n.project || 'Sinha Awards 2026',
-        img: n.img || '',
-        votes: n.votes || 0
-      });
-    });
-    batch.set(metaRef, { version: 1, seededAt: new Date().toISOString() });
-    await batch.commit();
-  },
-
-  /* Real-time listener: any vote/admin edit on any device updates here */
-  subscribeNominees() {
-    this.db.collection('nominees').onSnapshot(snap => {
-      DB.nominees = snap.docs.map(d => ({ id: d.id, catId: 'cat1', achievements: [], ...d.data() }));
-      if (this.enabled) setSyncStatus('live', 'Live synced');
-      refreshCloudUI();
-    }, err => {
-      console.warn('[sync] nominees listener error:', err);
-      setSyncStatus('offline', 'Sync blocked');
-      showToast('Could not sync with the cloud. Please check the Firestore rules.', 'error', 5000);
-    });
-  },
-
-  /* Listen to THIS voter's choices (by phone when logged in, else anonymous) */
+  /* Re-pull so this voter's saved choices (by phone) load in on this device */
   bindVoter() {
-    if (this._votesUnsub) { this._votesUnsub(); this._votesUnsub = null; }
-    const key = this.voterKey();
-    if (!key) return;
-    this._votesUnsub = this.db.collection('pollVotes').doc(key).onSnapshot(snap => {
-      const data = snap.data() || {};
-      AppState.votes = {};
-      Object.entries(data).forEach(([districtId, nomineeId]) => {
-        if (DB.districts.find(d => d.id === districtId)) {
-          AppState.votes[districtId] = { nomineeId, timestamp: new Date().toISOString() };
-        }
-      });
-      refreshCloudUI();
-    }, err => console.warn('[sync] votes listener error:', err));
+    this.refresh().catch(() => {});
   },
 
-  /* Atomic vote: one vote per district, changeable, counted safely */
-  castVote(districtId, nomineeId) {
-    const key = this.voterKey();
-    if (!key) return Promise.reject(new Error('No voter identity'));
-    const db = this.db;
-    const voteRef = db.collection('pollVotes').doc(key);
-    const newRef = db.collection('nominees').doc(nomineeId);
-    return db.runTransaction(t => {
-      return t.get(voteRef).then(voteSnap => {
-        const data = voteSnap.data() || {};
-        const current = data[districtId];
-        if (current === nomineeId) return { same: true };
-        const reads = [t.get(newRef)];
-        let oldRef = null;
-        if (current) { oldRef = db.collection('nominees').doc(current); reads.push(t.get(oldRef)); }
-        return Promise.all(reads).then(([newSnap, oldSnap]) => {
-          const nd = newSnap.data() || {};
-          t.set(newRef, { votes: (nd.votes || 0) + 1 }, { merge: true });
-          if (oldRef && oldSnap) {
-            const od = oldSnap.data() || {};
-            t.set(oldRef, { votes: Math.max(0, (od.votes || 0) - 1) }, { merge: true });
-          }
-          t.set(voteRef, { [districtId]: nomineeId }, { merge: true });
-          return { same: false };
-        });
-      });
-    }).then(res => !res.same);
+  /* Write the full store back to GitHub. Retries once on a 409 (someone
+     else committed in between) by re-fetching and re-applying the change. */
+  async commitFile(nominees, pollVotes, message) {
+    const body = {
+      message,
+      content: this.b64encode(JSON.stringify({ nominees, pollVotes }, null, 2)),
+      branch: GITHUB_STORE.BRANCH
+    };
+    if (this.sha) body.sha = this.sha;
+    const res = await fetch(
+      `${GITHUB_STORE.API}/repos/${GITHUB_STORE.OWNER}/${GITHUB_STORE.REPO}/contents/${GITHUB_STORE.PATH}`,
+      { method: 'PUT', headers: { ...this.headers(), 'Content-Type': 'application/json' }, body: JSON.stringify(body) }
+    );
+    if (res.status === 409) { const e = new Error('conflict'); e.conflict = true; throw e; }
+    if (!res.ok) throw new Error(`GitHub write failed: ${res.status} ${res.statusText}`);
+    const json = await res.json();
+    this.sha = json.content.sha;
+    return json;
   },
 
-  /* Admin writes */
-  updateNominee(id, fields) { return this.db.collection('nominees').doc(id).set(fields, { merge: true }); },
-  addNominee(districtId, data) {
-    return this.db.collection('nominees').doc(data.id).set({
-      catId: 'cat1', districtId, schoolName: data.schoolName, unit: data.unit,
-      project: 'Sinha Awards 2026', img: '', votes: data.votes || 0
-    });
+  /* Cast (or change) this voter's pick for one district. One vote per district. */
+  async castVote(districtId, nomineeId, attempt = 0) {
+    const key = this.voterKey();
+    if (!key) throw new Error('No voter identity');
+    const data = await this.fetchFile();
+    const current = (data.pollVotes[key] || {})[districtId];
+    if (current === nomineeId) return false; // no-op, already voted this way
+
+    data.nominees[nomineeId] = (data.nominees[nomineeId] || 0) + 1;
+    if (current) data.nominees[current] = Math.max(0, (data.nominees[current] || 0) - 1);
+    data.pollVotes[key] = { ...(data.pollVotes[key] || {}), [districtId]: nomineeId };
+
+    try {
+      await this.commitFile(data.nominees, data.pollVotes, `Vote: ${key} -> ${nomineeId} (${districtId})`);
+    } catch (err) {
+      if (err.conflict && attempt < 3) return this.castVote(districtId, nomineeId, attempt + 1);
+      throw err;
+    }
+    this.applyRemote(data);
+    refreshCloudUI();
+    return true;
   },
-  deleteNominee(id) { return this.db.collection('nominees').doc(id).delete(); }
+
+  /* Admin writes — same read-modify-write-with-retry pattern */
+  async updateNominee(id, fields, attempt = 0) {
+    const data = await this.fetchFile();
+    data.nominees[id] = fields.votes;
+    try { await this.commitFile(data.nominees, data.pollVotes, `Admin: update ${id}`); }
+    catch (err) { if (err.conflict && attempt < 3) return this.updateNominee(id, fields, attempt + 1); throw err; }
+    this.applyRemote(data);
+  },
+  async addNominee(districtId, nomineeData, attempt = 0) {
+    const data = await this.fetchFile();
+    data.nominees[nomineeData.id] = nomineeData.votes || 0;
+    try { await this.commitFile(data.nominees, data.pollVotes, `Admin: add ${nomineeData.id}`); }
+    catch (err) { if (err.conflict && attempt < 3) return this.addNominee(districtId, nomineeData, attempt + 1); throw err; }
+    this.applyRemote(data);
+  },
+  async deleteNominee(id, attempt = 0) {
+    const data = await this.fetchFile();
+    delete data.nominees[id];
+    Object.values(data.pollVotes).forEach(v => { Object.keys(v).forEach(d => { if (v[d] === id) delete v[d]; }); });
+    try { await this.commitFile(data.nominees, data.pollVotes, `Admin: delete ${id}`); }
+    catch (err) { if (err.conflict && attempt < 3) return this.deleteNominee(id, attempt + 1); throw err; }
+    this.applyRemote(data);
+  }
 };
 
 /* Re-render the UI when cloud data changes (without forcing admin open) */
@@ -3523,7 +3523,7 @@ function refreshCloudUI() {
 ═══════════════════════════════════════════════════════════ */
 
 async function bootstrap() {
-  /* Safety net: the app must ALWAYS appear, even if Firebase or another
+  /* Safety net: the app must ALWAYS appear, even if GitHub sync or another
      dependency is slow/blocked. Hides the loader no matter what. */
   setTimeout(() => {
     const ls = document.getElementById('loading-screen');
@@ -3542,7 +3542,7 @@ async function bootstrap() {
     document.getElementById('app').style.display='flex';
   } catch(e) {}
 
-  /* Connect to Firebase in the background; it can never block the UI. */
+  /* Connect to GitHub sync in the background; it can never block the UI. */
   Promise.race([
     Sync.init(),
     new Promise(res => setTimeout(() => { setSyncStatus('offline','Local mode'); res(); }, 8000))
