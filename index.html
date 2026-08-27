@@ -538,11 +538,6 @@ body{display:flex;flex-direction:column;position:relative}
 
 /* Site background — golden lion photo at 70% opacity with gold animations */
 #bg-scene{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;background:#08080f}
-#bg-photo{position:absolute;inset:-6%;
-  background:url('bg-lion.jpg') center 38%/cover no-repeat;
-  opacity:.7;
-  filter:sepia(.28) saturate(1.25) hue-rotate(-6deg) brightness(.85) contrast(1.05);
-  animation:bgKenBurns 32s ease-in-out infinite alternate, bgGoldPulse 7s ease-in-out infinite}
 #bg-shade{position:absolute;inset:0;
   background:
     radial-gradient(120% 90% at 50% 20%,rgba(8,8,15,.35) 0%,rgba(8,8,15,.72) 55%,rgba(8,8,15,.94) 100%),
@@ -695,6 +690,45 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
   .auth-screen{padding:16px 24px}
 }
 
+/* ══ SMALL SCREENS — enable BOTH vertical & horizontal scroll ══
+   On phones / tiny devices every surface scrolls vertically AND
+   horizontally so content (admin tables, schedules, analytics) is
+   never clipped. Wide blocks are allowed to keep their natural width
+   and scroll sideways instead of being squashed. */
+@media (max-width:600px){
+  #app,
+  .screen,
+  .admin-overlay,
+  .admin-content,
+  .judge-overlay,
+  #judge-content,
+  .sub-screen,
+  .notif-panel,
+  .school-detail-overlay,
+  .auth-screen,
+  .modal-box{
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    overscroll-behavior-x:contain;
+  }
+  /* Allow wide data rows / tables to keep their size and scroll sideways */
+  .admin-grid,
+  .admin-row,
+  .schedule-item,
+  .poll-option-row,
+  .operator-grid,
+  .winner-card,
+  .prize-row{ min-width:min-content; }
+  /* Make horizontal scrollbars visible & easy to grab on touch devices */
+  .screen::-webkit-scrollbar,
+  .admin-content::-webkit-scrollbar,
+  #judge-content::-webkit-scrollbar{ height:6px; }
+  .screen::-webkit-scrollbar-thumb,
+  .admin-content::-webkit-scrollbar-thumb,
+  #judge-content::-webkit-scrollbar-thumb{ background:var(--gold-dark);border-radius:3px; }
+}
+
+
 </style>
 </head>
 <body>
@@ -776,7 +810,6 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 
 <!-- Golden lion background -->
 <div id="bg-scene" aria-hidden="true">
-  <div id="bg-photo"></div>
   <div id="bg-shade"></div>
   <div id="bg-gold-sheen"></div>
   <div id="bg-vignette"></div>
@@ -790,7 +823,6 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 
 <!-- Loading Screen -->
 <div class="loading-overlay" id="loading-screen">
-  <span class="lion-logo lion-2xl lion-glow lion-spin-in" style="margin-bottom:14px"><img src="lion.png" alt="Sinha Awards lion logo"/></span>
   <div class="loading-logo">🏆 Sinha</div>
   <div style="font-size:12px;color:var(--text3);letter-spacing:2px;text-transform:uppercase">Awards 2026</div>
   <div class="spinner spinner-gold" style="margin-top:24px"></div>
@@ -800,7 +832,6 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 <!-- ══ AUTH SCREEN ═══════════════════════════════ -->
 <div class="auth-screen" id="auth-screen" style="display:none">
   <div style="text-align:center;margin-bottom:32px">
-    <span class="lion-logo lion-xl lion-float lion-glow lion-spin-in" style="margin-bottom:8px"><img src="lion.png" alt="Sinha Awards lion logo"/></span>
     <div style="font-family:var(--font-display);font-size:28px;font-weight:900;background:linear-gradient(135deg,var(--gold-light),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Sinha Awards</div>
     <div class="auth-tagline">Sri Lanka School Media Awards 2026</div>
   </div>
@@ -832,7 +863,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
       <p class="fee-note">LKR 39 is charged for tax and fees.</p>
       <button class="btn btn-primary btn-block btn-lg" style="margin-top:20px" onclick="sendOTP()" id="send-otp-btn">
         <span id="send-otp-text">Send Verification Code</span>
-        <span id="send-otp-spinner" style="display:none" class="spinner" style="width:16px;height:16px;border-width:2px;border-top-color:#080810;border-color:rgba(8,8,16,.3)"></span>
+        <span id="send-otp-spinner" class="spinner" style="display:none;width:16px;height:16px;border-width:2px;border-top-color:#080810;border-color:rgba(8,8,16,.3)"></span>
       </button>
       <p class="privacy-text" style="margin-top:20px">By continuing, you agree to our <span class="privacy-link" onclick="showPrivacy()">Privacy Policy</span> and <span class="privacy-link" onclick="showTerms()">Terms of Service</span>.</p>
     </div>
@@ -860,7 +891,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
       </div>
       <button class="btn btn-primary btn-block btn-lg" style="margin-top:16px" onclick="verifyOTP()" id="verify-otp-btn">
         <span id="verify-otp-text">Verify & Continue</span>
-        <span id="verify-otp-spinner" style="display:none" class="spinner" style="border-top-color:#080810;border-color:rgba(8,8,16,.3)"></span>
+        <span id="verify-otp-spinner" class="spinner" style="display:none;border-top-color:#080810;border-color:rgba(8,8,16,.3)"></span>
       </button>
     </div>
 
@@ -958,7 +989,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
     <div style="padding:20px">
       <button class="btn btn-primary btn-block btn-lg" onclick="initiatePayment()" id="pay-btn">
         <span id="pay-btn-text">Proceed to Payment</span>
-        <span id="pay-spinner" style="display:none" class="spinner" style="border-top-color:#080810"></span>
+        <span id="pay-spinner" class="spinner" style="display:none;border-top-color:#080810"></span>
       </button>
       <p class="privacy-text" style="margin-top:16px">Payment is processed securely. Subscription activates only after server-side verification. See our <span class="privacy-link">Subscription Terms</span>.</p>
     </div>
@@ -973,7 +1004,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
     <div class="screen active" id="screen-home">
       <div class="hero-section">
         <div class="hero-bg"></div>
-        <div class="hero-badge"><span class="lion-logo lion-float" style="width:26px;height:26px;vertical-align:middle"><img src="lion.png" alt="Sinha Awards lion logo"/></span> &nbsp; Sinha Awards 2026 &nbsp; · &nbsp; Now Open</div>
+        <div class="hero-badge"> &nbsp; Sinha Awards 2026 &nbsp; · &nbsp; Now Open</div>
         <h1 class="hero-title">Sri Lanka's<br/>School Media<br/><span class="gold lux-shimmer">Awards Night</span></h1>
         <p class="hero-subtitle">Celebrating excellence in school media production across Sri Lanka. Vote for your favourite school media units.</p>
         <div class="hero-cta">
@@ -1079,8 +1110,8 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
         <div id="schools-list" class="stagger" style="padding:0 20px;display:flex;flex-direction:column;gap:12px"></div>
       </div>
 
-      <!-- Winners Tab -->
-      <div id="awards-winners-tab" class="awards-tab-content" style="display:none">
+    <!-- Winners Tab -->
+    <div id="awards-winners" class="awards-tab-content" style="display:none">
         <div class="winner-year-tab" id="winner-years"></div>
         <div id="winners-list"></div>
       </div>
@@ -1123,6 +1154,12 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
         <div class="section-head"><div class="section-label">Upcoming Events</div></div>
       </div>
       <div id="event-list"></div>
+
+      <!-- Event Schedule -->
+      <div style="padding:0 20px;margin:8px 0 24px">
+        <div class="section-head"><div class="section-label">📋 Event Schedule</div></div>
+        <div class="card" id="event-schedule" style="padding:8px 16px"></div>
+      </div>
 
       <!-- Winner Award Category -->
       <div style="padding:0 20px;margin:8px 0 24px">
@@ -1258,7 +1295,6 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 <aside class="dash-drawer" id="dash-drawer" aria-label="Dashboard menu">
   <div class="dash-header">
     <div style="display:flex;align-items:center;gap:12px">
-      <span class="lion-logo lion-float" style="width:44px;height:44px;flex-shrink:0"><img src="lion.png" alt="Sinha Awards lion logo"/></span>
       <div>
         <div style="font-family:var(--font-display);font-size:20px;font-weight:900;background:linear-gradient(135deg,var(--gold-light),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Sinha Awards</div>
         <div style="font-size:11px;color:var(--text2);letter-spacing:1px;text-transform:uppercase">Dashboard · 2026</div>
@@ -1300,6 +1336,11 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 
 <!-- ══ MODALS ════════════════════════════════════ -->
 <div id="modal-container"></div>
+
+<!-- ══ FIREBASE SDK (real-time cross-device sync) ══ -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 
 <script>
 /* ═══════════════════════════════════════════════════════════
@@ -1890,6 +1931,8 @@ async function verifyOTP() {
   setLoading('verify-otp-btn','verify-otp-text','verify-otp-spinner',false,'Verify & Continue');
   clearInterval(AppState.otpTimerInterval);
   setAuthStep('success');
+  /* Re-bind cloud votes to this phone number so the same number sees the same votes on any device */
+  if (window.Sync && Sync.enabled && Sync.bindVoter) Sync.bindVoter();
 }
 
 function completeAuth() {
@@ -1951,8 +1994,7 @@ async function initiatePayment() {
     showModal(`
       <div class="modal-title modal-center">📲 Confirm Mobile Billing</div>
       <div style="text-align:center;margin:6px 0 18px">
-        <div class="lion-logo lion-l lion-glow" style="margin:0 auto 14px"><img src="lion.png" alt="Sinha Awards lion logo"/></div>
-        <div class="modal-subtitle" style="margin-bottom:6px">You will receive a confirmation on your phone from your network operator.</div>
+      <div class="modal-subtitle" style="margin-bottom:6px">You will receive a confirmation on your phone from your network operator.</div>
         <div class="security-notice" style="text-align:left"><span class="security-icon">🔒</span><span>Payment is processed securely by your mobile operator and activated only after confirmation.</span></div>
       </div>
       <div style="display:flex;gap:10px">
@@ -2003,7 +2045,7 @@ function activateDemoSubscription() {
 ═══════════════════════════════════════════════════════════ */
 
 function districtNominees(districtId) {
-  return DB.nominees.filter(n => DB.schools.find(s => s.id === n.schoolId)?.district === districtId);
+  return DB.nominees.filter(n => (n.districtId || DB.schools.find(s => s.id === n.schoolId)?.district) === districtId);
 }
 
 function pollCardHTML(districtId) {
@@ -2108,12 +2150,36 @@ function castPollVote(districtId, nomineeId) {
 
   const target = DB.nominees.find(n => n.id === nomineeId);
   if (!target || !districtNominees(districtId).some(n => n.id === nomineeId)) return;
+
+  /* When Firebase is connected, vote through the cloud (atomic + cross-device). */
+  if (window.Sync && Sync.enabled) {
+    showToast('Recording your vote…', 'info', 1500);
+    Sync.castVote(districtId, nomineeId).then(ok => {
+      if (ok) {
+        showToast(previousVote ? `Vote updated — now supporting ${target.schoolName} ✓` : `Vote recorded — ${target.schoolName} ✓`, 'success', 2200);
+        launchConfetti();
+      } else {
+        showToast('You have already voted in this district.', 'warning');
+      }
+    }).catch(err => {
+      console.warn('cloud vote failed, using local mode', err);
+      localCastPollVote(districtId, nomineeId);
+    });
+    return;
+  }
+
+  localCastPollVote(districtId, nomineeId);
+}
+
+/* Local (offline / no-Firebase) vote path */
+function localCastPollVote(districtId, nomineeId) {
+  const previousVote = AppState.votes[districtId];
+  const target = DB.nominees.find(n => n.id === nomineeId);
+  if (!target) return;
   if (previousVote) {
     const previousNominee = DB.nominees.find(n => n.id === previousVote.nomineeId);
     if (previousNominee) previousNominee.votes = Math.max(0, previousNominee.votes - 1);
   }
-
-  /* Production: POST /api/v1/polls/{districtId}/votes with abuse prevention and atomic counting. */
   target.votes += 1;
   AppState.votes[districtId] = { nomineeId, timestamp: new Date().toISOString() };
   AuditLog.log('POLL_VOTE_CAST', AppState.user?.id || 'guest', { districtId, nomineeId, changed: Boolean(previousVote) });
@@ -2546,7 +2612,7 @@ function showNotifications() {
     <div class="notif-item${n.read?'':' unread'}" onclick="markRead('${n.id}')">
       <div class="notif-dot${n.read?' read':''}"></div>
       <div class="notif-content">
-        <div class="notif-title">${Security.sanitize(n.title)}</d)}</div>
+        <div class="notif-title">${Security.sanitize(n.title)}</div>
         <div class="notif-body">${Security.sanitize(n.body)}</div>
         <div class="notif-time">${n.time}</div>
       </div>
@@ -2726,6 +2792,16 @@ function saveNomineeEdit(id) {
   if (!unit) { showToast('Media unit name is required.','warning'); return; }
   if (isNaN(votes) || votes < 0) { showToast('Vote count must be a number of 0 or more.','warning'); return; }
 
+  if (window.Sync && Sync.enabled) {
+    document.querySelectorAll('.modal-overlay').forEach(m=>m.remove());
+    showToast(`Updating ${schoolName}…`, 'info', 1200);
+    Sync.updateNominee(id, { schoolName, unit, votes })
+      .then(()=>showToast(`Updated ${schoolName} — ${votes.toLocaleString()} votes`, 'success'))
+      .catch(()=>{ n.schoolName=schoolName; n.unit=unit; n.votes=votes; afterAdminDataChange(); showToast('Saved locally (cloud unavailable)','warning'); });
+    AuditLog.log('ADMIN_EDIT_NOMINEE', 'admin', { nomineeId:id, schoolName, votes });
+    return;
+  }
+
   n.schoolName = schoolName;
   n.unit = unit;
   n.votes = votes;
@@ -2773,9 +2849,24 @@ function saveNomineeAdd(districtId) {
 
   const schoolId = 's' + (Date.now().toString(36)) + Math.floor(Math.random()*1000);
   const nomineeId = 'n' + (Date.now().toString(36)) + Math.floor(Math.random()*1000);
+
+  if (window.Sync && Sync.enabled) {
+    document.querySelectorAll('.modal-overlay').forEach(m=>m.remove());
+    showToast(`Adding ${schoolName}…`, 'info', 1200);
+    Sync.addNominee(districtId, { id: nomineeId, schoolName, unit, votes })
+      .then(()=>showToast(`Added ${schoolName} to the poll`, 'success'))
+      .catch(()=>{ localAddNominee(schoolId, nomineeId, districtId, schoolName, unit, votes); showToast('Saved locally (cloud unavailable)','warning'); afterAdminDataChange(); });
+    AuditLog.log('ADMIN_ADD_NOMINEE', 'admin', { nomineeId, schoolId, schoolName, districtId });
+    return;
+  }
+
+  localAddNominee(schoolId, nomineeId, districtId, schoolName, unit, votes);
+}
+
+function localAddNominee(schoolId, nomineeId, districtId, schoolName, unit, votes) {
   DB.schools.push({ id: schoolId, district: districtId, name: schoolName, photo: null });
   DB.nominees.push({
-    id: nomineeId, catId: 'cat1', schoolId, schoolName, unit,
+    id: nomineeId, catId: 'cat1', schoolId, districtId, schoolName, unit,
     project: 'Sinha Awards 2026',
     description: `School media unit of ${schoolName}, competing in the Most Popular Media Unit poll at Sinha Awards 2026.`,
     achievements: [], img: '', votes
@@ -2791,15 +2882,26 @@ function adminDeleteNominee(id) {
   const n = DB.nominees.find(x=>x.id===id);
   if (!n) return;
   showConfirm('Delete Poll Entry', `Remove ${n.schoolName} and its ${n.votes.toLocaleString()} votes from the poll? This cannot be undone.`, () => {
-    DB.nominees = DB.nominees.filter(x=>x.id!==id);
-    if (n.schoolId) DB.schools = DB.schools.filter(s=>s.id!==n.schoolId);
-    if (AppState.votes && Object.values(AppState.votes).some(v=>v.nomineeId===id)) {
-      Object.keys(AppState.votes).forEach(k=>{ if (AppState.votes[k].nomineeId===id) delete AppState.votes[k]; });
+    if (window.Sync && Sync.enabled) {
+      Sync.deleteNominee(id)
+        .then(()=>showToast(`${n.schoolName} removed from the poll`, 'info'))
+        .catch(()=>{ localDeleteNominee(id, n); showToast('Removed locally (cloud unavailable)','warning'); afterAdminDataChange(); });
+      AuditLog.log('ADMIN_DELETE_NOMINEE', 'admin', { nomineeId:id, school:n.schoolName }, 'WARN');
+      return;
     }
-    AuditLog.log('ADMIN_DELETE_NOMINEE', 'admin', { nomineeId:id, school:n.schoolName }, 'WARN');
-    showToast(`${n.schoolName} removed from the poll`, 'info');
-    afterAdminDataChange();
+    localDeleteNominee(id, n);
   }, 'Delete', true);
+}
+
+function localDeleteNominee(id, n) {
+  DB.nominees = DB.nominees.filter(x=>x.id!==id);
+  if (n && n.schoolId) DB.schools = DB.schools.filter(s=>s.id!==n.schoolId);
+  if (AppState.votes && Object.values(AppState.votes).some(v=>v.nomineeId===id)) {
+    Object.keys(AppState.votes).forEach(k=>{ if (AppState.votes[k].nomineeId===id) delete AppState.votes[k]; });
+  }
+  AuditLog.log('ADMIN_DELETE_NOMINEE', 'admin', { nomineeId:id, school:n?.schoolName }, 'WARN');
+  showToast(`${n?.schoolName || 'Entry'} removed from the poll`, 'info');
+  afterAdminDataChange();
 }
 
 /* Re-render everything after an admin data edit */
@@ -3185,6 +3287,179 @@ function populateNomineeFilter() {
 }
 
 /* ═══════════════════════════════════════════════════════════
+   FIREBASE REAL-TIME SYNC (cross-device)
+   ───────────────────────────────────────────────────────────
+   STEP 1: Create a free project at https://console.firebase.google.com
+   STEP 2: Add a "Web app" (</> icon) and copy the config object here.
+   STEP 3: In Firebase console → Firestore Database → Create database
+           (start in production mode is fine; paste the rules below).
+   STEP 4: Firebase console → Authentication → Sign-in method →
+           enable "Anonymous". (Phone sign-in is optional — see note.)
+   STEP 5: Deploy the Firestore security rules provided in the
+           FIREBASE-SETUP guide so only admins can edit schools.
+
+   Until you paste a real config below, the app keeps working in
+   local (offline) mode and nothing is sent to the cloud.
+═══════════════════════════════════════════════════════════ */
+const FIREBASE_CONFIG = {
+  apiKey:            "PASTE_YOUR_API_KEY",
+  authDomain:        "PASTE_YOUR_PROJECT.firebaseapp.com",
+  projectId:         "PASTE_YOUR_PROJECT_ID",
+  storageBucket:     "PASTE_YOUR_PROJECT.appspot.com",
+  messagingSenderId: "PASTE_YOUR_SENDER_ID",
+  appId:             "PASTE_YOUR_APP_ID"
+};
+
+const Sync = {
+  enabled: false,
+  app: null, db: null, auth: null,
+  uid: null,
+  _votesUnsub: null,
+
+  /* Build the districtId for a nominee from the local school registry */
+  districtOf(nominee) {
+    if (nominee.districtId) return nominee.districtId;
+    const school = DB.schools.find(s => s.id === nominee.schoolId);
+    return school?.district || 'colombo';
+  },
+
+  voterKey() {
+    const phone = AppState.user?.phone;
+    if (phone) return 'phone_' + phone.replace(/\D/g, '');
+    return this.uid ? 'anon_' + this.uid : null;
+  },
+
+  async init() {
+    if (typeof firebase === 'undefined') { console.info('[sync] Firebase SDK not loaded — using local mode.'); return; }
+    if (!FIREBASE_CONFIG.apiKey || FIREBASE_CONFIG.apiKey.startsWith('PASTE_')) {
+      console.info('[sync] No Firebase config set — using local mode. Add your config to enable cross-device sync.');
+      return;
+    }
+    try {
+      this.app = firebase.initializeApp(FIREBASE_CONFIG);
+      this.db = firebase.firestore();
+      this.auth = firebase.auth();
+
+      /* Persist an anonymous identity so votes survive refreshes */
+      await new Promise(resolve => {
+        this.auth.onAuthStateChanged(user => {
+          this.uid = user ? user.uid : null;
+          resolve();
+        });
+        this.auth.signInAnonymously().catch(() => {});
+      });
+
+      this.enabled = true;
+      await this.seedIfNeeded();
+      this.subscribeNominees();
+      this.bindVoter();
+      showToast('☁️ Live sync connected — votes sync across all devices', 'success', 3500);
+      AuditLog.log('FIREBASE_CONNECTED', this.uid || 'anon', {});
+    } catch (err) {
+      console.warn('[sync] Firebase init failed, using local mode:', err);
+      this.enabled = false;
+    }
+  },
+
+  /* First run: upload the 29 starter schools/nominees once */
+  async seedIfNeeded() {
+    const metaRef = this.db.collection('meta').doc('seed');
+    const meta = await metaRef.get();
+    if (meta.exists) return;
+    const batch = this.db.batch();
+    DB.nominees.forEach(n => {
+      const ref = this.db.collection('nominees').doc(n.id);
+      batch.set(ref, {
+        catId: 'cat1',
+        districtId: this.districtOf(n),
+        schoolName: n.schoolName,
+        unit: n.unit,
+        project: n.project || 'Sinha Awards 2026',
+        img: n.img || '',
+        votes: n.votes || 0
+      });
+    });
+    batch.set(metaRef, { version: 1, seededAt: new Date().toISOString() });
+    await batch.commit();
+  },
+
+  /* Real-time listener: any vote/admin edit on any device updates here */
+  subscribeNominees() {
+    this.db.collection('nominees').onSnapshot(snap => {
+      DB.nominees = snap.docs.map(d => ({ id: d.id, catId: 'cat1', achievements: [], ...d.data() }));
+      refreshCloudUI();
+    }, err => console.warn('[sync] nominees listener error:', err));
+  },
+
+  /* Listen to THIS voter's choices (by phone when logged in, else anonymous) */
+  bindVoter() {
+    if (this._votesUnsub) { this._votesUnsub(); this._votesUnsub = null; }
+    const key = this.voterKey();
+    if (!key) return;
+    this._votesUnsub = this.db.collection('pollVotes').doc(key).onSnapshot(snap => {
+      const data = snap.data() || {};
+      AppState.votes = {};
+      Object.entries(data).forEach(([districtId, nomineeId]) => {
+        if (DB.districts.find(d => d.id === districtId)) {
+          AppState.votes[districtId] = { nomineeId, timestamp: new Date().toISOString() };
+        }
+      });
+      refreshCloudUI();
+    }, err => console.warn('[sync] votes listener error:', err));
+  },
+
+  /* Atomic vote: one vote per district, changeable, counted safely */
+  castVote(districtId, nomineeId) {
+    const key = this.voterKey();
+    if (!key) return Promise.reject(new Error('No voter identity'));
+    const db = this.db;
+    const voteRef = db.collection('pollVotes').doc(key);
+    const newRef = db.collection('nominees').doc(nomineeId);
+    return db.runTransaction(t => {
+      return t.get(voteRef).then(voteSnap => {
+        const data = voteSnap.data() || {};
+        const current = data[districtId];
+        if (current === nomineeId) return { same: true };
+        const reads = [t.get(newRef)];
+        let oldRef = null;
+        if (current) { oldRef = db.collection('nominees').doc(current); reads.push(t.get(oldRef)); }
+        return Promise.all(reads).then(([newSnap, oldSnap]) => {
+          const nd = newSnap.data() || {};
+          t.set(newRef, { votes: (nd.votes || 0) + 1 }, { merge: true });
+          if (oldRef && oldSnap) {
+            const od = oldSnap.data() || {};
+            t.set(oldRef, { votes: Math.max(0, (od.votes || 0) - 1) }, { merge: true });
+          }
+          t.set(voteRef, { [districtId]: nomineeId }, { merge: true });
+          return { same: false };
+        });
+      });
+    }).then(res => !res.same);
+  },
+
+  /* Admin writes */
+  updateNominee(id, fields) { return this.db.collection('nominees').doc(id).set(fields, { merge: true }); },
+  addNominee(districtId, data) {
+    return this.db.collection('nominees').doc(data.id).set({
+      catId: 'cat1', districtId, schoolName: data.schoolName, unit: data.unit,
+      project: 'Sinha Awards 2026', img: '', votes: data.votes || 0
+    });
+  },
+  deleteNominee(id) { return this.db.collection('nominees').doc(id).delete(); }
+};
+
+/* Re-render the UI when cloud data changes (without forcing admin open) */
+function refreshCloudUI() {
+  if (typeof renderHome === 'function') renderHome();
+  if (typeof renderCategories === 'function') renderCategories();
+  if (typeof refreshPolls === 'function') refreshPolls();
+  if (typeof updateVoteProgress === 'function') updateVoteProgress();
+  if (typeof updateProfileUI === 'function') updateProfileUI();
+  const adminEl = document.getElementById('admin-overlay');
+  if (adminEl && adminEl.style.display === 'flex' && AppState.admin && typeof showAdmin === 'function') showAdmin();
+}
+
+/* ═══════════════════════════════════════════════════════════
    BOOTSTRAP
 ═══════════════════════════════════════════════════════════ */
 
@@ -3194,6 +3469,9 @@ async function bootstrap() {
 
   document.getElementById('loading-screen').style.display='none';
   document.getElementById('app').style.display='flex';
+
+  /* Connect to Firebase for real-time cross-device sync (safe no-op if not configured) */
+  Sync.init().then(() => { if (Sync.enabled) refreshCloudUI(); });
 
   /* Restore session if exists */
   const storedSession = sessionStorage.getItem('sa_session');
@@ -3225,5 +3503,6 @@ async function bootstrap() {
 
 document.addEventListener('DOMContentLoaded', bootstrap);
 </script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a31a69ccee153c16',t:'MTc4NzgyNjc1Ng=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a31a79a31db5849b',t:'MTc4NzgyNzQwNQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"1954b47c125f43f8b4338b3c4f804e4f"}' crossorigin="anonymous"></script>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a31a8d29ddc2d93e',t:'MTc4NzgyODIwNQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
