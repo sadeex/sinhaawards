@@ -901,7 +901,7 @@ body{display:flex;flex-direction:column;position:relative}
     <div style="font-size:14px;font-weight:600;flex:1" id="school-detail-title">School Details</div>
   </div>
   <div class="school-hero" id="school-detail-hero">
-    <img id="school-detail-img" src="" alt="School"/>
+    <img id="school-detail-img" src="" alt="School" referrerpolicy="no-referrer" onerror="this.style.display='none'"/>
     <div class="school-hero-overlay">
       <div class="school-detail-media-name" style="font-size:11px;color:var(--gold);font-weight:700;letter-spacing:.5px;text-transform:uppercase" id="school-detail-cat"></div>
       <div style="font-family:var(--font-display);font-size:22px;font-weight:700" id="school-detail-name"></div>
@@ -1154,30 +1154,61 @@ const DB = {
     { id:'cat7', name:'Best Media Project', icon:'💡', description:'Most innovative media project by a school unit', nominees:4, status:'open' },
     { id:'cat8', name:'Best Short Film', icon:'🎥', description:'Outstanding short film production by a school media team', nominees:4, status:'open' }
   ],
+  /* ─── School Registry · Western Province (photos verified from web sources) ─── */
+  districts: [
+    { id:'colombo', label:'Colombo District', nameSi:'කොළඹ දිස්ත්‍රික්කය' },
+    { id:'gampaha', label:'Gampaha District', nameSi:'ගම්පහ දිස්ත්‍රික්කය' },
+    { id:'kalutara', label:'Kalutara District', nameSi:'කළුතර දිස්ත්‍රික්කය' }
+  ],
+  schools: [
+    /* Colombo District */
+    { id:'s1', district:'colombo', name:'Ananda College', photo:'https://www.anandacollegeprefectsguild.com/img/anandacover.png' },
+    { id:'s2', district:'colombo', name:'D. S. Senanayake College', photo:'https://d3fphkxyf5o5bm.cloudfront.net/image-resize/format%3Dwebp%2Cw%3D720/QwRY54Li1HMwD7oNfqCf4lQJ1CSiA3TuLZgBSVjAYJ' },
+    { id:'s3', district:'colombo', name:'Royal College', photo:'https://upload.wikimedia.org/wikipedia/commons/d/d9/Royal_College_Colombo_main_building.jpg' },
+    { id:'s4', district:'colombo', name:'Nalanda College', photo:'https://goklassifieds.com/wp-content/uploads/2023/02/Nalanda-College-Cover-scaled.jpg' },
+    { id:'s5', district:'colombo', name:'Thurstan College', photo:'https://www.thurstanmedia.com/images/slide-03.jpg' },
+    { id:'s6', district:'colombo', name:'Isipathana College', photo:'https://media.licdn.com/dms/image/v2/C511BAQFXZTBXHVyDBg/company-background_10000/company-background_10000/0/1584026498239/isipathana_college_colombo_05_cover?e=2147483647&t=f2Jv7DGoFHt642SqDnUiPyx35pfs55k32oa-I5MMNec&v=beta' },
+    { id:'s7', district:'colombo', name:'St. Joseph\'s College', photo:'https://static.wixstatic.com/media/a63005_d591a091765945198ddb1955996ba4f3~mv2.jpg/v1/fill/w_980%2Ch_631%2Cal_c%2Cq_85%2Cusm_0.66_1.00_0.01%2Cenc_auto/a63005_d591a091765945198ddb1955996ba4f3~mv2.jpg' },
+    { id:'s8', district:'colombo', name:'Musaeus College', photo:null },
+    { id:'s9', district:'colombo', name:'Devi Balika Vidyalaya', photo:null },
+    /* Gampaha District */
+    { id:'s10', district:'gampaha', name:'Bandaranayake College', photo:'https://static.wixstatic.com/media/6f0ec4_cde53c3d211c463ba2e2a6d05a7b970a~mv2.jpg/v1/fill/w_980%2Ch_427%2Cal_c%2Cq_85%2Cusm_0.66_1.00_0.01%2Cenc_auto/6f0ec4_cde53c3d211c463ba2e2a6d05a7b970a~mv2.jpg' },
+    { id:'s11', district:'gampaha', name:'Yasodara Devi Balika Vidyalaya', photo:'https://3.bp.blogspot.com/-8gzZiG5-mLo/Vf_sMEo1pVI/AAAAAAAABd0/qMaVUboP7xo/s1600/5.jpg' },
+    { id:'s12', district:'gampaha', name:'Thakshila College', photo:'https://s3.amazonaws.com/bizenglish/wp-content/uploads/2022/08/31164830/Image-2-Rhino-e1661944755182.jpg' },
+    { id:'s13', district:'gampaha', name:'Sumedha College', photo:null },
+    { id:'s14', district:'gampaha', name:'St. Peter\'s College Gampaha', photo:null },
+    { id:'s15', district:'gampaha', name:'Al-Hilal Central College', photo:null },
+    { id:'s16', district:'gampaha', name:'Bandaranayake Balika Vidyalaya', photo:null },
+    { id:'s17', district:'gampaha', name:'Rathnavali Balika Vidyalaya', photo:null },
+    { id:'s18', district:'gampaha', name:'Sri Dharmaloka College', photo:'https://media.licdn.com/dms/image/v2/C4D1BAQFXQ6Reh9xSJyA/company-background_10000/company-background_10000/0/1634969754481/sri_dharmaloka_college_cover?e=2147483647&t=-dkpiuYIMfulkl6H-fv5J46ORuzEkajiebfn6xMNOM4&v=beta' },
+    /* Kalutara District */
+    { id:'s19', district:'kalutara', name:'Kalutara Vidyalaya', photo:'https://upload.wikimedia.org/wikipedia/commons/1/1b/Main_Building_of_Kalutara_Vidyalaya.jpg' },
+    { id:'s20', district:'kalutara', name:'Kalutara Balika Vidyalaya', photo:null },
+    { id:'s21', district:'kalutara', name:'C. W. W. Kannangara Central College', photo:null },
+    { id:'s22', district:'kalutara', name:'Holy Cross College Kalutara', photo:'https://media.licdn.com/dms/image/v2/C4D1BAQEsF4rQ8G6cVQ/company-background_10000/company-background_10000/0/1583173760664?e=2147483647&t=eRvGVSlHwcLsapiqJ9yz2hUfsBQOTLcswRsEVj7atp8&v=beta' },
+    { id:'s23', district:'kalutara', name:'Tissa Central College', photo:null },
+    { id:'s24', district:'kalutara', name:'Vidura College Kalutara', photo:null },
+    { id:'s25', district:'kalutara', name:'Agamethi Balika Vidyalaya', photo:null },
+    { id:'s26', district:'kalutara', name:'Sri Sumangala College Panadura', photo:'https://upload.wikimedia.org/wikipedia/commons/8/8e/Sri_Sumangala_College.png' },
+    { id:'s27', district:'kalutara', name:'Taxila Central College Horana', photo:'https://upload.wikimedia.org/wikipedia/commons/7/71/Taxila_Central_College.jpg' }
+  ],
   nominees: [
-    { id:'n1', catId:'cat1', schoolName:'Royal College, Colombo', unit:'Royal Media', project:'Royal Live 24/7', description:'A pioneering 24/7 online school media channel featuring news, entertainment and educational content.', achievements:['National Young Media Award 2025','Best Digital Platform 2024'], img:'https://images.pexels.com/photos/37092396/pexels-photo-37092396.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=300&w=300', votes:1248 },
-    { id:'n2', catId:'cat1', schoolName:'Ananda College, Colombo', unit:'Ananda Broadcasting', project:'Ananda FM & TV', description:'Multi-platform school media operation producing weekly radio and video content.', achievements:['Best Radio Show 2025','Outstanding Media Unit 2023'], img:'https://images.pexels.com/photos/37092394/pexels-photo-37092394.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=300&w=300', votes:987 },
-    { id:'n3', catId:'cat1', schoolName:'Nalanda College, Colombo', unit:'Nalanda Media Team', project:'Nalanda Vision', description:'Award-winning student journalism covering school and community events.', achievements:['Community Impact Award 2024'], img:'https://images.pexels.com/photos/37092401/pexels-photo-37092401.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=300&w=300', votes:1104 },
-    { id:'n4', catId:'cat1', schoolName:'Dharmaraja College, Kandy', unit:'Dharmaraja Media', project:'Dharmaraja Chronicle', description:'Central Province\'s top school media unit with comprehensive multimedia coverage.', achievements:['Provincial Media Excellence 2024'], img:'https://images.pexels.com/photos/37092402/pexels-photo-37092402.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=300&w=300', votes:876 },
-    { id:'n5', catId:'cat2', schoolName:'S. Thomas\' College, Mt. Lavinia', unit:'STC Productions', project:'The Thomas Film', description:'A 20-minute documentary on school life that won national youth film recognition.', achievements:['National Youth Film 2025'], img:'https://images.pexels.com/photos/31772890/pexels-photo-31772890.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=300&w=300', votes:1520 },
-    { id:'n6', catId:'cat2', schoolName:'Ladies\' College, Colombo', unit:'LC Media Creatives', project:'Voices of Tomorrow', description:'Inspirational documentary series featuring student stories of resilience and ambition.', achievements:['Best Women\'s Media Project 2024'], img:'https://images.pexels.com/photos/37012315/pexels-photo-37012315.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=300&w=300', votes:1190 },
-    { id:'n7', catId:'cat2', schoolName:'Mahamaya Girls\' College, Kandy', unit:'Mahamaya Visuals', project:'Kandy Through Our Lens', description:'A cultural visual journey through the heritage city of Kandy.', achievements:['Cultural Heritage Award 2024'], img:'https://images.pexels.com/photos/6532365/pexels-photo-6532365.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=200&w=300', votes:943 },
-    { id:'n8', catId:'cat3', schoolName:'Visakha Vidyalaya, Colombo', unit:'VV Photo Club', project:'Faces of Sri Lanka', description:'Powerful portrait series capturing the diversity of Sri Lankan school life.', achievements:['National Youth Photography Award 2025'], img:'https://images.pexels.com/photos/36512550/pexels-photo-36512550.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=300&w=300', votes:1340 },
-    { id:'n9', catId:'cat3', schoolName:'Zahira College, Colombo', unit:'Zahira Photojournalism', project:'Unity in Frames', description:'A powerful photographic essay on multicultural unity in Sri Lankan schools.', achievements:['Peace Through Art Award 2024'], img:'https://images.pexels.com/photos/6532362/pexels-photo-6532362.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=300&w=300', votes:1100 },
-    { id:'n10', catId:'cat4', schoolName:'Colombo International School', unit:'CIS Design Lab', project:'The Visual Identity Campaign', description:'Complete brand identity redesign campaign that won national creative recognition.', achievements:['Young Designer Award 2025'], img:'https://images.pexels.com/photos/6565248/pexels-photo-6565248.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=300&w=300', votes:890 },
-    { id:'n11', catId:'cat5', schoolName:'D.S. Senanayake College, Colombo', unit:'DSS News Desk', project:'School Weekly Report', description:'Professional weekly news bulletin covering national education and school news.', achievements:['Best Student News 2025'], img:'https://images.pexels.com/photos/6532363/pexels-photo-6532363.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=300&w=300', votes:1670 },
-    { id:'n12', catId:'cat6', schoolName:'Bishop\'s College, Colombo', unit:'BC Student Media', project:'Campus Talk with Dilan', description:'A weekly talk show presented by student anchor Dilan, covering student life and community issues.', achievements:['Best Young Presenter 2025','Campus Media Star 2024'], img:'https://images.pexels.com/photos/36512552/pexels-photo-36512552.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=300&w=300', votes:2100 },
-    { id:'n13', catId:'cat7', schoolName:'Trinity College, Kandy', unit:'Trinity Innovate', project:'AR School Tour App', description:'An augmented reality school tour application that won international student tech recognition.', achievements:['UNESCO Youth Innovation Award 2025'], img:'https://images.pexels.com/photos/37012315/pexels-photo-37012315.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=300&w=300', votes:1450 },
-    { id:'n14', catId:'cat8', schoolName:'Isipathana College, Colombo', unit:'Isipathana Films', project:'The Last Bell', description:'An emotional short film about a retiring teacher\'s final day at school. Selected for the South Asia Youth Film Festival.', achievements:['South Asia Youth Film Festival 2025'], img:'https://images.pexels.com/photos/31772890/pexels-photo-31772890.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=300&w=300', votes:1800 },
+    { id:'n1', catId:'cat1', schoolId:'s1', schoolName:'Ananda College, Colombo', unit:'Ananda Media Unit', project:'Annual Media Coverage', description:'Multi-platform coverage of school events, sports and student activities produced by the Ananda College media unit.', achievements:[], img:'https://www.anandacollegeprefectsguild.com/img/anandacover.png', votes:1248 },
+    { id:'n2', catId:'cat1', schoolId:'s3', schoolName:'Royal College, Colombo', unit:'Royal Media Unit', project:'Live Event Broadcasting', description:'Student-run broadcasting of school events and assemblies, delivering live coverage across audio and video platforms.', achievements:[], img:'https://upload.wikimedia.org/wikipedia/commons/d/d9/Royal_College_Colombo_main_building.jpg', votes:987 },
+    { id:'n3', catId:'cat1', schoolId:'s4', schoolName:'Nalanda College, Colombo', unit:'Nalanda Media Team', project:'School Media Magazine', description:'A student-produced media magazine featuring news, features and creative work from across the school community.', achievements:[], img:'https://goklassifieds.com/wp-content/uploads/2023/02/Nalanda-College-Cover-scaled.jpg', votes:1104 },
+    { id:'n4', catId:'cat1', schoolId:'s2', schoolName:'D. S. Senanayake College, Colombo', unit:'DSS Media Crew', project:'News & Current Affairs Bulletin', description:'Weekly student bulletin covering school news and national education developments.', achievements:[], img:'https://d3fphkxyf5o5bm.cloudfront.net/image-resize/format%3Dwebp%2Cw%3D720/QwRY54Li1HMwD7oNfqCf4lQJ1CSiA3TuLZgBSVjAYJ', votes:876 },
+    { id:'n5', catId:'cat2', schoolId:'s5', schoolName:'Thurstan College, Colombo', unit:'Thurstan Productions', project:'School Life Documentary', description:'A short documentary capturing everyday life, traditions and achievements at Thurstan College.', achievements:[], img:'https://www.thurstanmedia.com/images/slide-03.jpg', votes:1520 },
+    { id:'n6', catId:'cat2', schoolId:'s6', schoolName:'Isipathana College, Colombo', unit:'Isipathana Films', project:'Student Short Film', description:'A student-directed short film selected for screening at the Sinha Awards school media showcase.', achievements:[], img:'https://media.licdn.com/dms/image/v2/C511BAQFXZTBXHVyDBg/company-background_10000/company-background_10000/0/1584026498239/isipathana_college_colombo_05_cover?e=2147483647&t=f2Jv7DGoFHt642SqDnUiPyx35pfs55k32oa-I5MMNec&v=beta', votes:1190 },
+    { id:'n7', catId:'cat2', schoolId:'s7', schoolName:'St. Joseph\'s College, Colombo', unit:'St. Joseph\'s Visuals', project:'Sports Season Highlights', description:'Cinematic highlights package covering the college sports season, from training sessions to match day.', achievements:[], img:'https://static.wixstatic.com/media/a63005_d591a091765945198ddb1955996ba4f3~mv2.jpg/v1/fill/w_980%2Ch_631%2Cal_c%2Cq_85%2Cusm_0.66_1.00_0.01%2Cenc_auto/a63005_d591a091765945198ddb1955996ba4f3~mv2.jpg', votes:943 },
+    { id:'n8', catId:'cat3', schoolId:'s10', schoolName:'Bandaranayake College, Gampaha', unit:'BC Photo Club', project:'Campus Through the Lens', description:'A photographic series documenting campus life, events and landscapes at Bandaranayake College.', achievements:[], img:'https://static.wixstatic.com/media/6f0ec4_cde53c3d211c463ba2e2a6d05a7b970a~mv2.jpg/v1/fill/w_980%2Ch_427%2Cal_c%2Cq_85%2Cusm_0.66_1.00_0.01%2Cenc_auto/6f0ec4_cde53c3d211c463ba2e2a6d05a7b970a~mv2.jpg', votes:1340 },
+    { id:'n9', catId:'cat3', schoolId:'s18', schoolName:'Sri Dharmaloka College, Gampaha', unit:'Dharmaloka Photo Unit', project:'Faces of Our School', description:'Portrait photography project celebrating the students and staff of the school community.', achievements:[], img:'https://media.licdn.com/dms/image/v2/C4D1BAQFXQ6Reh9xSJyA/company-background_10000/company-background_10000/0/1634969754481/sri_dharmaloka_college_cover?e=2147483647&t=-dkpiuYIMfulkl6H-fv5J46ORuzEkajiebfn6xMNOM4&v=beta', votes:1100 },
+    { id:'n10', catId:'cat4', schoolId:'s11', schoolName:'Yasodara Devi Balika Vidyalaya, Gampaha', unit:'YDV Design Team', project:'Festival Poster Campaign', description:'Poster and visual identity campaign designed by students for the school festival season.', achievements:[], img:'https://3.bp.blogspot.com/-8gzZiG5-mLo/Vf_sMEo1pVI/AAAAAAAABd0/qMaVUboP7xo/s1600/5.jpg', votes:890 },
+    { id:'n11', catId:'cat5', schoolId:'s19', schoolName:'Kalutara Vidyalaya, Kalutara', unit:'KV News Desk', project:'Student News Bulletin', description:'A student news bulletin reporting on school, local and national education news.', achievements:[], img:'https://upload.wikimedia.org/wikipedia/commons/1/1b/Main_Building_of_Kalutara_Vidyalaya.jpg', votes:1670 },
+    { id:'n12', catId:'cat6', schoolId:'s22', schoolName:'Holy Cross College, Kalutara', unit:'Holy Cross Presenters', project:'Morning Announcements', description:'Student presenter team delivering daily announcements and hosting school events and assemblies.', achievements:[], img:'https://media.licdn.com/dms/image/v2/C4D1BAQEsF4rQ8G6cVQ/company-background_10000/company-background_10000/0/1583173760664?e=2147483647&t=eRvGVSlHwcLsapiqJ9yz2hUfsBQOTLcswRsEVj7atp8&v=beta', votes:2100 },
+    { id:'n13', catId:'cat7', schoolId:'s26', schoolName:'Sri Sumangala College, Panadura', unit:'Sumangala Media Project', project:'School Heritage Archive', description:'A digital archive project recording the history, heritage and milestones of the college.', achievements:[], img:'https://upload.wikimedia.org/wikipedia/commons/8/8e/Sri_Sumangala_College.png', votes:1450 },
+    { id:'n14', catId:'cat8', schoolId:'s12', schoolName:'Thakshila College, Gampaha', unit:'Thakshila Film Unit', project:'The Classroom Window', description:'An original short film written and produced by students, exploring everyday life in the classroom.', achievements:[], img:'https://s3.amazonaws.com/bizenglish/wp-content/uploads/2022/08/31164830/Image-2-Rhino-e1661944755182.jpg', votes:1800 }
   ],
-  winners: [
-    { year:2025, catId:'cat1', school:'Royal College', unit:'Royal Media', project:'Royal Live 24/7', img:'https://images.pexels.com/photos/37092396/pexels-photo-37092396.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=200&w=400' },
-    { year:2025, catId:'cat2', school:'S. Thomas\' College', unit:'STC Productions', project:'The Thomas Film', img:'https://images.pexels.com/photos/31772890/pexels-photo-31772890.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=200&w=400' },
-    { year:2025, catId:'cat8', school:'Isipathana College', unit:'Isipathana Films', project:'The Last Bell', img:'https://images.pexels.com/photos/6532362/pexels-photo-6532362.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=200&w=400' },
-    { year:2024, catId:'cat1', school:'Ananda College', unit:'Ananda Broadcasting', project:'Ananda FM', img:'https://images.pexels.com/photos/37092394/pexels-photo-37092394.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=200&w=400' },
-    { year:2024, catId:'cat6', school:'Bishop\'s College', unit:'BC Student Media', project:'Campus Talk', img:'https://images.pexels.com/photos/36512552/pexels-photo-36512552.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=200&w=400' },
-    { year:2023, catId:'cat3', school:'Visakha Vidyalaya', unit:'VV Photo Club', project:'Faces of Sri Lanka', img:'https://images.pexels.com/photos/36512550/pexels-photo-36512550.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=200&w=400' },
-  ],
+  winners: [], /* Winners will be announced at Sinha Awards Night 2026 */
   events: [
     { id:'e1', name:'Sinha Awards Night 2026', date:'2026-03-15', time:'6:00 PM', venue:'BMICH, Colombo', description:'The grand annual Sinha Awards ceremony celebrating Sri Lankan school media excellence.', type:'main', img:'https://images.pexels.com/photos/31772890/pexels-photo-31772890.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=300&w=600' },
     { id:'e2', name:'Finalists Announcement', date:'2026-02-28', time:'10:00 AM', venue:'Online / All Platforms', description:'Announcement of final nominees for all 8 award categories.', type:'announcement', img:'https://images.pexels.com/photos/37012315/pexels-photo-37012315.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=300&w=600' },
@@ -1602,7 +1633,7 @@ function renderVoteScreen() {
         ${nominees.map(n => `
           <div class="nominee-card${myVote?.nomineeId===n.id?' selected':''}" onclick="selectVote('${cat.id}','${n.id}')">
             <div class="nominee-card-inner">
-              <img class="nominee-avatar" src="${n.img}" alt="${Security.sanitize(n.schoolName)}" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22><rect fill=%22%231a1a2e%22 width=%2264%22 height=%2264%22/><text y=%2240%22 x=%2232%22 font-size=%2228%22 text-anchor=%22middle%22>${cat.icon}</text></svg>'"/>
+              <img class="nominee-avatar" src="${n.img}" alt="${Security.sanitize(n.schoolName)}" loading="lazy" referrerpolicy="no-referrer" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22><rect fill=%22%231a1a2e%22 width=%2264%22 height=%2264%22/><text y=%2240%22 x=%2232%22 font-size=%2228%22 text-anchor=%22middle%22>${cat.icon}</text></svg>'"/>
               <div class="nominee-info">
                 <div class="nominee-school">${Security.sanitize(n.schoolName)}</div>
                 <div class="nominee-name">${Security.sanitize(n.unit)}</div>
@@ -1764,7 +1795,7 @@ function renderNominees(catId) {
     return `<div class="nominee-card" onclick="openSchoolDetail('${n.id}')">
       ${isLeading?`<div class="winner-badge">🥇 Leading</div>`:''}
       <div class="nominee-card-inner">
-        <img class="nominee-avatar" src="${n.img}" alt="${Security.sanitize(n.schoolName)}" onerror="this.style.display='none'"/>
+        <img class="nominee-avatar" src="${n.img}" alt="${Security.sanitize(n.schoolName)}" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none'"/>
         <div class="nominee-info">
           <div class="nominee-school">${Security.sanitize(n.schoolName)}</div>
           <div class="nominee-name">${Security.sanitize(n.unit)}</div>
@@ -1781,22 +1812,51 @@ function renderNominees(catId) {
 
 function filterNominees(catId) { renderNominees(catId); }
 
+function schoolThumbHTML(s, size) {
+  const px = size || 56;
+  return `<div style="position:relative;width:${px}px;height:${px}px;flex-shrink:0;border-radius:10px;overflow:hidden;background:rgba(201,168,76,.15)">
+    <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:${Math.round(px*0.42)}px">🏫</div>
+    ${s.photo?`<img src="${s.photo}" alt="${Security.sanitize(s.name)}" loading="lazy" referrerpolicy="no-referrer" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover" onerror="this.style.display='none'"/>`:''}
+  </div>`;
+}
+
 function renderSchools() {
-  const schools = {};
-  DB.nominees.forEach(n => { if (!schools[n.schoolName]) schools[n.schoolName] = []; schools[n.schoolName].push(n); });
   const list = document.getElementById('schools-list');
-  list.innerHTML = Object.entries(schools).map(([school, nominees]) => `
-    <div class="card card-gold" style="cursor:pointer" onclick="openSchoolDetail('${nominees[0].id}')">
-      <div style="display:flex;align-items:center;gap:14px">
-        <div style="width:48px;height:48px;border-radius:10px;background:rgba(201,168,76,.15);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0">🏫</div>
-        <div style="flex:1">
-          <div style="font-size:15px;font-weight:700">${Security.sanitize(school)}</div>
-          <div style="font-size:12px;color:var(--text2);margin-top:4px">${nominees.length} nomination${nominees.length>1?'s':''} · ${nominees.map(n=>n.unit).join(', ')}</div>
-          <div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap">${nominees.map(n=>`<span class="chip" style="font-size:10px;padding:3px 8px">${DB.categories.find(c=>c.id===n.catId)?.icon||'🏆'} ${Security.sanitize(DB.categories.find(c=>c.id===n.catId)?.name||'')}</span>`).join('')}</div>
-        </div>
-        <span style="color:var(--text3)">›</span>
+  const withPhotos = DB.schools.filter(s=>s.photo).length;
+  let html = `
+    <div class="card" style="display:flex;align-items:center;gap:12px">
+      <div style="width:48px;height:48px;border-radius:10px;background:rgba(201,168,76,.15);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0">🏫</div>
+      <div style="flex:1">
+        <div style="font-size:15px;font-weight:700">Participating Schools</div>
+        <div style="font-size:12px;color:var(--text2);margin-top:4px">${DB.schools.length} schools · ${DB.districts.length} districts · ${withPhotos} verified photos</div>
       </div>
-    </div>`).join('');
+      <span class="chip chip-gold" style="font-size:10px">2026</span>
+    </div>`;
+  html += DB.districts.map(d => {
+    const schools = DB.schools.filter(s=>s.district===d.id);
+    return `
+    <div class="section-label" style="margin:18px 0 10px">📍 ${Security.sanitize(d.label)} · ${d.nameSi}</div>
+    <div style="display:flex;flex-direction:column;gap:12px">
+    ${schools.map(s => {
+      const noms = DB.nominees.filter(n=>n.schoolId===s.id);
+      return `<div class="card card-gold" style="cursor:pointer" onclick="openSchoolInfo('${s.id}')">
+        <div style="display:flex;align-items:center;gap:14px">
+          ${schoolThumbHTML(s, 56)}
+          <div style="flex:1;min-width:0">
+            <div style="font-size:15px;font-weight:700">${Security.sanitize(s.name)}</div>
+            <div style="font-size:12px;color:var(--text2);margin-top:4px">📍 ${Security.sanitize(d.label)}</div>
+            <div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap">
+              ${noms.map(n=>{const c=DB.categories.find(c=>c.id===n.catId);return `<span class="chip chip-gold" style="font-size:10px;padding:3px 8px">${c?.icon||'🏆'} ${Security.sanitize(c?.name||'')}</span>`;}).join('')}
+              ${noms.length===0?`<span class="chip" style="font-size:10px;padding:3px 8px">Registered 2026</span>`:''}
+            </div>
+          </div>
+          <span style="color:var(--text3)">›</span>
+        </div>
+      </div>`;
+    }).join('')}
+    </div>`;
+  }).join('');
+  list.innerHTML = html;
 }
 
 function renderWinners(year) {
@@ -1818,7 +1878,7 @@ function renderWinners(year) {
         <div style="margin-top:10px"><span class="chip chip-gold" style="font-size:11px">${w.year} Winner</span></div>
       </div>
     </div>`;
-  }).join('') || `<div class="empty-state"><div class="empty-icon">🏆</div><div class="empty-title">No winners for ${year}</div><div class="empty-sub">Winners will be announced after the ceremony.</div></div>`;
+  }).join('') || `<div class="empty-state"><div class="empty-icon">🏆</div><div class="empty-title">${DB.winners.length?`No winners for ${year}`:'Winners Not Announced Yet'}</div><div class="empty-sub">Winners of Sinha Awards 2026 will be revealed at the Awards Night on March 15, 2026 at BMICH, Colombo.</div></div>`;
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -1829,9 +1889,13 @@ function openSchoolDetail(nomineeId) {
   const n = DB.nominees.find(x=>x.id===nomineeId);
   if (!n) return;
   const cat = DB.categories.find(c=>c.id===n.catId);
+  const school = DB.schools.find(s=>s.id===n.schoolId);
+  const district = DB.districts.find(d=>d.id===school?.district);
+  const heroImg = document.getElementById('school-detail-img');
+  heroImg.style.display = n.img ? '' : 'none';
+  heroImg.src = n.img;
   document.getElementById('school-detail-title').textContent = n.unit;
-  document.getElementById('school-detail-img').src = n.img;
-  document.getElementById('school-detail-cat').textContent = (cat?.icon||'')+'  '+Security.sanitize(cat?.name||'');
+  document.getElementById('school-detail-cat').textContent = (cat?.icon||'')+'  '+Security.sanitize(cat?.name||'')+(district?('  ·  📍 '+district.label):'');
   document.getElementById('school-detail-name').textContent = Security.sanitize(n.schoolName);
   const totalVotes = DB.nominees.filter(x=>x.catId===n.catId).reduce((s,x)=>s+x.votes,0);
   const pct = totalVotes ? ((n.votes/totalVotes)*100).toFixed(1) : 0;
@@ -1854,10 +1918,10 @@ function openSchoolDetail(nomineeId) {
         <div style="margin-top:12px;height:6px;background:var(--surface2);border-radius:3px;overflow:hidden"><div style="height:100%;width:${pct}%;background:linear-gradient(90deg,var(--gold),var(--gold-light));border-radius:3px;transition:width .8s ease"></div></div>
       </div>
     </div>
-    <div style="margin-bottom:20px">
+    ${n.achievements.length?`<div style="margin-bottom:20px">
       <div class="section-label" style="margin-bottom:12px">Achievements</div>
       ${n.achievements.map(a=>`<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border3)"><span style="font-size:16px">🏅</span><span style="font-size:14px">${Security.sanitize(a)}</span></div>`).join('')}
-    </div>
+    </div>`:''}
     <div style="margin-bottom:16px">
       <div class="section-label" style="margin-bottom:12px">Category</div>
       <div class="card" style="display:flex;align-items:center;gap:12px"><span style="font-size:28px">${cat?.icon||'🏆'}</span><div><div style="font-size:14px;font-weight:700">${Security.sanitize(cat?.name||'')}</div><div style="font-size:12px;color:var(--text2);margin-top:2px">${Security.sanitize(cat?.description||'')}</div></div></div>
@@ -1868,6 +1932,47 @@ function openSchoolDetail(nomineeId) {
 }
 
 function closeSchoolDetail() { document.getElementById('school-detail').style.display='none'; }
+
+function openSchoolInfo(schoolId) {
+  const s = DB.schools.find(x=>x.id===schoolId);
+  if (!s) return;
+  const d = DB.districts.find(x=>x.id===s.district);
+  const heroImg = document.getElementById('school-detail-img');
+  heroImg.style.display = s.photo ? '' : 'none';
+  heroImg.src = s.photo || '';
+  document.getElementById('school-detail-title').textContent = s.name;
+  document.getElementById('school-detail-cat').textContent = '📍 '+Security.sanitize(d?.label||'')+' · '+(d?.nameSi||'');
+  document.getElementById('school-detail-name').textContent = Security.sanitize(s.name);
+  const noms = DB.nominees.filter(n=>n.schoolId===s.id);
+  document.getElementById('school-detail-body').innerHTML = `
+    <div style="margin-bottom:20px">
+      <div class="gold-line"></div>
+      <div style="font-size:18px;font-weight:700;font-family:var(--font-display);margin-bottom:4px">${Security.sanitize(s.name)}</div>
+      <div style="font-size:13px;color:var(--text2)">📍 ${Security.sanitize(d?.label||'')} · ${d?.nameSi||''}</div>
+      <div class="divider-gold divider"></div>
+      <p style="font-size:14px;color:var(--text2);line-height:1.7">Registered school for Sinha Awards 2026 — Sri Lanka School Media Awards. ${s.photo?'School photo verified from official web sources.':'School photo coming soon.'}</p>
+    </div>
+    ${s.photo?`<div style="margin-bottom:20px">
+      <div class="section-label" style="margin-bottom:12px">School Photo</div>
+      <div class="card" style="padding:8px"><img src="${s.photo}" alt="${Security.sanitize(s.name)}" referrerpolicy="no-referrer" style="width:100%;border-radius:8px;display:block" onerror="this.parentElement.innerHTML='<div style=\\'padding:24px;text-align:center;color:var(--text3)\\'>📷 Photo temporarily unavailable</div>'"/></div>
+    </div>`:''}
+    ${noms.length?`<div style="margin-bottom:20px">
+      <div class="section-label" style="margin-bottom:12px">Nominations · Sinha Awards 2026</div>
+      ${noms.map(n=>{const c=DB.categories.find(c=>c.id===n.catId);return `<div class="card card-gold" style="margin-bottom:10px">
+        <div style="display:flex;align-items:center;gap:12px">
+          <span style="font-size:26px">${c?.icon||'🏆'}</span>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:14px;font-weight:700">${Security.sanitize(c?.name||'')}</div>
+            <div style="font-size:12px;color:var(--gold);margin-top:2px">${Security.sanitize(n.unit)} · ${Security.sanitize(n.project)}</div>
+          </div>
+          <span class="chip chip-gold" style="font-size:10px">${n.votes.toLocaleString()} votes</span>
+        </div>
+      </div>`;}).join('')}
+    </div>`:`<div class="card" style="margin-bottom:20px;text-align:center;padding:24px;color:var(--text2);font-size:13px">No nominations yet for Sinha Awards 2026.</div>`}
+    ${noms.length?`<button class="btn btn-primary btn-block" onclick="closeSchoolDetail();navTo('vote')" style="margin-top:8px">🗳️ Vote for This School</button>`:''}
+    <div style="height:20px"></div>`;
+  document.getElementById('school-detail').style.display='flex';
+}
 
 /* ═══════════════════════════════════════════════════════════
    EVENTS SCREEN
@@ -1921,7 +2026,7 @@ function renderHome() {
   const picks = DB.nominees.slice(0,4);
   featured.innerHTML = picks.map((n,i)=>`
     <div class="featured-card" onclick="openSchoolDetail('${n.id}')">
-      <img src="${n.img}" alt="${Security.sanitize(n.schoolName)}" onerror="this.style.background='var(--bg3)'"/>
+      <img src="${n.img}" alt="${Security.sanitize(n.schoolName)}" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.background='var(--bg3)'"/>
       <div class="featured-card-overlay">
         <div class="featured-school">${Security.sanitize(n.schoolName)}</div>
         <div class="featured-name">${Security.sanitize(n.unit)}</div>
@@ -1943,7 +2048,9 @@ function renderHome() {
 
   /* Previous winners */
   const winnersEl = document.getElementById('home-winners');
-  winnersEl.innerHTML = DB.winners.filter(w=>w.year===2025).slice(0,2).map(w=>{
+  const homeWinners = DB.winners.filter(w=>w.year===2025);
+  if (winnersEl.parentElement) winnersEl.parentElement.style.display = homeWinners.length ? '' : 'none';
+  winnersEl.innerHTML = homeWinners.slice(0,2).map(w=>{
     const cat = DB.categories.find(c=>c.id===w.catId);
     return `<div class="winner-card" style="margin:0 0 12px" onclick="navTo('awards');renderWinners(2025)">
       <div class="winner-trophy">🏆</div>
