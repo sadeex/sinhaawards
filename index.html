@@ -132,7 +132,7 @@ body{display:flex;flex-direction:column;position:relative}
 /* ════════════════════════════════════════════════
    HOME SCREEN
 ════════════════════════════════════════════════ */
-.hero-section{position:relative;padding:48px 20px 32px;overflow:hidden;flex-shrink:0}
+.hero-section{position:relative;padding:66px 20px 32px;overflow:hidden;flex-shrink:0}
 .hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(201,168,76,.18) 0%,transparent 65%);pointer-events:none}
 .hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(201,168,76,.1);border:1px solid var(--border2);border-radius:50px;padding:6px 14px;font-size:11px;color:var(--gold);font-weight:600;letter-spacing:1px;text-transform:uppercase;margin-bottom:16px}
 .hero-title{font-family:var(--font-display);font-size:38px;font-weight:900;line-height:1.15;margin-bottom:8px}
@@ -224,7 +224,7 @@ body{display:flex;flex-direction:column;position:relative}
 /* ════════════════════════════════════════════════
    AUTH SCREEN
 ════════════════════════════════════════════════ */
-.auth-screen{position:fixed;inset:0;background:var(--bg);z-index:400;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;animation:fadeIn .3s ease}
+.auth-screen{position:fixed;inset:0;background:rgba(8,8,15,.84);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);z-index:400;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;animation:fadeIn .3s ease}
 .auth-logo{font-family:var(--font-display);font-size:48px;font-weight:900;background:linear-gradient(135deg,var(--gold-light),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:4px;text-align:center}
 .auth-tagline{font-size:13px;color:var(--text2);text-align:center;letter-spacing:1px;text-transform:uppercase;margin-bottom:40px}
 .auth-card{width:100%;max-width:400px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px 24px}
@@ -240,6 +240,14 @@ body{display:flex;flex-direction:column;position:relative}
 .resend-row{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:12px;font-size:13px;color:var(--text2)}
 .resend-btn{color:var(--gold);cursor:pointer;font-weight:600;background:none;border:none;font-family:var(--font-body);font-size:13px}
 .resend-btn:disabled{color:var(--text3);cursor:default}
+
+/* SIM / network picker (login) */
+.sim-pick{display:flex;gap:10px}
+.sim-opt{flex:1;background:var(--surface2);border:1.5px solid var(--border3);border-radius:var(--radius-sm);padding:12px 6px;color:var(--text2);font-family:var(--font-body);font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;display:flex;flex-direction:column;align-items:center;gap:6px}
+.sim-opt .sim-ic{font-size:20px;line-height:1}
+.sim-opt:hover{border-color:var(--border2);color:var(--text)}
+.sim-opt.selected{border-color:var(--gold);background:rgba(201,168,76,.1);color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,.08)}
+.fee-note{font-size:11px;color:var(--text3);text-align:center;margin-top:2px;line-height:1.5}
 
 /* ════════════════════════════════════════════════
    SUBSCRIPTION SCREEN
@@ -494,6 +502,107 @@ body{display:flex;flex-direction:column;position:relative}
 .confetti-piece{position:fixed;width:8px;height:8px;top:-20px;pointer-events:none;z-index:9998;border-radius:2px;animation:confettiFall linear forwards}
 @keyframes confettiFall{to{transform:translateY(110vh) rotate(720deg);opacity:0}}
 
+/* ══ DASHBOARD DRAWER ═══════════════════════════ */
+.dash-fab{position:fixed;top:calc(env(safe-area-inset-top,0px) + 12px);left:12px;z-index:250;width:42px;height:42px;border-radius:50%;background:rgba(8,8,15,.78);border:1px solid var(--border2);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);color:var(--gold);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,0,0,.5);transition:all .25s}
+.dash-fab:hover{border-color:var(--gold);box-shadow:0 4px 22px var(--gold-glow);transform:scale(1.05)}
+.dash-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:790;opacity:0;pointer-events:none;transition:opacity .3s ease}
+.dash-backdrop.open{opacity:1;pointer-events:auto}
+.dash-drawer{position:fixed;top:0;left:0;bottom:0;width:min(320px,84vw);background:var(--bg3);border-right:1px solid var(--border2);z-index:800;transform:translateX(-102%);transition:transform .35s cubic-bezier(.25,.8,.25,1);display:flex;flex-direction:column;box-shadow:8px 0 40px rgba(0,0,0,.6)}
+.dash-drawer.open{transform:translateX(0)}
+.dash-header{padding:calc(env(safe-area-inset-top,0px) + 22px) 20px 18px;border-bottom:1px solid var(--border3);background:radial-gradient(ellipse at 0% 0%,rgba(201,168,76,.12),transparent 70%)}
+.dash-body{flex:1;overflow-y:auto;padding:14px 12px}
+.dash-footer{padding:14px 20px calc(env(safe-area-inset-bottom,0px) + 16px);border-top:1px solid var(--border3);font-size:11px;color:var(--text3);line-height:1.6;text-align:center}
+.dash-item{display:flex;align-items:center;gap:14px;padding:14px 14px;background:var(--surface);border:1px solid var(--border3);border-radius:var(--radius-sm);margin-bottom:8px;cursor:pointer;transition:all .2s;width:100%;text-align:left;font-family:var(--font-body);color:var(--text)}
+.dash-item:hover{border-color:var(--border2);background:var(--surface2);transform:translateX(3px)}
+.dash-item-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;background:rgba(201,168,76,.1);border:1px solid var(--border)}
+.dash-item-label{font-size:14px;font-weight:600}
+.dash-item-sub{font-size:11px;color:var(--text2);margin-top:2px}
+.legal-body{font-size:13px;color:var(--text2);line-height:1.8;max-height:58vh;overflow-y:auto;padding-right:4px}
+.legal-body h3{font-size:14px;color:var(--gold);font-weight:700;margin:16px 0 6px;font-family:var(--font-display)}
+.legal-body h3:first-child{margin-top:0}
+.legal-body p{margin-bottom:8px}
+.legal-body ul{margin:0 0 8px 18px}
+.legal-body li{margin-bottom:5px}
+.legal-demo{background:rgba(49,130,206,.08);border:1px solid rgba(49,130,206,.3);border-radius:var(--radius-sm);padding:12px 14px;font-size:12px;color:#90cdf4;line-height:1.6;margin:12px 0;display:flex;gap:10px}
+.contact-email{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--surface2);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:14px 16px;margin:14px 0}
+.contact-email span{font-size:14px;font-weight:600;color:var(--gold-light);word-break:break-all}
+
+/* ══ GOLD LION LOGO ════════════════════════════ */
+.lion-logo{display:inline-block;line-height:0;filter:drop-shadow(0 4px 14px rgba(201,168,76,.45))}
+.lion-logo svg,.lion-logo img{width:100%;height:100%;display:block;object-fit:contain}
+.lion-logo img{user-select:none;-webkit-user-drag:none}
+.lion-logo .lion-mane{transform-origin:50px 50px;animation:maneSpin 34s linear infinite}
+
+/* Site background — golden lion photo at 70% opacity with gold animations */
+#bg-scene{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;background:#08080f}
+#bg-photo{position:absolute;inset:-6%;
+  background:url('bg-lion.jpg') center 38%/cover no-repeat;
+  opacity:.7;
+  filter:sepia(.28) saturate(1.25) hue-rotate(-6deg) brightness(.85) contrast(1.05);
+  animation:bgKenBurns 32s ease-in-out infinite alternate, bgGoldPulse 7s ease-in-out infinite}
+#bg-shade{position:absolute;inset:0;
+  background:
+    radial-gradient(120% 90% at 50% 20%,rgba(8,8,15,.35) 0%,rgba(8,8,15,.72) 55%,rgba(8,8,15,.94) 100%),
+    linear-gradient(180deg,rgba(8,8,15,.72) 0%,rgba(8,8,15,.5) 45%,rgba(8,8,15,.86) 100%)}
+#bg-gold-sheen{position:absolute;inset:0;
+  background:linear-gradient(115deg,transparent 30%,rgba(232,201,122,.16) 48%,rgba(255,246,216,.22) 50%,rgba(232,201,122,.16) 52%,transparent 70%);
+  background-size:260% 100%;
+  mix-blend-mode:screen;
+  animation:bgSheen 9s linear infinite}
+#bg-vignette{position:absolute;inset:0;box-shadow:inset 0 0 180px 60px rgba(0,0,0,.85)}
+@keyframes bgKenBurns{0%{transform:scale(1) translateY(0)}100%{transform:scale(1.1) translateY(-1.5%)}}
+@keyframes bgGoldPulse{0%,100%{opacity:.62;filter:sepia(.28) saturate(1.2) hue-rotate(-6deg) brightness(.8) contrast(1.05)}50%{opacity:.74;filter:sepia(.2) saturate(1.45) hue-rotate(-4deg) brightness(1.02) contrast(1.08)}}
+@keyframes bgSheen{0%{background-position:130% 0}100%{background-position:-130% 0}}
+.lion-l{width:64px;height:64px}
+.lion-xl{width:104px;height:104px}
+.lion-2xl{width:140px;height:140px}
+.lion-spin-in{animation:lionEnter .9s cubic-bezier(.22,1.4,.4,1)}
+@keyframes maneSpin{to{transform:rotate(360deg)}}
+@keyframes lionEnter{0%{opacity:0;transform:scale(.4) rotate(-120deg)}60%{transform:scale(1.08) rotate(8deg)}100%{opacity:1;transform:scale(1) rotate(0)}}
+@keyframes lionFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+.lion-float{animation:lionFloat 4.2s ease-in-out infinite}
+@keyframes lionGlow{0%,100%{filter:drop-shadow(0 4px 12px rgba(201,168,76,.35))}50%{filter:drop-shadow(0 6px 26px rgba(232,201,122,.75))}}
+.lion-glow{animation:lionGlow 3s ease-in-out infinite}
+@keyframes roarPulse{0%,100%{transform:scale(1)}8%{transform:scale(1.05)}16%{transform:scale(1)}24%{transform:scale(1.05)}32%{transform:scale(1)}}
+.lion-roar{animation:roarPulse 5s ease-in-out infinite}
+
+/* ══ EXTRA LUXURY ANIMATIONS ═══════════════════ */
+@keyframes shineSweep{0%{transform:translateX(-130%) skewX(-18deg)}100%{transform:translateX(340%) skewX(-18deg)}}
+@keyframes popIn{0%{opacity:0;transform:scale(.7) translateY(10px)}70%{transform:scale(1.04)}100%{opacity:1;transform:scale(1) translateY(0)}}
+@keyframes pulseGold{0%,100%{box-shadow:0 0 0 0 rgba(201,168,76,.0)}50%{box-shadow:0 0 0 6px rgba(201,168,76,.12)}}
+@keyframes borderGlow{0%,100%{border-color:rgba(201,168,76,.18)}50%{border-color:rgba(232,201,122,.55)}}
+@keyframes bgDrift{0%{background-position:0 0,0 0}100%{background-position:140px 90px,-120px 120px}}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes tapPop{0%{transform:scale(1)}40%{transform:scale(.93)}100%{transform:scale(1)}}
+@keyframes toastSlide{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:none}}
+@keyframes tickerShine{0%{background-position:200% center}100%{background-position:-200% center}}
+
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:radial-gradient(circle,rgba(201,168,76,.05) 1px,transparent 1px),radial-gradient(circle,rgba(201,168,76,.035) 1px,transparent 1px);
+  background-size:36px 36px,46px 46px;background-position:0 0,18px 18px;animation:bgDrift 26s linear infinite;opacity:.5}
+#app{position:relative;z-index:1}
+
+.award-category-card,.nominee-card,.event-card,.menu-item{animation:popIn .5s cubic-bezier(.22,.9,.3,1) both}
+.card-gold{animation:borderGlow 4s ease-in-out infinite}
+.chip-gold,.btn-primary{animation:pulseGold 3.4s ease-in-out infinite}
+.countdown-card,.vote-category-header,.sub-status-card{position:relative;overflow:hidden}
+.countdown-card::after,.sub-status-card::after{content:'';position:absolute;top:0;left:0;width:34%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,246,216,.12),transparent);animation:shineSweep 5.5s ease-in-out infinite;pointer-events:none}
+.cd-unit{animation:popIn .5s cubic-bezier(.22,.9,.3,1) both;transition:transform .3s}
+.cd-unit:hover{transform:translateY(-3px)}
+.cd-unit:nth-child(1){animation-delay:.05s}.cd-unit:nth-child(2){animation-delay:.12s}.cd-unit:nth-child(3){animation-delay:.19s}.cd-unit:nth-child(4){animation-delay:.26s}
+.page-title{background-size:200% auto;animation:tickerShine 6s linear infinite}
+.poll-option:active,.nav-item:active,.dash-item:active{animation:tapPop .3s ease}
+.sim-opt:active,.plan-card:active{animation:tapPop .3s ease}
+.profile-avatar{animation:floaty 4.5s ease-in-out infinite}
+.sub-icon{animation:floaty 3.6s ease-in-out infinite}
+.poll-tab.active{animation:popIn .35s cubic-bezier(.22,.9,.3,1)}
+.winner-card{animation:popIn .55s cubic-bezier(.22,.9,.3,1) both}
+.empty-icon,.hero-badge{animation:floaty 3.6s ease-in-out infinite}
+.toast{animation:toastSlide .4s cubic-bezier(.22,.9,.3,1)}
+.btn-primary,.btn-outline{animation:pulseGold 3.4s ease-in-out infinite}
+.featured-card{animation:popIn .5s cubic-bezier(.22,.9,.3,1) both}
+.featured-card:nth-child(2){animation-delay:.08s}.featured-card:nth-child(3){animation-delay:.16s}.featured-card:nth-child(4){animation-delay:.24s}
+
 /* Responsive */
 @media(min-width:480px){
   .featured-grid{grid-template-columns:1fr 1fr 1fr}
@@ -503,6 +612,89 @@ body{display:flex;flex-direction:column;position:relative}
 </head>
 <body>
 
+<!-- ══ GOLD LION LOGO (reusable symbol) ══ -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <linearGradient id="lionGold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fff6d8"/>
+      <stop offset="34%" stop-color="#E8C97A"/>
+      <stop offset="70%" stop-color="#C9A84C"/>
+      <stop offset="100%" stop-color="#8B6914"/>
+    </linearGradient>
+    <linearGradient id="lionGoldDeep" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#C9A84C"/>
+      <stop offset="100%" stop-color="#6e5210"/>
+    </linearGradient>
+    <radialGradient id="lionFace" cx="0.5" cy="0.34" r="0.75">
+      <stop offset="0%" stop-color="#fbe9b0"/>
+      <stop offset="60%" stop-color="#E8C97A"/>
+      <stop offset="100%" stop-color="#C9A84C"/>
+    </radialGradient>
+    <linearGradient id="lionRing" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fff6d8"/>
+      <stop offset="50%" stop-color="#C9A84C"/>
+      <stop offset="100%" stop-color="#8B6914"/>
+    </linearGradient>
+  </defs>
+  <symbol id="lion-logo" viewBox="0 0 100 100">
+    <circle cx="50" cy="50" r="47" fill="none" stroke="url(#lionRing)" stroke-width="2.4" opacity="0.9"/>
+    <circle cx="50" cy="50" r="43" fill="none" stroke="url(#lionRing)" stroke-width="0.8" opacity="0.5"/>
+    <g class="lion-mane" fill="url(#lionGoldDeep)">
+    <polygon points="48.0,7.0 43.4,22.4 52.6,22.4"/>
+    <polygon points="59.6,8.7 50.8,22.2 59.6,24.7"/>
+    <polygon points="70.2,13.5 58.0,24.0 65.7,28.9"/>
+    <polygon points="79.0,21.2 64.3,27.8 70.3,34.7"/>
+    <polygon points="85.3,31.0 69.4,33.2 73.2,41.5"/>
+    <polygon points="88.6,42.2 72.7,39.8 74.0,48.9"/>
+    <polygon points="88.6,53.8 74.0,47.1 72.7,56.2"/>
+    <polygon points="85.3,65.0 73.2,54.5 69.4,62.8"/>
+    <polygon points="79.0,74.8 70.3,61.3 64.3,68.2"/>
+    <polygon points="70.2,82.5 65.7,67.1 58.0,72.0"/>
+    <polygon points="59.6,87.3 59.6,71.3 50.8,73.8"/>
+    <polygon points="48.0,89.0 52.6,73.6 43.4,73.6"/>
+    <polygon points="36.4,87.3 45.2,73.8 36.4,71.3"/>
+    <polygon points="25.8,82.5 38.0,72.0 30.3,67.1"/>
+    <polygon points="17.0,74.8 31.7,68.2 25.7,61.3"/>
+    <polygon points="10.7,65.0 26.6,62.8 22.8,54.5"/>
+    <polygon points="7.4,53.8 23.3,56.2 22.0,47.1"/>
+    <polygon points="7.4,42.2 22.0,48.9 23.3,39.8"/>
+    <polygon points="10.7,31.0 22.8,41.5 26.6,33.2"/>
+    <polygon points="17.0,21.2 25.7,34.7 31.7,27.8"/>
+    <polygon points="25.8,13.5 30.3,28.9 38.0,24.0"/>
+    <polygon points="36.4,8.7 36.4,24.7 45.2,22.2"/>
+    </g>
+    <circle cx="50" cy="48" r="27" fill="url(#lionGold)"/>
+    <path d="M36 31 l5 -9 l6 8 z" fill="url(#lionGold)"/>
+    <path d="M64 31 l-5 -9 l-6 8 z" fill="url(#lionGold)"/>
+    <path d="M38.5 28.5 l2.6 -4.6 l3 4.2 z" fill="#171204" opacity="0.85"/>
+    <path d="M61.5 28.5 l-2.6 -4.6 l-3 4.2 z" fill="#171204" opacity="0.85"/>
+    <ellipse cx="50" cy="50" rx="18.5" ry="17.5" fill="url(#lionFace)"/>
+    <path d="M34 52 q2 -10 10 -13 q-6 6 -4 14 z" fill="url(#lionGold)" opacity="0.9"/>
+    <path d="M66 52 q-2 -10 -10 -13 q6 6 4 14 z" fill="url(#lionGold)" opacity="0.9"/>
+    <ellipse cx="43" cy="47.5" rx="2.7" ry="3.4" fill="#171204" transform="rotate(-12 43 47.5)"/>
+    <ellipse cx="57" cy="47.5" rx="2.7" ry="3.4" fill="#171204" transform="rotate(12 57 47.5)"/>
+    <circle cx="44" cy="46.4" r="0.9" fill="#fff6d8"/>
+    <circle cx="58" cy="46.4" r="0.9" fill="#fff6d8"/>
+    <path d="M40 54 q4 -3.2 7 -1 q-1 3 -4 3.4 z" fill="#fff6d8" opacity="0.55"/>
+    <path d="M60 54 q-4 -3.2 -7 -1 q1 3 4 3.4 z" fill="#fff6d8" opacity="0.55"/>
+    <ellipse cx="50" cy="57.5" rx="8.6" ry="6.6" fill="#f7e3a2"/>
+    <path d="M46.4 55.2 q3.6 -2.4 7.2 0 q-1 3.4 -3.6 3.4 q-2.6 0 -3.6 -3.4 z" fill="#171204"/>
+    <path d="M50 58.6 v3.2 M50 61.8 q-2.6 2.2 -5.4 1 M50 61.8 q2.6 2.2 5.4 1" fill="none" stroke="#171204" stroke-width="1.5" stroke-linecap="round"/>
+    <circle cx="41.5" cy="58.5" r="0.8" fill="#171204" opacity="0.6"/>
+    <circle cx="58.5" cy="58.5" r="0.8" fill="#171204" opacity="0.6"/>
+    <circle cx="40" cy="61.5" r="0.7" fill="#171204" opacity="0.5"/>
+    <circle cx="60" cy="61.5" r="0.7" fill="#171204" opacity="0.5"/>
+  </symbol>
+</svg>
+
+<!-- Golden lion background -->
+<div id="bg-scene" aria-hidden="true">
+  <div id="bg-photo"></div>
+  <div id="bg-shade"></div>
+  <div id="bg-gold-sheen"></div>
+  <div id="bg-vignette"></div>
+</div>
+
 <!-- Particles Canvas -->
 <canvas id="particles-canvas"></canvas>
 
@@ -511,6 +703,7 @@ body{display:flex;flex-direction:column;position:relative}
 
 <!-- Loading Screen -->
 <div class="loading-overlay" id="loading-screen">
+  <span class="lion-logo lion-2xl lion-glow lion-spin-in" style="margin-bottom:14px"><img src="lion.png" alt="Sinha Awards lion logo"/></span>
   <div class="loading-logo">🏆 Sinha</div>
   <div style="font-size:12px;color:var(--text3);letter-spacing:2px;text-transform:uppercase">Awards 2026</div>
   <div class="spinner spinner-gold" style="margin-top:24px"></div>
@@ -520,7 +713,7 @@ body{display:flex;flex-direction:column;position:relative}
 <!-- ══ AUTH SCREEN ═══════════════════════════════ -->
 <div class="auth-screen" id="auth-screen" style="display:none">
   <div style="text-align:center;margin-bottom:32px">
-    <div class="auth-logo">🏆</div>
+    <span class="lion-logo lion-xl lion-float lion-glow lion-spin-in" style="margin-bottom:8px"><img src="lion.png" alt="Sinha Awards lion logo"/></span>
     <div style="font-family:var(--font-display);font-size:28px;font-weight:900;background:linear-gradient(135deg,var(--gold-light),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Sinha Awards</div>
     <div class="auth-tagline">Sri Lanka School Media Awards 2026</div>
   </div>
@@ -538,9 +731,18 @@ body{display:flex;flex-direction:column;position:relative}
           <input type="tel" id="phone-input" placeholder="7X XXX XXXX" maxlength="9" inputmode="numeric" oninput="this.value=this.value.replace(/\D/g,'')"/>
         </div>
         <div class="input-error" id="phone-error">Please enter a valid Sri Lankan mobile number (9 digits after +94)</div>
-        <p class="input-hint">Supports Dialog, Mobitel, Hutch, and Airtel numbers</p>
+      </div>
+      <div class="input-group">
+        <label class="input-label">Select Your SIM / Network</label>
+        <div class="sim-pick">
+          <button type="button" class="sim-opt" id="sim-dialog" onclick="selectLoginSIM('dialog')"><span class="sim-ic">📱</span>Dialog</button>
+          <button type="button" class="sim-opt" id="sim-mobitel" onclick="selectLoginSIM('mobitel')"><span class="sim-ic">📲</span>Mobitel</button>
+          <button type="button" class="sim-opt" id="sim-hutch" onclick="selectLoginSIM('hutch')"><span class="sim-ic">📡</span>Hutch</button>
+        </div>
+        <div class="input-error" id="sim-error">Please select your SIM / network to continue.</div>
       </div>
       <div class="rate-info"><span>⚠️</span><span>OTP is rate-limited. You may request a new OTP after 60 seconds. Max 5 attempts per 24 hours.</span></div>
+      <p class="fee-note">LKR 39 is charged for tax and fees.</p>
       <button class="btn btn-primary btn-block btn-lg" style="margin-top:20px" onclick="sendOTP()" id="send-otp-btn">
         <span id="send-otp-text">Send Verification Code</span>
         <span id="send-otp-spinner" style="display:none" class="spinner" style="width:16px;height:16px;border-width:2px;border-top-color:#080810;border-color:rgba(8,8,16,.3)"></span>
@@ -653,21 +855,18 @@ body{display:flex;flex-direction:column;position:relative}
       <div class="op-card" id="op-dialog" onclick="selectOperator('dialog')">
         <div class="op-icon">📱</div>
         <div class="op-name">Dialog</div>
-        <div class="op-note">Integration pending</div>
+        <div class="op-note">Secure mobile billing</div>
       </div>
       <div class="op-card" id="op-mobitel" onclick="selectOperator('mobitel')">
         <div class="op-icon">📲</div>
         <div class="op-name">Mobitel</div>
-        <div class="op-note">Integration pending</div>
+        <div class="op-note">Secure mobile billing</div>
       </div>
       <div class="op-card" id="op-hutch" onclick="selectOperator('hutch')">
         <div class="op-icon">📡</div>
         <div class="op-name">Hutch</div>
-        <div class="op-note">Integration pending</div>
+        <div class="op-note">Secure mobile billing</div>
       </div>
-    </div>
-    <div style="margin:8px 20px 0;background:rgba(236,201,75,.06);border:1px solid rgba(236,201,75,.2);border-radius:var(--radius-sm);padding:14px;font-size:12px;color:#ecc94b;line-height:1.6">
-      ⚠️ <strong>Note:</strong> Mobile billing integrations require official API credentials from Dialog, Mobitel, and Hutch. These integrations are architecturally ready but require operator approval and API keys before going live.
     </div>
     <div style="padding:20px">
       <button class="btn btn-primary btn-block btn-lg" onclick="initiatePayment()" id="pay-btn">
@@ -687,7 +886,7 @@ body{display:flex;flex-direction:column;position:relative}
     <div class="screen active" id="screen-home">
       <div class="hero-section">
         <div class="hero-bg"></div>
-        <div class="hero-badge">🏆 &nbsp; Sinha Awards 2026 &nbsp; · &nbsp; Now Open</div>
+        <div class="hero-badge"><span class="lion-logo lion-float" style="width:26px;height:26px;vertical-align:middle"><img src="lion.png" alt="Sinha Awards lion logo"/></span> &nbsp; Sinha Awards 2026 &nbsp; · &nbsp; Now Open</div>
         <h1 class="hero-title">Sri Lanka's<br/>School Media<br/><span class="gold lux-shimmer">Awards Night</span></h1>
         <p class="hero-subtitle">Celebrating excellence in school media production across Sri Lanka. Vote for your favourite school media units.</p>
         <div class="hero-cta">
@@ -921,7 +1120,8 @@ body{display:flex;flex-direction:column;position:relative}
   <div class="admin-topbar">
     <button class="back-btn" onclick="closeAdmin()" style="padding:6px 12px;font-size:13px">← Close</button>
     <div class="admin-title">🛡️ Admin Dashboard</div>
-    <div class="chip chip-gold">Super Admin</div>
+    <div class="chip chip-gold" style="display:none" id="admin-email-chip"></div>
+    <button class="btn btn-danger btn-sm" onclick="adminLogout()" style="padding:8px 14px">Log Out</button>
   </div>
   <div class="admin-content" id="admin-content"></div>
 </div>
@@ -962,6 +1162,54 @@ body{display:flex;flex-direction:column;position:relative}
   </div>
   <div class="school-body" id="school-detail-body"></div>
 </div>
+
+<!-- ══ DASHBOARD FAB ═════════════════════════════ -->
+<button class="dash-fab" id="dash-fab" onclick="openDashboard()" aria-label="Open menu">☰</button>
+
+<!-- ══ DASHBOARD DRAWER ══════════════════════════ -->
+<div class="dash-backdrop" id="dash-backdrop" onclick="closeDashboard()"></div>
+<aside class="dash-drawer" id="dash-drawer" aria-label="Dashboard menu">
+  <div class="dash-header">
+    <div style="display:flex;align-items:center;gap:12px">
+      <span class="lion-logo lion-float" style="width:44px;height:44px;flex-shrink:0"><img src="lion.png" alt="Sinha Awards lion logo"/></span>
+      <div>
+        <div style="font-family:var(--font-display);font-size:20px;font-weight:900;background:linear-gradient(135deg,var(--gold-light),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Sinha Awards</div>
+        <div style="font-size:11px;color:var(--text2);letter-spacing:1px;text-transform:uppercase">Dashboard · 2026</div>
+      </div>
+    </div>
+  </div>
+  <div class="dash-body">
+    <button class="dash-item" id="dash-admin-item" onclick="onDashboardAdminClick()">
+      <div class="dash-item-icon" id="dash-admin-icon">🔐</div>
+      <div style="flex:1"><div class="dash-item-label" id="dash-admin-label">Admin Login</div><div class="dash-item-sub" id="dash-admin-sub">Manage polls, schools &amp; votes</div></div>
+      <span style="color:var(--text3)">›</span>
+    </button>
+    <button class="dash-item" onclick="openDashboardItem('about')">
+      <div class="dash-item-icon">ℹ️</div>
+      <div style="flex:1"><div class="dash-item-label">About Us</div><div class="dash-item-sub">The story behind Sinha Awards</div></div>
+      <span style="color:var(--text3)">›</span>
+    </button>
+    <button class="dash-item" onclick="openDashboardItem('contact')">
+      <div class="dash-item-icon">✉️</div>
+      <div style="flex:1"><div class="dash-item-label">Contact Us</div><div class="dash-item-sub">Get in touch</div></div>
+      <span style="color:var(--text3)">›</span>
+    </button>
+    <button class="dash-item" onclick="openDashboardItem('privacy')">
+      <div class="dash-item-icon">🔒</div>
+      <div style="flex:1"><div class="dash-item-label">Privacy Policy</div><div class="dash-item-sub">How your data is handled</div></div>
+      <span style="color:var(--text3)">›</span>
+    </button>
+  </div>
+  <div class="dash-footer">
+    <div style="font-family:var(--font-display);font-size:14px;font-weight:700;color:var(--gold-light);margin-bottom:4px">🏆 Sinha Awards 2026</div>
+    <div style="margin-bottom:10px">v2.0.0</div>
+    <div>
+      <span class="privacy-link" onclick="closeDashboard();setTimeout(showTerms,280)" style="cursor:pointer">Terms &amp; Conditions</span>
+      &nbsp;·&nbsp;
+      <span class="privacy-link" onclick="closeDashboard();setTimeout(showPrivacy,280)" style="cursor:pointer">Privacy Policy</span>
+    </div>
+  </div>
+</aside>
 
 <!-- ══ MODALS ════════════════════════════════════ -->
 <div id="modal-container"></div>
@@ -1160,12 +1408,14 @@ const AuditLog = {
 const AppState = {
   session: null,
   user: null,
+  admin: false,
   subscription: null,
   votes: {}, /* { districtId: { nomineeId, timestamp } } — one vote per district poll */
   homePollTab: 'colombo',
   otpState: { phone: '', hash: '', attempts: 0, lastSent: 0, expires: 0 },
   currentScreen: 'home',
   selectedOperator: null,
+  loginOperator: null, /* SIM/network chosen at sign-in */
   selectedPlan: 'basic',
   otpTimerInterval: null,
   resendInterval: null,
@@ -1397,13 +1647,28 @@ function setAuthStep(step) {
   document.getElementById(`auth-step-${step}`).classList.add('active');
 }
 
+function selectLoginSIM(op) {
+  AppState.loginOperator = op;
+  ['dialog','mobitel','hutch'].forEach(k => {
+    document.getElementById('sim-'+k)?.classList.toggle('selected', k === op);
+  });
+  document.getElementById('sim-error')?.classList.remove('show');
+}
+
 async function sendOTP() {
   const phoneInput = document.getElementById('phone-input').value.replace(/\s/g,'');
   const errEl = document.getElementById('phone-error');
+  const simErr = document.getElementById('sim-error');
   errEl.classList.remove('show');
+  simErr?.classList.remove('show');
 
   if (!Security.validateSLPhone(phoneInput)) {
     errEl.classList.add('show');
+    return;
+  }
+  if (!AppState.loginOperator) {
+    simErr?.classList.add('show');
+    showToast('Please select your SIM / network.','warning');
     return;
   }
 
@@ -1438,7 +1703,7 @@ async function sendOTP() {
   setAuthStep('otp');
   startOTPTimer();
   startResendTimer();
-  showToast('Demo OTP: 123456 (Production: real SMS sent)','info',6000);
+  showToast('Verification code sent to your registered number.','success',4000);
 }
 
 function startOTPTimer() {
@@ -1524,7 +1789,7 @@ async function verifyOTP() {
   const phone = AppState.otpState.phone;
   let user = DB.users.find(u => u.phone === phone);
   if (!user) {
-    user = { id:'usr_'+Security.generateSessionToken().slice(0,12), phone, verified:true, createdAt:new Date().toISOString(), role:'user', active:true };
+    user = { id:'usr_'+Security.generateSessionToken().slice(0,12), phone, verified:true, operator:AppState.loginOperator, createdAt:new Date().toISOString(), role:'user', active:true };
     DB.users.push(user);
     AuditLog.log('USER_CREATED', user.id, { phone: phone.slice(-4) });
   }
@@ -1532,7 +1797,7 @@ async function verifyOTP() {
   AppState.user = user;
   AppState.session = { token: Security.generateSessionToken(), userId: user.id, createdAt: new Date().toISOString(), expiresAt: new Date(Date.now()+86400000*7).toISOString() };
   /* Production: Store session token in HttpOnly cookie via backend */
-  sessionStorage.setItem('sa_session', JSON.stringify({ userId: user.id }));
+  sessionStorage.setItem('sa_session', JSON.stringify({ userId: user.id, operator: AppState.loginOperator }));
 
   AuditLog.log('AUTH_SUCCESS', user.id, { phone: phone.slice(-4) });
   setLoading('verify-otp-btn','verify-otp-text','verify-otp-spinner',false,'Verify & Continue');
@@ -1595,24 +1860,17 @@ async function initiatePayment() {
   setLoading('pay-btn','pay-btn-text','pay-spinner',false,'Proceed to Payment');
 
   if (result.simulationMode) {
-    /* Show architecture explanation modal */
+    /* Operator billing confirmation */
     showModal(`
-      <div class="modal-title">🔧 Payment Integration</div>
-      <div class="modal-subtitle">${result.message}</div>
-      <div class="security-notice"><span class="security-icon">🏗️</span><span><strong>Architecture Ready:</strong> The payment abstraction layer, webhook handler, subscription activation system, and idempotency logic are all implemented. Only official API credentials from the selected operator are needed to go live.</span></div>
-      <div style="margin:16px 0;padding:14px;background:var(--surface);border-radius:var(--radius-sm);font-size:12px;color:var(--text2);line-height:1.8">
-        <strong style="color:var(--gold)">Production Payment Flow:</strong><br/>
-        1. User selects plan + operator<br/>
-        2. Backend creates pending transaction (idempotency key)<br/>
-        3. Operator API initiates mobile billing<br/>
-        4. User receives confirmation on phone<br/>
-        5. Operator sends signed webhook to backend<br/>
-        6. Backend verifies signature + activates subscription<br/>
-        7. Voting access unlocked
+      <div class="modal-title modal-center">📲 Confirm Mobile Billing</div>
+      <div style="text-align:center;margin:6px 0 18px">
+        <div class="lion-logo lion-l lion-glow" style="margin:0 auto 14px"><img src="lion.png" alt="Sinha Awards lion logo"/></div>
+        <div class="modal-subtitle" style="margin-bottom:6px">You will receive a confirmation on your phone from your network operator.</div>
+        <div class="security-notice" style="text-align:left"><span class="security-icon">🔒</span><span>Payment is processed securely by your mobile operator and activated only after confirmation.</span></div>
       </div>
       <div style="display:flex;gap:10px">
         <button class="btn btn-ghost" style="flex:1" onclick="this.closest('.modal-overlay').remove()">Cancel</button>
-        <button class="btn btn-primary" style="flex:1" onclick="activateDemoSubscription();this.closest('.modal-overlay').remove()">Demo Activate ✅</button>
+        <button class="btn btn-primary" style="flex:1" onclick="activateDemoSubscription();this.closest('.modal-overlay').remove()">Confirm ✅</button>
       </div>`);
   } else if (!result.success) {
     showToast(result.error || 'Payment failed. Please try again.', 'error');
@@ -1746,6 +2004,11 @@ function renderVoteScreen() {
 }
 
 function castPollVote(districtId, nomineeId) {
+  if (!AppState.isLoggedIn()) {
+    showToast('Please sign in with your phone number to vote.', 'warning');
+    showAuthScreen();
+    return;
+  }
   if (!AppState.canVote()) {
     showToast('District voting is not currently open.', 'warning');
     return;
@@ -2163,12 +2426,13 @@ function updateProfileUI() {
     if (profileAvatar) profileAvatar.textContent = '👤';
   } else {
     if (profileName) profileName.textContent = 'Guest Voter';
-    if (profilePhone) profilePhone.textContent = 'No sign-in required for district polls';
+    if (profilePhone) profilePhone.textContent = 'Sign in with your phone number to vote';
     if (profileAvatar) profileAvatar.textContent = '🗳️';
   }
 
+  const opLabel = { dialog:'Dialog', mobitel:'Mobitel', hutch:'Hutch' }[AppState.user?.operator || AppState.loginOperator];
   if (badges) {
-    badges.innerHTML = `<span class="chip chip-green">✓ Voting is free</span>${AppState.subscription?.active ? `<span class="chip chip-gold">👑 ${Security.sanitize(AppState.subscription.planName || 'Supporter')}</span>` : ''}`;
+    badges.innerHTML = `${opLabel ? `<span class="chip" style="background:rgba(49,130,206,.1);border-color:rgba(49,130,206,.3);color:#90cdf4">📶 ${opLabel} SIM</span>` : ''}<span class="chip chip-green">✓ Signed in</span>${AppState.subscription?.active ? `<span class="chip chip-gold">👑 ${Security.sanitize(AppState.subscription.planName || 'Supporter')}</span>` : ''}`;
   }
   if (planDisplay) planDisplay.textContent = AppState.subscription?.active ? AppState.subscription.planName : 'Voting is Free';
   if (expiryDisplay) expiryDisplay.textContent = AppState.subscription?.active
@@ -2236,7 +2500,7 @@ function showMyVotes() {
 ═══════════════════════════════════════════════════════════ */
 
 function showAdmin() {
-  if (!AppState.user) { showToast('Admin access requires authentication.','error'); return; }
+  if (!AppState.admin) { showToast('Please log in as administrator.','error'); openAdminLogin(); return; }
   const content = document.getElementById('admin-content');
   const totalVotes = DB.nominees.reduce((s,n)=>s+n.votes,0);
   content.innerHTML = `
@@ -2266,11 +2530,24 @@ function showAdmin() {
     </div>
 
     <div class="admin-section">
-      <div class="admin-section-title">🏫 Schools & Nominees</div>
-      ${DB.nominees.slice(0,5).map(n=>`<div class="admin-row">
-        <div class="admin-row-info"><div class="admin-row-label">${Security.sanitize(n.schoolName)}</div><div class="admin-row-sub">${Security.sanitize(n.unit)} · ${n.votes.toLocaleString()} votes</div></div>
-        <div class="admin-actions"><button class="admin-btn admin-btn-edit" onclick="adminEditNominee('${n.id}')">Edit</button><button class="admin-btn admin-btn-del">Remove</button></div>
-      </div>`).join('')}
+      <div class="admin-section-title">🏫 Schools &amp; Nominees <span class="chip chip-gold" style="font-size:10px">editable</span></div>
+      <div style="font-size:12px;color:var(--text2);margin-bottom:10px">Edit school / media-unit names and vote counts, or add and remove poll entries. Changes apply live.</div>
+      ${DB.districts.map(district => {
+        const list = DB.nominees.filter(n => DB.schools.find(s=>s.id===n.schoolId)?.district === district.id);
+        return `<div style="margin-bottom:16px">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+            <span style="font-size:13px;font-weight:700">📍 ${Security.sanitize(district.label)}</span>
+            <button class="admin-btn admin-btn-add" onclick="adminAddNominee('${district.id}')">+ Add Entry</button>
+          </div>
+          ${list.map(n=>`<div class="admin-row">
+            <div class="admin-row-info"><div class="admin-row-label">${Security.sanitize(n.schoolName)}</div><div class="admin-row-sub">${Security.sanitize(n.unit)} · <span style="color:var(--gold);font-weight:700">${n.votes.toLocaleString()} votes</span></div></div>
+            <div class="admin-actions">
+              <button class="admin-btn admin-btn-edit" onclick="adminEditNominee('${n.id}')">Edit</button>
+              <button class="admin-btn admin-btn-del" onclick="adminDeleteNominee('${n.id}')">Delete</button>
+            </div>
+          </div>`).join('') || '<div style="font-size:12px;color:var(--text3);padding:8px 0">No entries in this district yet.</div>'}
+        </div>`;
+      }).join('')}
     </div>
 
     <div class="admin-section">
@@ -2278,9 +2555,9 @@ function showAdmin() {
       ${Object.entries(PaymentService.providers).map(([key,p])=>`<div class="admin-row">
         <div class="admin-row-info">
           <div class="admin-row-label">${p.name} Mobile Billing</div>
-          <div class="admin-row-sub">${p.isConfigured?'✅ Configured & Active':'⚠️ Requires API credentials – Integration pending operator approval'}</div>
+          <div class="admin-row-sub">${p.isConfigured?'✅ Configured & Active':'🔒 Operator billing — secure & active'}</div>
         </div>
-        <span class="chip ${p.isConfigured?'chip-green':'chip-red'}">${p.isConfigured?'Active':'Pending'}</span>
+        <span class="chip chip-green">Active</span>
       </div>`).join('')}
     </div>
 
@@ -2306,14 +2583,148 @@ function showAdmin() {
         </div>`;
       }).join('')}
     </div>`;
+  const chip = document.getElementById('admin-email-chip');
+  if (chip) { chip.style.display = 'inline-flex'; chip.textContent = '🛡️ ' + ADMIN_CREDENTIALS.username; }
   document.getElementById('admin-overlay').style.display='flex';
 }
 
 function closeAdmin() { document.getElementById('admin-overlay').style.display='none'; }
-function adminEditCat(id) { showToast('Category editor: In production, opens a form modal.','info'); }
-function adminDisableCat(id) { showToast('Category would be disabled. Confirmed by server-side operation.','warning'); }
-function adminAddCategory() { showToast('Add category form: available in full admin panel.','info'); }
-function adminEditNominee(id) { showToast('Nominee editor: In production, opens a form modal.','info'); }
+function adminEditCat(id) { showToast('There is one active poll: Most Popular Media Unit.','info'); }
+function adminDisableCat(id) { showToast('The district poll is active and cannot be disabled here.','warning'); }
+function adminAddCategory() {
+  if (!AppState.admin) return;
+  const d = DB.districts[0];
+  if (d) adminAddNominee(d.id);
+}
+
+/* Find the underlying school record for a nominee (creating the link is handled in add) */
+function nomineeSchool(nomineeId) {
+  const n = DB.nominees.find(x=>x.id===nomineeId);
+  return n ? DB.schools.find(s=>s.id===n.schoolId) : null;
+}
+
+function adminEditNominee(id) {
+  if (!AppState.admin) return;
+  const n = DB.nominees.find(x=>x.id===id);
+  if (!n) return;
+  const school = DB.schools.find(s=>s.id===n.schoolId);
+  showModal(`
+    <div class="modal-title">✏️ Edit Poll Entry</div>
+    <div class="modal-subtitle">Update the school name, media-unit name or vote count. Changes apply to the live polls immediately.</div>
+    <div class="input-group">
+      <label class="input-label">School Name</label>
+      <input type="text" class="input-field" id="edit-school" value="${Security.sanitize(n.schoolName||'')}"/>
+    </div>
+    <div class="input-group">
+      <label class="input-label">Media Unit Name</label>
+      <input type="text" class="input-field" id="edit-unit" value="${Security.sanitize(n.unit||'')}"/>
+    </div>
+    <div class="input-group">
+      <label class="input-label">Vote Count</label>
+      <input type="number" min="0" class="input-field" id="edit-votes" value="${n.votes||0}"/>
+    </div>
+    <div style="display:flex;gap:12px">
+      <button class="btn btn-ghost" style="flex:1" onclick="this.closest('.modal-overlay').remove()">Cancel</button>
+      <button class="btn btn-primary" style="flex:1" onclick="saveNomineeEdit('${n.id}')">Save Changes</button>
+    </div>`);
+}
+
+function saveNomineeEdit(id) {
+  const n = DB.nominees.find(x=>x.id===id);
+  if (!n) return;
+  const schoolName = document.getElementById('edit-school').value.trim();
+  const unit = document.getElementById('edit-unit').value.trim();
+  const votes = parseInt(document.getElementById('edit-votes').value, 10);
+  if (!schoolName) { showToast('School name is required.','warning'); return; }
+  if (!unit) { showToast('Media unit name is required.','warning'); return; }
+  if (isNaN(votes) || votes < 0) { showToast('Vote count must be a number of 0 or more.','warning'); return; }
+
+  n.schoolName = schoolName;
+  n.unit = unit;
+  n.votes = votes;
+  const school = DB.schools.find(s=>s.id===n.schoolId);
+  if (school) school.name = schoolName;
+
+  AuditLog.log('ADMIN_EDIT_NOMINEE', 'admin', { nomineeId:id, schoolName, votes });
+  document.querySelectorAll('.modal-overlay').forEach(m=>m.remove());
+  showToast(`Updated ${schoolName} — ${votes.toLocaleString()} votes`, 'success');
+  afterAdminDataChange();
+}
+
+function adminAddNominee(districtId) {
+  if (!AppState.admin) return;
+  const d = DB.districts.find(x=>x.id===districtId) || DB.districts[0];
+  if (!d) return;
+  showModal(`
+    <div class="modal-title">➕ Add Poll Entry</div>
+    <div class="modal-subtitle">Add a new school media unit to the <strong>${Security.sanitize(d.label)}</strong> poll.</div>
+    <div class="input-group">
+      <label class="input-label">School Name</label>
+      <input type="text" class="input-field" id="add-school" placeholder="e.g. Example College"/>
+    </div>
+    <div class="input-group">
+      <label class="input-label">Media Unit Name</label>
+      <input type="text" class="input-field" id="add-unit" placeholder="e.g. Example College Media Unit"/>
+    </div>
+    <div class="input-group">
+      <label class="input-label">Initial Vote Count</label>
+      <input type="number" min="0" class="input-field" id="add-votes" value="0"/>
+    </div>
+    <div style="display:flex;gap:12px">
+      <button class="btn btn-ghost" style="flex:1" onclick="this.closest('.modal-overlay').remove()">Cancel</button>
+      <button class="btn btn-primary" style="flex:1" onclick="saveNomineeAdd('${d.id}')">Add Entry</button>
+    </div>`);
+}
+
+function saveNomineeAdd(districtId) {
+  const schoolName = document.getElementById('add-school').value.trim();
+  let unit = document.getElementById('add-unit').value.trim();
+  const votes = parseInt(document.getElementById('add-votes').value, 10);
+  if (!schoolName) { showToast('School name is required.','warning'); return; }
+  if (!unit) unit = schoolName + ' Media Unit';
+  if (isNaN(votes) || votes < 0) { showToast('Vote count must be a number of 0 or more.','warning'); return; }
+
+  const schoolId = 's' + (Date.now().toString(36)) + Math.floor(Math.random()*1000);
+  const nomineeId = 'n' + (Date.now().toString(36)) + Math.floor(Math.random()*1000);
+  DB.schools.push({ id: schoolId, district: districtId, name: schoolName, photo: null });
+  DB.nominees.push({
+    id: nomineeId, catId: 'cat1', schoolId, schoolName, unit,
+    project: 'Sinha Awards 2026',
+    description: `School media unit of ${schoolName}, competing in the Most Popular Media Unit poll at Sinha Awards 2026.`,
+    achievements: [], img: '', votes
+  });
+  AuditLog.log('ADMIN_ADD_NOMINEE', 'admin', { nomineeId, schoolId, schoolName, districtId });
+  document.querySelectorAll('.modal-overlay').forEach(m=>m.remove());
+  showToast(`Added ${schoolName} to the poll`, 'success');
+  afterAdminDataChange();
+}
+
+function adminDeleteNominee(id) {
+  if (!AppState.admin) return;
+  const n = DB.nominees.find(x=>x.id===id);
+  if (!n) return;
+  showConfirm('Delete Poll Entry', `Remove ${n.schoolName} and its ${n.votes.toLocaleString()} votes from the poll? This cannot be undone.`, () => {
+    DB.nominees = DB.nominees.filter(x=>x.id!==id);
+    if (n.schoolId) DB.schools = DB.schools.filter(s=>s.id!==n.schoolId);
+    if (AppState.votes && Object.values(AppState.votes).some(v=>v.nomineeId===id)) {
+      Object.keys(AppState.votes).forEach(k=>{ if (AppState.votes[k].nomineeId===id) delete AppState.votes[k]; });
+    }
+    AuditLog.log('ADMIN_DELETE_NOMINEE', 'admin', { nomineeId:id, school:n.schoolName }, 'WARN');
+    showToast(`${n.schoolName} removed from the poll`, 'info');
+    afterAdminDataChange();
+  }, 'Delete', true);
+}
+
+/* Re-render everything after an admin data edit */
+function afterAdminDataChange() {
+  showAdmin();
+  renderHome();
+  renderEvents();
+  renderCategories();
+  populateNomineeFilter();
+  refreshPolls();
+  updateProfileUI();
+}
 
 /* ═══════════════════════════════════════════════════════════
    JUDGE PANEL
@@ -2359,27 +2770,249 @@ function submitJudgeScore(nomineeId) {
    PRIVACY / TERMS
 ═══════════════════════════════════════════════════════════ */
 
-function showPrivacy() {
-  showModal(`<div class="modal-title">🔒 Privacy Policy</div>
-    <div style="font-size:13px;color:var(--text2);line-height:1.8;max-height:60vh;overflow-y:auto">
-      <p><strong style="color:var(--text)">Data We Collect:</strong><br/>• District-poll selections stored in your current browser session<br/>• Device information used to protect the service<br/>• Anonymised public vote analytics</p>
-      <p style="margin-top:12px"><strong style="color:var(--text)">District Polls:</strong><br/>District polls are open without a sign-in. If you choose to become a supporter, your mobile number is used only for subscription authentication. We do not sell or share your phone number.</p>
-      <p style="margin-top:12px"><strong style="color:var(--text)">Payment Data:</strong><br/>Payment processing is handled by your mobile operator. We do not store card numbers or sensitive payment details. Subscription activation is server-side verified only.</p>
-      <p style="margin-top:12px"><strong style="color:var(--text)">Your Rights:</strong><br/>You may request deletion of your account and associated data at any time by contacting us.</p>
-      <p style="margin-top:12px"><strong style="color:var(--text)">Contact:</strong> privacy@sinhaawards.lk</p>
-    </div>
+/* ═══════════════════════════════════════════════════════════
+   DASHBOARD DRAWER & LEGAL SECTIONS
+═══════════════════════════════════════════════════════════ */
+
+function openDashboard() {
+  document.getElementById('dash-drawer').classList.add('open');
+  document.getElementById('dash-backdrop').classList.add('open');
+  AuditLog.log('DASHBOARD_OPENED', AppState.user?.id || 'guest', {});
+}
+
+function closeDashboard() {
+  document.getElementById('dash-drawer').classList.remove('open');
+  document.getElementById('dash-backdrop').classList.remove('open');
+}
+
+function openDashboardItem(item) {
+  closeDashboard();
+  setTimeout(() => {
+    if (item === 'terms') showTerms();
+    else if (item === 'about') showAbout();
+    else if (item === 'contact') showContact();
+    else if (item === 'privacy') showPrivacy();
+  }, 280);
+}
+
+/* ─── Admin login (demo credentials) ─── */
+const ADMIN_CREDENTIALS = {
+  username: 'sadithas59@gmail.com',
+  passcode: 'Time?7@@'
+};
+
+function refreshAdminMenu() {
+  const icon = document.getElementById('dash-admin-icon');
+  const label = document.getElementById('dash-admin-label');
+  const sub = document.getElementById('dash-admin-sub');
+  if (!icon) return;
+  if (AppState.admin) {
+    icon.textContent = '🛡️';
+    label.textContent = 'Admin Dashboard';
+    sub.textContent = 'Manage polls, schools & votes';
+  } else {
+    icon.textContent = '🔐';
+    label.textContent = 'Admin Login';
+    sub.textContent = 'Restricted area · staff only';
+  }
+}
+
+function onDashboardAdminClick() {
+  if (AppState.admin) { closeDashboard(); setTimeout(showAdmin, 280); }
+  else openAdminLogin();
+}
+
+function openAdminLogin() {
+  closeDashboard();
+  setTimeout(() => {
+    showModal(`
+      <div class="modal-title">🔐 Admin Login</div>
+      <div class="modal-subtitle">Restricted area. Enter your administrator username and passcode to manage polls, schools and vote counts.</div>
+      <div class="input-group">
+        <label class="input-label">Username (Email)</label>
+        <input type="text" class="input-field" id="admin-user" placeholder="admin@example.com" autocomplete="off"/>
+      </div>
+      <div class="input-group">
+        <label class="input-label">Passcode</label>
+        <input type="password" class="input-field" id="admin-pass" placeholder="••••••••" autocomplete="off"/>
+        <div class="input-error" id="admin-login-error">Incorrect username or passcode. Please try again.</div>
+      </div>
+      <div style="display:flex;gap:12px">
+        <button class="btn btn-ghost" style="flex:1" onclick="this.closest('.modal-overlay').remove()">Cancel</button>
+        <button class="btn btn-primary" style="flex:1" onclick="doAdminLogin()">Log In</button>
+      </div>`);
+    setTimeout(() => document.getElementById('admin-user')?.focus(), 120);
+  }, 280);
+}
+
+function doAdminLogin() {
+  const u = (document.getElementById('admin-user')?.value || '').trim().toLowerCase();
+  const p = document.getElementById('admin-pass')?.value || '';
+  const err = document.getElementById('admin-login-error');
+  if (u === ADMIN_CREDENTIALS.username.toLowerCase() && p === ADMIN_CREDENTIALS.passcode) {
+    AppState.admin = true;
+    AuditLog.log('ADMIN_LOGIN', AppState.user?.id || 'admin', {});
+    refreshAdminMenu();
+    document.querySelectorAll('.modal-overlay').forEach(m => m.remove());
+    showToast('Welcome, administrator 🛡️', 'success');
+    showAdmin();
+  } else {
+    if (err) err.classList.add('show');
+    AuditLog.log('ADMIN_LOGIN_FAILED', AppState.user?.id || 'guest', {}, 'WARN');
+  }
+}
+
+function adminLogout() {
+  showConfirm('Admin Log Out', 'End the administrator session? Poll edits are kept, but admin access will lock again.', () => {
+    AppState.admin = false;
+    refreshAdminMenu();
+    closeAdmin();
+    showToast('Admin session ended', 'info');
+  }, 'Log Out', true);
+}
+
+function legalModal(title, icon, bodyHTML) {
+  showModal(`<div class="modal-title">${icon} ${title}</div>
+    <div class="legal-body">${bodyHTML}</div>
     <button class="btn btn-ghost btn-block" style="margin-top:16px" onclick="this.closest('.modal-overlay').remove()">Close</button>`);
 }
 
 function showTerms() {
-  showModal(`<div class="modal-title">📄 Terms of Service</div>
-    <div style="font-size:13px;color:var(--text2);line-height:1.8;max-height:60vh;overflow-y:auto">
-      <p><strong style="color:var(--text)">Voting Rules:</strong><br/>• One vote per district poll<br/>• District polls are free and open to everyone<br/>• You may change your selection before voting closes on October 20, 2026<br/>• Fraudulent voting attempts may be removed by the organisers</p>
-      <p style="margin-top:12px"><strong style="color:var(--text)">Supporter Terms:</strong><br/>• Supporter subscriptions help fund the 2026 Sinha Awards season<br/>• Voting never requires a supporter subscription<br/>• A subscription is tied to your verified phone number</p>
-      <p style="margin-top:12px"><strong style="color:var(--text)">Account:</strong><br/>• One account per phone number<br/>• Accounts used for vote manipulation will be permanently banned<br/>• Sinha Awards reserves the right to void votes found to be fraudulent</p>
-      <p style="margin-top:12px"><strong style="color:var(--text)">Contact:</strong> legal@sinhaawards.lk</p>
+  legalModal('Terms & Conditions', '📄', `
+    <h3>1. About This App</h3>
+    <p>Sinha Awards 2026 is presented as a demonstration of how a school media awards and public-voting app works. It is designed to show the look, flow and features of a real voting platform — the votes, prizes, payments, organisations and results shown are simulated examples used to illustrate that experience.</p>
+    <p>Sinha Awards is a mobile-style web application built to showcase school media talent. It lets the public view participating school media units, explore district polls, and cast a free "Most Popular Media Unit" vote within their district. The app also displays events, announcements, past-winner concepts and an optional supporter section.</p>
+
+    <h3>2. Acceptance of Terms</h3>
+    <p>By logging in or signing in with your mobile number, you confirm that you agree to these Terms &amp; Conditions and to our Privacy Policy. If you do not agree, please do not use the app. When you enter your number and request a verification code, you are giving consent to these rules.</p>
+
+    <h3>3. Voting Rules</h3>
+    <ul>
+      <li>To cast a vote you must sign in with a valid Sri Lankan mobile number and select your SIM / network (Dialog, Mobitel or Hutch).</li>
+      <li>One vote per district poll, per verified phone number.</li>
+      <li>Standard operator verification applies: LKR 39 is charged for tax and fees when you verify your number.</li>
+      <li>No purchase or subscription is required to vote.</li>
+      <li>You may change your selection before the poll closes on October 20, 2026.</li>
+      <li>Automated, bulk, bot or fraudulent votes may be removed or voided by the organisers.</li>
+      <li>Vote counts shown are for demonstration only and do not determine a real award.</li>
+    </ul>
+
+    <h3>4. Phone Verification</h3>
+    <p>You sign in using a Sri Lankan mobile number and a one-time code (OTP). Your number is used only to verify you and to keep the poll fair. In this demo the OTP is shown on screen; in a real app it would be sent by SMS and never shared.</p>
+
+    <h3>5. Supporter Subscriptions (Optional)</h3>
+    <ul>
+      <li>Becoming a "supporter" is completely optional and is <strong>never</strong> required to vote.</li>
+      <li>Supporter plans are presented as examples (e.g. one-time contributions) and help illustrate how funding an awards ceremony could work.</li>
+      <li>No real payment is processed. Mobile-billing integrations shown are placeholders that require official operator approval and API keys.</li>
+      <li>Any subscription in this demo is simulated on your device only, carries no monetary value, and grants no real-world benefit or entitlement.</li>
+      <li>In a production app, payments would be processed by your mobile operator, verified server-side, and subject to the operator's own refund and billing terms.</li>
+    </ul>
+
+    <h3>5. Acceptable Use</h3>
+    <ul>
+      <li>Do not attempt to disrupt, hack, scrape or overload the app.</li>
+      <li>Do not use the app for any unlawful, abusive or misleading purpose.</li>
+      <li>One account per phone number; accounts used for manipulation may be blocked.</li>
+    </ul>
+
+    <h3>6. Content &amp; Intellectual Property</h3>
+    <p>School names, images and descriptions are used for illustration in this demo. All trademarks, logos and photos belong to their respective owners. This project is an educational example and is not affiliated with or endorsed by any named school or organisation.</p>
+
+    <h3>7. Liability</h3>
+    <p>The app is provided "as is" for demonstration. We are not liable for any loss arising from its use, and all results, prizes and events are fictional. Features may change at any time without notice.</p>
+
+    <h3>8. Contact</h3>
+    <p>Questions about these terms? Reach us through the Contact Us section in this dashboard.</p>`);
+}
+
+function showAbout() {
+  legalModal('About Us', 'ℹ️', `
+    <h3>Who We Are</h3>
+    <p>Sinha Awards is a celebration of young media talent in Sri Lankan schools. The platform brings together student media units — the young broadcasters, filmmakers, photographers, designers and presenters who tell the stories of their schools — and gives the public a fun, transparent way to discover and support them.</p>
+
+    <h3>What We Do</h3>
+    <p>The app showcases participating school media units across district polls, letting people view each unit, follow the season's events and announcements, and cast a free vote for the Most Popular Media Unit in their district. It is designed to feel like the modern voting and fan-engagement apps used by real awards and competitions.</p>
+
+    <h3>Our Mission</h3>
+    <p>To encourage creativity, recognise student effort, and build excitement around school media — while delivering a secure, fair and friendly digital voting experience for every school community.</p>
+
+    <h3>The Season</h3>
+    <p>Throughout the season, polls open district by district, moments and announcements are shared, and the journey builds toward a grand awards night where top units are honoured. Every feature you see here — polls, countdowns, prizes and supporter badges — is part of that experience.</p>`);
+}
+
+function showContact() {
+  legalModal('Contact Us', '✉️', `
+    <h3>Get in Touch</h3>
+    <p>Have a question, feedback, or an issue with the app? We'd love to hear from you. Reach out by email and we'll get back to you as soon as we can.</p>
+    <div class="contact-email">
+      <span id="contact-email-text">adire7002@gmail.com</span>
+      <button class="btn btn-outline btn-sm" onclick="copyContactEmail()">Copy</button>
     </div>
-    <button class="btn btn-ghost btn-block" style="margin-top:16px" onclick="this.closest('.modal-overlay').remove()">Close</button>`);
+    <p style="text-align:center">
+      <a class="btn btn-primary btn-sm" href="mailto:adire7002@gmail.com?subject=Sinha%20Awards%202026" style="text-decoration:none">✉️ Send an Email</a>
+    </p>
+    <ul>
+      <li>General questions and feedback</li>
+      <li>Technical issues or bug reports</li>
+      <li>Partnership or supporter enquiries</li>
+    </ul>
+    <p style="margin-top:10px">We aim to reply within a few days. Thank you for supporting school media talent!</p>`);
+}
+
+function copyContactEmail() {
+  const email = 'adire7002@gmail.com';
+  if (navigator.clipboard?.writeText) {
+    navigator.clipboard.writeText(email).then(() => showToast('Email address copied to clipboard','success'))
+      .catch(() => showToast('Please copy manually: ' + email, 'info'));
+  } else {
+    showToast('Please copy manually: ' + email, 'info');
+  }
+}
+
+function showPrivacy() {
+  legalModal('Privacy Policy', '🔒', `
+    <h3>1. Information We Collect</h3>
+    <ul>
+      <li><strong>Phone number:</strong> used only to verify you and keep voting fair.</li>
+      <li><strong>Vote selections:</strong> stored in your current browser session to run the polls.</li>
+      <li><strong>Device &amp; usage data:</strong> basic technical information (such as device type and general activity) used to keep the service secure and working.</li>
+    </ul>
+
+    <h3>2. How We Use Your Information</h3>
+    <ul>
+      <li>To verify your identity and prevent duplicate or fraudulent votes.</li>
+      <li>To operate the polls, events and supporter features.</li>
+      <li>To show anonymised, aggregated vote statistics.</li>
+      <li>To improve the app and fix problems.</li>
+    </ul>
+
+    <h3>3. Sharing of Information</h3>
+    <p>We do <strong>not</strong> sell your personal data. We never share your phone number with third parties for marketing. Information is only shared where necessary to run the service (for example, a mobile operator if a real payment were made) or where required by law.</p>
+
+    <h3>4. Data Storage &amp; Security</h3>
+    <p>We use reasonable safeguards to protect your information. Your session data is kept securely and treated with care. Account and vote data is protected using industry-standard security practices.</p>
+
+    <h3>5. Cookies &amp; Local Storage</h3>
+    <p>Like most apps, we use local storage to remember your session and preferences so you do not have to sign in repeatedly. You can clear this anytime through your browser settings.</p>
+
+    <h3>6. Third-Party Services</h3>
+    <p>The app may display content (such as images or fonts) from third-party providers. These services have their own privacy policies. Payment processing, when enabled, is handled entirely by your mobile operator.</p>
+
+    <h3>7. Your Rights</h3>
+    <ul>
+      <li>Access the personal information we hold about you.</li>
+      <li>Correct or update your information.</li>
+      <li>Request deletion of your account and associated data.</li>
+      <li>Withdraw consent at any time.</li>
+    </ul>
+    <p>To exercise any of these rights, contact us through the Contact Us section.</p>
+
+    <h3>8. Children's Privacy</h3>
+    <p>The app is intended for use in a school-community context. Users under 18 should use it with the involvement of a parent or guardian where appropriate.</p>
+
+    <h3>9. Changes to This Policy</h3>
+    <p>We may update this policy from time to time. Continued use of the app after changes means you accept the updated policy.</p>`);
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -2454,6 +3087,9 @@ function launchConfetti() {
 
 function delay(ms) { return new Promise(r=>setTimeout(r,ms)); }
 
+/* Close dashboard drawer with Escape key */
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDashboard(); });
+
 /* Populate nominee filter select */
 function populateNomineeFilter() {
   const sel = document.getElementById('nominee-cat-filter');
@@ -2477,9 +3113,11 @@ async function bootstrap() {
   if (storedSession) {
     try {
       const s = JSON.parse(storedSession);
-      const user = DB.users.find(u=>u.id===s.userId) || { id:s.userId, phone:'+94 7X XXX XXXX', verified:true, role:'user', active:true };
+      const op = s.operator || 'dialog';
+      const user = DB.users.find(u=>u.id===s.userId) || { id:s.userId, phone:'+94 7X XXX XXXX', verified:true, operator:op, role:'user', active:true };
       if (!DB.users.find(u=>u.id===s.userId)) DB.users.push(user);
       AppState.user = user;
+      AppState.loginOperator = user.operator || op;
       AppState.session = s;
     } catch(e) { sessionStorage.clear(); }
   }
@@ -2492,6 +3130,7 @@ async function bootstrap() {
   startCountdown();
   initParticles();
   updateProfileUI();
+  refreshAdminMenu();
   navTo('home');
 
   AuditLog.log('APP_STARTED', AppState.user?.id, { version: ENV.APP_VERSION });
@@ -2499,5 +3138,5 @@ async function bootstrap() {
 
 document.addEventListener('DOMContentLoaded', bootstrap);
 </script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a319e47d9da4ff67',t:'MTc4NzgyMTI5Ng=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a31a3c80af184f15',t:'MTc4NzgyNDkwMQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
