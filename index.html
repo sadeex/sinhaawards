@@ -1928,7 +1928,7 @@ async function verifyOTP() {
   clearInterval(AppState.otpTimerInterval);
   setAuthStep('success');
   /* Re-bind cloud votes to this phone number so the same number sees the same votes on any device */
-  if (window.Sync && Sync.enabled && Sync.bindVoter) Sync.bindVoter();
+  if (Sync && Sync.enabled && Sync.bindVoter) Sync.bindVoter();
 }
 
 function completeAuth() {
@@ -2149,7 +2149,7 @@ function castPollVote(districtId, nomineeId) {
   if (!target || !districtNominees(districtId).some(n => n.id === nomineeId)) return;
 
   /* When cloud sync is connected, vote through it (cross-device). */
-  if (window.Sync && Sync.enabled) {
+  if (Sync && Sync.enabled) {
     showToast('Recording your vote…', 'info', 1200);
     Sync.castVote(districtId, nomineeId).then(ok => {
       if (ok) {
@@ -2815,7 +2815,7 @@ function saveNomineeEdit(id) {
   if (!unit) { showToast('Media unit name is required.','warning'); return; }
   if (isNaN(votes) || votes < 0) { showToast('Vote count must be a number of 0 or more.','warning'); return; }
 
-  if (window.Sync && Sync.enabled) {
+  if (Sync && Sync.enabled) {
     document.querySelectorAll('.modal-overlay').forEach(m=>m.remove());
     showToast(`Updating ${schoolName}…`, 'info', 1200);
     Sync.updateNominee(id, { schoolName, unit, votes })
@@ -2873,7 +2873,7 @@ function saveNomineeAdd(districtId) {
   const schoolId = 's' + (Date.now().toString(36)) + Math.floor(Math.random()*1000);
   const nomineeId = 'n' + (Date.now().toString(36)) + Math.floor(Math.random()*1000);
 
-  if (window.Sync && Sync.enabled) {
+  if (Sync && Sync.enabled) {
     document.querySelectorAll('.modal-overlay').forEach(m=>m.remove());
     showToast(`Adding ${schoolName}…`, 'info', 1200);
     Sync.addNominee(districtId, { id: nomineeId, schoolName, unit, votes })
@@ -2905,7 +2905,7 @@ function adminDeleteNominee(id) {
   const n = DB.nominees.find(x=>x.id===id);
   if (!n) return;
   showConfirm('Delete Poll Entry', `Remove ${n.schoolName} and its ${n.votes.toLocaleString()} votes from the poll? This cannot be undone.`, () => {
-    if (window.Sync && Sync.enabled) {
+    if (Sync && Sync.enabled) {
       Sync.deleteNominee(id)
         .then(()=>showToast(`${n.schoolName} removed from the poll`, 'info'))
         .catch(()=>{ localDeleteNominee(id, n); showToast('Removed locally (cloud unavailable)','warning'); afterAdminDataChange(); });
@@ -3624,5 +3624,5 @@ function safeBootstrap() { try { Promise.resolve(bootstrap()).catch(e=>console.e
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', safeBootstrap);
 else safeBootstrap();
 </script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a31fe8871cdd2666',t:'MTc4Nzg4NDM3Ng=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a32000b268f83fae',t:'MTc4Nzg4NTM2Ng=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
