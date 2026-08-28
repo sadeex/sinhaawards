@@ -723,6 +723,8 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 }
 
 </style>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 </head>
 <body>
 
@@ -1332,7 +1334,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 <div id="modal-container"></div>
 
 <!-- Votes are read from / written to a JSON file in this GitHub repo via
-     Sync (see GITHUB_STORE below); it can never block the app from appearing. -->
+     Sync (see FIREBASE_CONFIG below); it can never block the app from appearing. -->
 <script>
 /* ═══════════════════════════════════════════════════════════
    SINHA AWARDS 2026 — Application Engine
@@ -2143,7 +2145,7 @@ function castPollVote(districtId, nomineeId) {
   const target = DB.nominees.find(n => n.id === nomineeId);
   if (!target || !districtNominees(districtId).some(n => n.id === nomineeId)) return;
 
-  /* When GitHub sync is connected, vote through it (cross-device). */
+  /* When cloud sync is connected, vote through it (cross-device). */
   if (window.Sync && Sync.enabled) {
     showToast('Recording your vote…', 'info', 1200);
     Sync.castVote(districtId, nomineeId).then(ok => {
@@ -2155,7 +2157,7 @@ function castPollVote(districtId, nomineeId) {
       }
     }).catch(err => {
       console.error('[vote] cloud vote failed:', err && err.code, err && err.message, err);
-      showToast('Vote could not be synced: ' + ((err && err.message) || 'check your GitHub token/repo settings') + '. Saved on this device.', 'error', 6000);
+      showToast('Vote could not be synced: ' + ((err && err.message) || 'check your Firebase database config') + '. Saved on this device.', 'error', 6000);
       localCastPollVote(districtId, nomineeId);
     });
     return;
@@ -2166,7 +2168,7 @@ function castPollVote(districtId, nomineeId) {
 
 /* Cache local-mode votes so a refresh on the SAME browser doesn't lose them
    while cloud sync is unavailable. This does NOT make votes cross-device —
-   only Sync (GitHub) does that — it just stops them vanishing on reload. */
+   only Sync (Firebase) does that — it just stops them vanishing on reload. */
 const LocalVoteCache = {
   KEY: 'sa_local_votes',
   save() {
@@ -3305,42 +3307,55 @@ function populateNomineeFilter() {
 }
 
 /* ═══════════════════════════════════════════════════════════
-   GITHUB-BACKED VOTE STORAGE (cross-device, no server)
+   FIREBASE REALTIME DATABASE — VOTE STORAGE (cross-device)
    ───────────────────────────────────────────────────────────
-   Votes are read from and written to a single JSON file in this
-   GitHub repo via the GitHub Contents API. There is no backend —
-   the browser talks to api.github.com directly using the token
-   below.
+   Votes live in a Firebase Realtime Database so the same phone
+   number sees the same votes on every device. There is no
+   backend server: the browser reads/writes the database directly
+   with the Firebase JS SDK, using the public project config below.
 
-   ⚠️ IMPORTANT SECURITY NOTE
-   A token embedded in client-side code is visible to anyone who
-   views the page source or opens DevTools. Do NOT use a token
-   with broad access. Set this up as:
-     1. Create a dedicated GitHub account just for this (not your
-        main one), or use a fine-grained token scoped to ONLY
-        this one repo.
-     2. Settings → Developer settings → Fine-grained tokens →
-        Generate new token.
-     3. Repository access: "Only select repositories" → this repo.
-     4. Permissions: Contents → Read and write. Nothing else.
-     5. Paste the token below.
-   Anyone with this token can rewrite GITHUB_STORE.PATH (and
-   anything else the token's permission scope allows) — that's
-   an accepted tradeoff for a low-stakes public poll with no
-   backend. Do not reuse this token anywhere sensitive, and
-   rotate/regenerate it if you ever suspect abuse.
+   SETUP (one time):
+     1. Go to console.firebase.google.com → Add project (free).
+     2. Build → Realtime Database → Create database → choose
+        "Start in test mode" (rules below), pick any location.
+     3. Copy the database URL (looks like
+        https://YOUR-PROJECT-default-rtdb.firebaseio.com) and your
+        Web API key (Project settings → General → Your apps → Web),
+        then paste them into FIREBASE_CONFIG below.
 
-   Every vote creates one commit to GITHUB_STORE.PATH. That's
-   normal for this approach — expect the commit history to grow.
+   DATABASE RULES (Realtime Database → Rules). For this public
+   poll the app reads AND writes both "votes" and "nominees", so
+   start with test-mode/open rules:
+       {
+         "rules": {
+           ".read": true,
+           ".write": true
+         }
+       }
+   ⚠️ Open rules let anyone write — fine for a demo. For a real
+   deployment, add Firebase Authentication and tighten writes so
+   increments can't be forged. The app is architected so the
+   counts live in one place; lock them down behind auth later.
 ═══════════════════════════════════════════════════════════ */
-const GITHUB_STORE = {
-  OWNER:  'sadeex',              // repo owner
-  REPO:   'sinhaawards',         // repo name
-  BRANCH: 'main',
-  PATH:   'data/votes.json',     // file this app reads/writes
-  TOKEN:  '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',
-  API:    'https://api.github.com'
+const FIREBASE_CONFIG = {
+  apiKey:            'AIzaSyAHs_W4SOsRmeTGqZr9sNf6lx6rtqBzPVA',
+  authDomain:        'uuuooolk.firebaseapp.com',
+  databaseURL:       'https://uuuooolk-default-rtdb.firebaseio.com', /* ← the field that matters */
+  projectId:         'uuuooolk',
+  storageBucket:     'uuuooolk.firebasestorage.app',
+  messagingSenderId: '44770477080',
+  appId:             '1:44770477080:web:d4e9d4cbf469c545732f6d'
 };
+
+/* Firebase SDK must be loaded via the <script> tags in <head> before this runs. */
+let _fb = null;
+function fbInit() {
+  if (_fb) return _fb;
+  if (!window.firebase || !window.firebase.database) return null;
+  try { firebase.initializeApp(FIREBASE_CONFIG); } catch (e) { /* already initialised */ }
+  _fb = firebase.database();
+  return _fb;
+}
 
 function setSyncStatus(state, text) {
   const el = document.getElementById('sync-status');
@@ -3353,12 +3368,12 @@ function setSyncStatus(state, text) {
 
 const Sync = {
   enabled: false,
-  sha: null,           // current file blob sha, needed to write without clobbering others
-  pollTimer: null,
-  POLL_MS: 20000,       // how often to re-check GitHub for other people's votes
+  listenersBound: false,
 
   isConfigured() {
-    return GITHUB_STORE.TOKEN && !GITHUB_STORE.TOKEN.startsWith('PASTE_');
+    return !!FIREBASE_CONFIG.databaseURL
+        && !FIREBASE_CONFIG.databaseURL.includes('PASTE_PROJECT')
+        && !!window.firebase && !!window.firebase.database;
   },
 
   voterKey() {
@@ -3367,160 +3382,147 @@ const Sync = {
     return null;
   },
 
-  headers(withAuth = true) {
-    const h = { 'Accept': 'application/vnd.github+json' };
-    if (withAuth && this.isConfigured()) h['Authorization'] = 'Bearer ' + GITHUB_STORE.TOKEN;
-    return h;
+  seedNominees() {
+    const out = {};
+    DB.nominees.forEach(n => { out[n.id] = n.votes; });
+    return out;
   },
 
-  contentsUrl() {
-    return `${GITHUB_STORE.API}/repos/${GITHUB_STORE.OWNER}/${GITHUB_STORE.REPO}/contents/${GITHUB_STORE.PATH}?ref=${GITHUB_STORE.BRANCH}&_=${Date.now()}`;
+  errorText(err) {
+    const m = String((err && err.message) || err || '');
+    if (/permission_denied|denied/i.test(m)) return 'Sync off — check Firebase rules';
+    if (/not found|refused|network|failed to fetch|unreachable/i.test(m)) return 'Sync off — database unreachable';
+    if (/invalid|key|config|auth/i.test(m)) return 'Sync off — bad Firebase config';
+    return 'Sync off — check Firebase setup';
   },
 
-  b64encode(str) { return btoa(unescape(encodeURIComponent(str))); },
-  b64decode(str) { return decodeURIComponent(escape(atob(str))); },
-
-  /* Pull the latest votes.json from GitHub. Returns { nominees, pollVotes }. */
-  async fetchFile() {
-    const res = await fetch(this.contentsUrl(), { headers: this.headers() });
-    if (res.status === 404) {
-      // File doesn't exist yet — start from an empty store, will be created on first write.
-      this.sha = null;
-      return { nominees: {}, pollVotes: {} };
-    }
-    if (!res.ok) throw new Error(`GitHub read failed: ${res.status} ${res.statusText}`);
-    const json = await res.json();
-    this.sha = json.sha;
-    const data = JSON.parse(this.b64decode(json.content));
-    return { nominees: data.nominees || {}, pollVotes: data.pollVotes || {} };
+  /* Seed the /nominees node with the app's current counts the first time only. */
+  async ensureSeeded() {
+    const db = fbInit(); if (!db) throw new Error('Firebase SDK not loaded');
+    const snap = await db.ref('nominees').once('value');
+    if (snap.exists()) return;
+    const seed = this.seedNominees();
+    const hasData = Object.values(seed).some(v => v > 0);
+    if (hasData) await db.ref('nominees').set(seed);
   },
 
-  /* Apply the fetched vote-store into local DB/AppState for rendering. */
-  applyRemote(data) {
-    DB.nominees.forEach(n => {
-      if (Object.prototype.hasOwnProperty.call(data.nominees, n.id)) n.votes = data.nominees[n.id];
+  /* Realtime: reflect any change to counts or this voter's picks instantly. */
+  bindListeners() {
+    if (this.listenersBound) return;
+    const db = fbInit(); if (!db) return;
+    db.ref('nominees').on('value', snap => {
+      const data = snap.val() || {};
+      DB.nominees.forEach(n => {
+        if (Object.prototype.hasOwnProperty.call(data, n.id)) n.votes = data[n.id];
+      });
+      refreshCloudUI();
     });
-    const key = this.voterKey();
-    if (key && data.pollVotes[key]) {
-      AppState.votes = {};
-      Object.entries(data.pollVotes[key]).forEach(([districtId, nomineeId]) => {
+    db.ref('votes').on('value', snap => {
+      const all = snap.val() || {};
+      const key = this.voterKey();
+      const mine = (key && all[key]) || {};
+      const next = {};
+      Object.entries(mine).forEach(([districtId, nomineeId]) => {
         if (DB.districts.find(d => d.id === districtId)) {
-          AppState.votes[districtId] = { nomineeId, timestamp: new Date().toISOString() };
+          next[districtId] = { nomineeId, timestamp: new Date().toISOString() };
         }
       });
-    }
-  },
-
-  async refresh() {
-    try {
-      const data = await this.fetchFile();
-      this.applyRemote(data);
-      setSyncStatus('live', 'Synced with GitHub');
-      refreshCloudUI();
-      return data;
-    } catch (err) {
-      console.warn('[sync] GitHub read failed:', err);
-      setSyncStatus('offline', 'Sync unavailable');
-      throw err;
-    }
-  },
-
-  startPolling() {
-    if (this.pollTimer) clearInterval(this.pollTimer);
-    this.pollTimer = setInterval(() => this.refresh().catch(() => {}), this.POLL_MS);
+      AppState.votes = next;
+      updateVoteProgress();
+      renderHomePollTabs();
+      updateProfileUI();
+    });
+    this.listenersBound = true;
   },
 
   async init() {
     if (!this.isConfigured()) {
-      console.info('[sync] No GitHub token configured — using local (this-device-only) mode.');
+      console.info('[sync] No Firebase config — using local (this-device-only) mode.');
       setSyncStatus('offline', 'Local mode');
       this.enabled = false;
       return;
     }
     setSyncStatus('connecting', 'Connecting…');
     try {
-      await this.refresh();
+      await this.ensureSeeded();
+      this.bindListeners();
       this.enabled = true;
-      this.startPolling();
-      showToast('☁️ Connected — votes sync via GitHub', 'success', 3000);
-      AuditLog.log('GITHUB_SYNC_CONNECTED', this.voterKey() || 'anon', {});
+      setSyncStatus('live', 'Synced with Firebase');
+      showToast('☁️ Connected — votes sync across devices', 'success', 3000);
+      AuditLog.log('CLOUD_SYNC_CONNECTED', this.voterKey() || 'anon', {});
     } catch (err) {
-      console.warn('[sync] GitHub init failed, using local mode:', err);
-      setSyncStatus('offline', 'Local mode');
+      console.warn('[sync] Firebase init failed, using local mode:', err);
+      setSyncStatus('offline', this.errorText(err));
       this.enabled = false;
     }
   },
 
-  /* Re-pull so this voter's saved choices (by phone) load in on this device */
-  bindVoter() {
-    this.refresh().catch(() => {});
-  },
-
-  /* Write the full store back to GitHub. Retries once on a 409 (someone
-     else committed in between) by re-fetching and re-applying the change. */
-  async commitFile(nominees, pollVotes, message) {
-    const body = {
-      message,
-      content: this.b64encode(JSON.stringify({ nominees, pollVotes }, null, 2)),
-      branch: GITHUB_STORE.BRANCH
-    };
-    if (this.sha) body.sha = this.sha;
-    const res = await fetch(
-      `${GITHUB_STORE.API}/repos/${GITHUB_STORE.OWNER}/${GITHUB_STORE.REPO}/contents/${GITHUB_STORE.PATH}`,
-      { method: 'PUT', headers: { ...this.headers(), 'Content-Type': 'application/json' }, body: JSON.stringify(body) }
-    );
-    if (res.status === 409) { const e = new Error('conflict'); e.conflict = true; throw e; }
-    if (!res.ok) throw new Error(`GitHub write failed: ${res.status} ${res.statusText}`);
-    const json = await res.json();
-    this.sha = json.content.sha;
-    return json;
+  /* Pull this phone's picks so a vote cast on another device shows up here. */
+  async bindVoter() {
+    if (!this.isConfigured() || !this.voterKey()) return;
+    try {
+      const db = fbInit(); if (!db) return;
+      const snap = await db.ref('votes/' + this.voterKey()).once('value');
+      const mine = snap.val() || {};
+      Object.entries(mine).forEach(([districtId, nomineeId]) => {
+        if (DB.districts.find(d => d.id === districtId)) {
+          AppState.votes[districtId] = { nomineeId, timestamp: new Date().toISOString() };
+        }
+      });
+      updateVoteProgress();
+      renderHomePollTabs();
+      updateProfileUI();
+    } catch (e) { /* non-fatal */ }
   },
 
   /* Cast (or change) this voter's pick for one district. One vote per district. */
-  async castVote(districtId, nomineeId, attempt = 0) {
+  async castVote(districtId, nomineeId) {
     const key = this.voterKey();
     if (!key) throw new Error('No voter identity');
-    const data = await this.fetchFile();
-    const current = (data.pollVotes[key] || {})[districtId];
-    if (current === nomineeId) return false; // no-op, already voted this way
+    const db = fbInit(); if (!db) throw new Error('Firebase SDK not loaded');
 
-    data.nominees[nomineeId] = (data.nominees[nomineeId] || 0) + 1;
-    if (current) data.nominees[current] = Math.max(0, (data.nominees[current] || 0) - 1);
-    data.pollVotes[key] = { ...(data.pollVotes[key] || {}), [districtId]: nomineeId };
+    const prevSnap = await db.ref(`votes/${key}/${districtId}`).once('value');
+    const prev = prevSnap.val();
+    if (prev === nomineeId) return false; /* already voted this way — no-op */
 
-    try {
-      await this.commitFile(data.nominees, data.pollVotes, `Vote: ${key} -> ${nomineeId} (${districtId})`);
-    } catch (err) {
-      if (err.conflict && attempt < 3) return this.castVote(districtId, nomineeId, attempt + 1);
-      throw err;
-    }
-    this.applyRemote(data);
-    refreshCloudUI();
+    const readCount = async id => {
+      const s = await db.ref('nominees/' + id).once('value');
+      if (typeof s.val() === 'number') return s.val();
+      return DB.nominees.find(n => n.id === id)?.votes || 0;
+    };
+
+    const updates = {};
+    updates[`votes/${key}/${districtId}`] = nomineeId;
+    updates[`nominees/${nomineeId}`] = (await readCount(nomineeId)) + 1;
+    if (prev) updates[`nominees/${prev}`] = Math.max(0, (await readCount(prev)) - 1);
+
+    await db.ref().update(updates); /* atomic multi-location write */
     return true;
   },
 
-  /* Admin writes — same read-modify-write-with-retry pattern */
-  async updateNominee(id, fields, attempt = 0) {
-    const data = await this.fetchFile();
-    data.nominees[id] = fields.votes;
-    try { await this.commitFile(data.nominees, data.pollVotes, `Admin: update ${id}`); }
-    catch (err) { if (err.conflict && attempt < 3) return this.updateNominee(id, fields, attempt + 1); throw err; }
-    this.applyRemote(data);
+  /* Admin writes */
+  async updateNominee(id, fields) {
+    const db = fbInit(); if (!db) throw new Error('Firebase SDK not loaded');
+    await db.ref('nominees/' + id).set(fields.votes);
   },
-  async addNominee(districtId, nomineeData, attempt = 0) {
-    const data = await this.fetchFile();
-    data.nominees[nomineeData.id] = nomineeData.votes || 0;
-    try { await this.commitFile(data.nominees, data.pollVotes, `Admin: add ${nomineeData.id}`); }
-    catch (err) { if (err.conflict && attempt < 3) return this.addNominee(districtId, nomineeData, attempt + 1); throw err; }
-    this.applyRemote(data);
+
+  async addNominee(districtId, nomineeData) {
+    const db = fbInit(); if (!db) throw new Error('Firebase SDK not loaded');
+    await db.ref('nominees/' + nomineeData.id).set(nomineeData.votes || 0);
   },
-  async deleteNominee(id, attempt = 0) {
-    const data = await this.fetchFile();
-    delete data.nominees[id];
-    Object.values(data.pollVotes).forEach(v => { Object.keys(v).forEach(d => { if (v[d] === id) delete v[d]; }); });
-    try { await this.commitFile(data.nominees, data.pollVotes, `Admin: delete ${id}`); }
-    catch (err) { if (err.conflict && attempt < 3) return this.deleteNominee(id, attempt + 1); throw err; }
-    this.applyRemote(data);
+
+  async deleteNominee(id) {
+    const db = fbInit(); if (!db) throw new Error('Firebase SDK not loaded');
+    await db.ref('nominees/' + id).remove();
+    const snap = await db.ref('votes').once('value');
+    const all = snap.val() || {};
+    const updates = {};
+    Object.entries(all).forEach(([phone, picks]) => {
+      Object.entries(picks || {}).forEach(([d, nid]) => {
+        if (nid === id) updates[`votes/${phone}/${d}`] = null;
+      });
+    });
+    if (Object.keys(updates).length) await db.ref().update(updates);
   }
 };
 
@@ -3540,7 +3542,7 @@ function refreshCloudUI() {
 ═══════════════════════════════════════════════════════════ */
 
 async function bootstrap() {
-  /* Safety net: the app must ALWAYS appear, even if GitHub sync or another
+  /* Safety net: the app must ALWAYS appear, even if cloud sync or another
      dependency is slow/blocked. Hides the loader no matter what. */
   setTimeout(() => {
     const ls = document.getElementById('loading-screen');
@@ -3586,6 +3588,11 @@ async function bootstrap() {
     } catch(e) { sessionStorage.clear(); }
   }
 
+  /* Once the identity is known, pull this phone's votes from the cloud right away
+     (instead of waiting up to 20s for the next poll) so a vote cast on another
+     device shows up on this one as soon as the page loads. */
+  if (Sync.isConfigured() && AppState.user) Sync.bindVoter();
+
   /* Initialize all screens */
   renderHome();
   renderEvents();
@@ -3614,5 +3621,5 @@ function safeBootstrap() { try { Promise.resolve(bootstrap()).catch(e=>console.e
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', safeBootstrap);
 else safeBootstrap();
 </script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a31fa241df70f309',t:'MTc4Nzg4MTQ5Nw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a31fd05b7a46a55b',t:'MTc4Nzg4MzM4Ng=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
