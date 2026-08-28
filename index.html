@@ -451,6 +451,7 @@ body{display:flex;flex-direction:column;position:relative}
 .poll-option-row{position:relative;display:flex;align-items:center;gap:10px;padding:10px 12px}
 .poll-radio{width:18px;height:18px;border-radius:50%;border:2px solid var(--text3);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:#1a1a2e;transition:all .2s ease}
 .poll-radio.checked{background:var(--gold);border-color:var(--gold)}
+.poll-votes{white-space:nowrap;flex-shrink:0;font-variant-numeric:tabular-nums;font-size:12px;font-weight:700}
 .poll-tabs{display:flex;gap:6px;margin-bottom:14px;background:var(--surface);padding:5px;border-radius:13px;border:1px solid var(--border3)}
 .poll-tab{flex:1;border:none;background:transparent;color:var(--text2);font-size:13px;font-weight:700;padding:10px 6px;border-radius:9px;cursor:pointer;transition:all .28s cubic-bezier(.25,.8,.25,1);font-family:inherit;white-space:nowrap}
 .poll-tab:hover{color:var(--gold-light)}
@@ -630,6 +631,10 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
   /* App fills the entire window */
   #app{width:100%;margin:0;box-shadow:none}
 
+  /* Bottom nav becomes a centered dock instead of stretching edge-to-edge */
+  #bottom-nav{justify-content:center;gap:6px}
+  .nav-item{flex:0 0 auto;min-width:132px;padding:10px 22px}
+
   /* Sub-screen: center the billing content */
   .sub-screen > div:last-child{width:100%;max-width:560px;margin:0 auto}
 
@@ -670,6 +675,11 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
   }
 }
 
+/* Tablet: media-unit (nominee) cards two-up */
+@media (min-width:720px){
+  #nominee-list-container{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;align-items:start}
+}
+
 /* Wide screens: centered content band + multi-column desktop layouts */
 @media (min-width:960px){
   /* Every main screen gets a shared, centered content band (no phone frame) */
@@ -677,12 +687,10 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
     padding-left:max(24px,calc((100% - 1140px)/2));
     padding-right:max(24px,calc((100% - 1140px)/2));
   }
-  /* District polls: three columns — one per district */
-  #vote-category-list{display:grid!important;grid-template-columns:repeat(3,1fr);gap:18px;align-items:start}
-  /* Winner prizes: three columns — one per district */
-  #winner-awards-list{display:grid!important;grid-template-columns:repeat(3,1fr);gap:14px;align-items:start}
-  /* Nominee / media-unit cards two-up */
-  #nominee-list-container{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+  /* District polls: fluid 1→2→3 columns — one per district, never cramped */
+  #vote-category-list{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px;align-items:start}
+  /* Winner prizes: fluid columns */
+  #winner-awards-list{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;align-items:start}
   /* Admin stat tiles spread out */
   .admin-grid{grid-template-columns:repeat(6,1fr)}
 
@@ -694,6 +702,15 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
     padding-left:max(24px,calc((100% - 760px)/2));
     padding-right:max(24px,calc((100% - 760px)/2));
   }
+}
+
+/* Extra-large screens: grander hero & page headers for a true desktop feel */
+@media (min-width:1280px){
+  .hero-section{padding:92px 20px 52px}
+  .hero-title{font-size:60px}
+  .hero-subtitle{font-size:16px;max-width:640px}
+  .page-header{padding:76px 20px 26px}
+  .page-title{font-size:34px}
 }
 
 /* Short / landscape phones: shrink hero & frame chrome so content still fits */
@@ -2050,7 +2067,7 @@ function pollCardHTML(districtId) {
           <div class="poll-option-row">
             <div class="poll-radio${isMine ? ' checked' : ''}" aria-hidden="true">${isMine ? '✓' : ''}</div>
             <div style="flex:1;min-width:0;font-size:13px;font-weight:${isMine || isLeading ? '700' : '500'}">${Security.sanitize(nominee.schoolName)}${isLeading ? ' 🥇' : ''}</div>
-            <div style="font-size:12px;font-weight:700;color:${isMine ? 'var(--gold)' : 'var(--text2)'};white-space:nowrap">${hasVoted ? `${percent.toFixed(0)}% · ` : ''}${nominee.votes.toLocaleString()}</div>
+            <div class="poll-votes" style="color:${isMine ? 'var(--gold)' : 'var(--text)'}">${hasVoted ? `${percent.toFixed(0)}% · ` : ''}${nominee.votes.toLocaleString()}</div>
           </div>
         </div>`;
       }).join('')}
@@ -3597,5 +3614,5 @@ function safeBootstrap() { try { Promise.resolve(bootstrap()).catch(e=>console.e
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', safeBootstrap);
 else safeBootstrap();
 </script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a31acfbaefb7ff62',t:'MTc4NzgzMDkzMQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a31fa241df70f309',t:'MTc4Nzg4MTQ5Nw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
