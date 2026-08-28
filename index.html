@@ -452,6 +452,9 @@ body{display:flex;flex-direction:column;position:relative}
 .poll-radio{width:18px;height:18px;border-radius:50%;border:2px solid var(--text3);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:#1a1a2e;transition:all .2s ease}
 .poll-radio.checked{background:var(--gold);border-color:var(--gold)}
 .poll-votes{white-space:nowrap;flex-shrink:0;font-variant-numeric:tabular-nums;font-size:12px;font-weight:700}
+.live-badge{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:800;letter-spacing:.5px;color:#68d391;background:rgba(56,161,105,.1);border:1px solid rgba(56,161,105,.35);border-radius:50px;padding:3px 9px}
+.live-dot{width:6px;height:6px;border-radius:50%;background:#38a169;box-shadow:0 0 8px rgba(56,161,105,.9);animation:livePulse 1.6s ease-in-out infinite}
+@keyframes livePulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.5);opacity:.5}}
 .poll-tabs{display:flex;gap:6px;margin-bottom:14px;background:var(--surface);padding:5px;border-radius:13px;border:1px solid var(--border3)}
 .poll-tab{flex:1;border:none;background:transparent;color:var(--text2);font-size:13px;font-weight:700;padding:10px 6px;border-radius:9px;cursor:pointer;transition:all .28s cubic-bezier(.25,.8,.25,1);font-family:inherit;white-space:nowrap}
 .poll-tab:hover{color:var(--gold-light)}
@@ -2074,7 +2077,7 @@ function pollCardHTML(districtId) {
         </div>`;
       }).join('')}
     </div>
-    <div style="margin-top:12px;font-size:11px;color:var(--text3)">${totalVotes.toLocaleString()} votes · One vote per district${hasVoted ? ' · Tap another option to change your vote' : ''}</div>
+    <div style="margin-top:12px;font-size:11px;color:var(--text3);display:flex;align-items:center;gap:8px;flex-wrap:wrap">${totalVotes.toLocaleString()} votes · One vote per district${hasVoted ? ' · Tap another option to change your vote' : ''}${Sync.enabled ? '<span class="live-badge"><span class="live-dot"></span>LIVE</span>' : ''}</div>
   </section>`;
 }
 
@@ -3445,8 +3448,8 @@ const Sync = {
     setSyncStatus('connecting', 'Connecting…');
     try {
       await this.ensureSeeded();
-      this.bindListeners();
       this.enabled = true;
+      this.bindListeners();
       setSyncStatus('live', 'Synced with Firebase');
       showToast('☁️ Connected — votes sync across devices', 'success', 3000);
       AuditLog.log('CLOUD_SYNC_CONNECTED', this.voterKey() || 'anon', {});
@@ -3621,5 +3624,5 @@ function safeBootstrap() { try { Promise.resolve(bootstrap()).catch(e=>console.e
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', safeBootstrap);
 else safeBootstrap();
 </script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a31fd05b7a46a55b',t:'MTc4Nzg4MzM4Ng=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a31fe8871cdd2666',t:'MTc4Nzg4NDM3Ng=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
